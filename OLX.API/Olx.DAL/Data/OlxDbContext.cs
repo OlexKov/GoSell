@@ -10,6 +10,7 @@ namespace Olx.DAL.Data
     public class OlxDbContext(DbContextOptions<OlxDbContext> options, 
         IConfiguration configuration) : IdentityDbContext<OlxUser, IdentityRole<int>, int>(options)
     {
+        public DbSet<Category> Category { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

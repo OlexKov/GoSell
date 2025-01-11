@@ -1,18 +1,36 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Olx.BLL.DTOs.CategoryDtos;
 using Olx.BLL.Helpers;
 using Olx.BLL.Interfaces;
 using Olx.BLL.Models.Category;
+using Olx.DAL.Data;
 
 
 namespace OLX.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController(ICategoryService categoryService) : ControllerBase
+    public class CategoryController(ICategoryService categoryService, IMapper mapper, OlxDbContext dbContext) : ControllerBase
     {
         [HttpGet("get")]
-        public async Task<IActionResult> GetAll() => Ok(await categoryService.GetAllTreeAsync());
+        public async Task<IActionResult> GetAll()
+        {
+            var query = dbContext.Category.AsQueryable()
+                .Where(x => x.ParentId == null)
+                .ProjectTo<CategoryDto>(mapper.ConfigurationProvider)
+                .ToList();
+            //    .Include(p => p.Childs)
+            //    .ThenInclude(c => c.Childs)
+            //    .ThenInclude(c=>c.Childs)
+            //    .ToList();// Включення дочірніх сутностей;
+            //var list = mapper.Map<List<CategoryDto>>(query);
+            return Ok(query);
+            //return Ok(await categoryService.GetAllTreeAsync());
+        }
 
         [HttpGet("get/{id:int}")]
         public async Task<IActionResult> GetTree([FromRoute]int id) => Ok(await categoryService.GetTreeAsync(id));

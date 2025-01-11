@@ -12,9 +12,9 @@ namespace Olx.BLL.Mapper
         {
             CreateMap<CategoryCreationModel, Category>();
             CreateMap<Category, CategoryDto>()
-                .ForMember(x => x.Filters, opt => opt.MapFrom(z => z.Filters.Select(y => y.Id)))
-                .ForMember(x => x.Childs, opt => opt.MapFrom(x => x.Childs))
-                .IncludeAllDerived();
+                //.ForMember(x => x.Filters, opt => opt.MapFrom(z => z.Filters.Select(y => y.Id)))
+                //.ForMember(x => x.Childs, opt => opt.MapFrom(x => x.Childs));
+            .ForMember(dest => dest.Childs, opt => opt.MapFrom(src => src.Childs));
         }
     }
 }

@@ -95,7 +95,8 @@ namespace Olx.BLL.Services
         }
 
         public async Task<IEnumerable<CategoryDto>> GetAllTreeAsync()
-        { 
+        {
+            //var query = categoryRepository.GetQuery();
             return await categoryRepository.GetQuery()
                 .Include(x => x.Childs)
                 .Where(c => c.ParentId == null)
