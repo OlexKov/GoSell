@@ -49,6 +49,7 @@ function App() {
 
           <Route element={<ProtectedRoutes requiredRole={"User"} />}>
             <Route path="user">
+              <Route path="userprofile" element={<HomePage />} />
             </Route>
           </Route>
         </Route>
