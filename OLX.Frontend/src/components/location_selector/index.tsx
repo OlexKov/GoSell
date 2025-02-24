@@ -47,7 +47,7 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({ value, width, heigh
             })) : [], [regions]);
 
     const formattedSettlements = useMemo(() => settlements
-        ? settlements.filter((x: ISettlement) => x.warehouse === 1 === newPost)
+        ? settlements.filter((x: ISettlement) => newPost ? x.warehouse === 1 : true)
             .slice().sort((a: ISettlement, b: ISettlement) => a.description.localeCompare(b.description))
             .map((settlement: ISettlement) => ({
                 id: settlement.ref,
