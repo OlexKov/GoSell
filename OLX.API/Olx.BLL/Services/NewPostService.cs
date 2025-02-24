@@ -109,7 +109,6 @@ namespace Olx.BLL.Services
             });
 
             return settlements.AsParallel()
-                .Where(x => x.Warehouse > 0)
                 .GroupBy(x => x.Ref)
                 .Select(z => z.First());
         }

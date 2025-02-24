@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import AdvertCard from "../../../components/advert_card";
 import { BackButton } from "../../../components/buttons/back_button"
 import { APP_ENV } from "../../../constants/env";
@@ -6,29 +6,58 @@ import { useGetAdvertByIdQuery } from "../../../redux/api/advertApi";
 import { Form, Input, Radio, Select } from "antd";
 import { app_regex } from "../../../constants/regex";
 import LocationSelector from "../../../components/location_selector";
-import { useAppSelector } from "../../../redux";
+import { useAppDispatch, useAppSelector } from "../../../redux";
 import PrimaryButton from "../../../components/buttons/primary_button";
 import '../../../components/price_filter/style.scss'
 import { useMemo, useState } from "react";
-import { useGetWirehousesQuery } from "../../../redux/api/newPostApi";
+import { useGetAreasQuery, useGetRegionsByAreaQuery, useGetSettlementsByRegionQuery, useGetWirehousesQuery } from "../../../redux/api/newPostApi";
+import { MinusOutlined } from "@ant-design/icons";
+import { IArea, IRegion, ISettlement } from "../../../models/newPost";
+import { getQueryString } from "../../../utilities/common_funct";
+import { scrollTop } from "../../../redux/slices/appSlice";
 
 const BuyAdvertPage: React.FC = () => {
+    const [searchParams, setSearchParams] = useSearchParams('');
     const user = useAppSelector(state => state.user.user)
+    const dispatch = useAppDispatch()
     const [form] = Form.useForm()
     const { id } = useParams();
     const { data: advert } = useGetAdvertByIdQuery(Number(id))
-    const [delivery, setDelivery] = useState<string>('Укрпошта')
-    const [location, setLocation] = useState<string | undefined>(user?.settlement)
-    const { data: wirehouses, isLoading: isWirehousesLoading } = useGetWirehousesQuery(location || '', { skip: !location })
+    const [delivery, setDelivery] = useState<string>(searchParams.get('delivery') || 'Укрпошта')
+    const [newPostLocation, setNewPostLocation] = useState<string | undefined>(searchParams.get('settlementRef') || user?.settlement)
+    const { data: wirehouses, isLoading: isWirehousesLoading } = useGetWirehousesQuery(newPostLocation || '', { skip: !newPostLocation })
+    const { data: areas, isLoading: isAreasLoading } = useGetAreasQuery();
+    const [locationData, setLocationData] = useState<{ area: string | undefined, region: string | undefined }>({ area: searchParams.get('area') || undefined, region: searchParams.get('region') || undefined })
+    const { data: regions, isLoading: isRegionsLoading } = useGetRegionsByAreaQuery(locationData.area || '', { skip: !locationData.area })
+    const { data: settlements, isLoading: isSettlementsLoading } = useGetSettlementsByRegionQuery(locationData.region || '', { skip: !locationData.region })
+    const areasData = useMemo(() => areas?.length ? areas.map((x: IArea) => ({ value: x.ref, label: x.description })) : [], [areas]);
+    const regionsData = useMemo(() => regions?.length ? regions.map((x: IRegion) => ({ value: x.ref, label: x.description })) : [], [regions]);
+    const settlementsData = useMemo(() => settlements?.length ? settlements.map((x: ISettlement) => ({ value: x.ref, label: x.description })) : [], [settlements]);
     const navigate = useNavigate();
     const onFinish = (data: any) => {
-        console.log(data);
-        navigate(`/user/advert/payment/${id}`);
+        const queryString = getQueryString(data)
+        setSearchParams(queryString)
+        navigate(`/user/advert/payment/${id}${queryString}`);
+        dispatch(scrollTop())
     }
 
-    const onLocationChange = (value: string) => {
-        setLocation(value)
+    const onNewPostLocationChange = (value: string) => {
+        setNewPostLocation(value)
         form.setFieldValue("wirehouse", undefined)
+    }
+
+    const onUkrPoshtaAreaChange = (value: string) => {
+        setLocationData({ ...locationData, area: value })
+        form.setFieldsValue({
+            region: undefined,
+            settlement: undefined
+        })
+
+    }
+
+    const onUkrPoshtaRegionChange = (value: string) => {
+        setLocationData({ ...locationData, region: value })
+        form.setFieldValue("settlement", undefined)
     }
 
     const wirehousesSelectData = useMemo(() =>
@@ -59,12 +88,20 @@ const BuyAdvertPage: React.FC = () => {
                         layout="vertical"
                         onFinish={onFinish}
                         initialValues={{
-                            lastName: user?.lastName,
-                            firstName: user?.firstName,
-                            phoneNumber: user?.phone,
-                            email: user?.email,
-                            settlementRef: user?.settlement,
-                            delivery: "Укрпошта"
+                            lastName: searchParams.get('lastName') || user?.lastName,
+                            firstName: searchParams.get('firstName') || user?.firstName,
+                            phoneNumber: searchParams.get('phoneNumber') || user?.phone,
+                            email: searchParams.get('email') || user?.email,
+                            settlementRef: searchParams.get('settlementRef') || user?.settlement,
+                            delivery: searchParams.get('delivery') || "Укрпошта",
+                            area: searchParams.get('area'),
+                            index: searchParams.get('index'),
+                            region: searchParams.get('region'),
+                            settlement: searchParams.get('settlement'),
+                            street: searchParams.get('street'),
+                            house: searchParams.get('house'),
+                            room: searchParams.get('room'),
+                            wirehouse:searchParams.get('wirehouse')
                         }}>
                         <div className='grid grid-cols-2 gap-y-[1.2vw]  gap-x-[2.1vw] mt-[2.8vh]'>
                             <Form.Item
@@ -166,7 +203,134 @@ const BuyAdvertPage: React.FC = () => {
                         </Form.Item>
                         <div className='mt-[2.8vh]'>
                             {delivery !== "Самовивіз" && (delivery === "Укрпошта"
-                                ? <>Укрпошта</>
+                                ? <div className='grid grid-cols-2 gap-y-[1.2vw]  gap-x-[2.1vw] mt-[2.8vh]'>
+
+                                    <Form.Item
+                                        name="index"
+                                        label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Індекс</div>}
+                                        className="w-full custom-form-item"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть індекс</span>
+                                            },
+                                        ]}
+                                    >
+                                        <Input.OTP
+                                            formatter={(str) => isNaN(Number(str[str.length - 1])) ? str.slice(0, -1) : str}
+                                            separator={<MinusOutlined className="text-[#9B7A5B] text-[clamp(12px,2vh,20px)]" />}
+                                            length={5} />
+
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="area"
+                                        label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Область</div>}
+                                        className="w-full custom-form-item"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть область</span>
+                                            },
+                                        ]}
+                                    >
+                                        <Select
+                                            allowClear
+                                            onChange={onUkrPoshtaAreaChange}
+                                            loading={isAreasLoading}
+                                            options={areasData}
+                                            popupClassName="create-advert-select-popup"
+                                            className="create-advert-select h-[5vh]"
+                                            placeholder="Область" />
+
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="region"
+                                        label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Район</div>}
+                                        className="w-full custom-form-item"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть район</span>
+                                            },
+                                        ]}
+                                    >
+                                        <Select
+                                            allowClear
+                                            onChange={onUkrPoshtaRegionChange}
+                                            loading={isRegionsLoading}
+                                            options={regionsData}
+                                            popupClassName="create-advert-select-popup"
+                                            className="create-advert-select h-[5vh]"
+                                            placeholder="Район" />
+
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="settlement"
+                                        className="w-full custom-form-item"
+                                        label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Населений пункт</div>}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберыть населений пункт</span>
+                                            },
+                                        ]}
+                                    >
+                                        <Select
+                                            allowClear
+                                            loading={isSettlementsLoading}
+                                            options={settlementsData}
+                                            popupClassName="create-advert-select-popup"
+                                            className="create-advert-select h-[5vh]"
+                                            placeholder="Населений пункт" />
+
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="street"
+                                        label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Вулиця</div>}
+                                        className="w-full custom-form-item"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть назву вулиці</span>
+                                            },
+                                        ]}
+                                    >
+                                        <Input
+                                            className="h-[5vh] font-montserrat text-adaptive-1_6-text border-[#9B7A5B]"
+                                            placeholder="Вулиця" />
+
+                                    </Form.Item>
+                                    <div className="flex gap-[2.1vw]">
+                                        <Form.Item
+                                            name="house"
+                                            label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Будинок</div>}
+                                            className="w-full custom-form-item"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть номер будинку</span>
+                                                },
+                                            ]}
+                                        >
+                                            <Input
+                                                className="h-[5vh] font-montserrat text-adaptive-1_6-text border-[#9B7A5B]"
+                                                placeholder="Номер будинку" />
+
+                                        </Form.Item>
+                                        <Form.Item
+                                            name="room"
+                                            label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Квартира</div>}
+                                            className="w-full custom-form-item"
+                                        >
+                                            <Input
+                                                className="h-[5vh] font-montserrat text-adaptive-1_6-text border-[#9B7A5B]"
+                                                placeholder="Номер квартири" />
+
+                                        </Form.Item>
+                                    </div>
+                                </div>
+
+
                                 : <div className="flex flex-col gap-[1.2vw]">
                                     <Form.Item
                                         name="settlementRef"
@@ -180,7 +344,8 @@ const BuyAdvertPage: React.FC = () => {
                                         ]}
                                     >
                                         <LocationSelector
-                                            onChange={onLocationChange}
+                                            newPost={true}
+                                            onChange={onNewPostLocationChange}
                                             height="5vh"
                                             width="100%"
                                             placeholder="Місто/Населений пункт" />

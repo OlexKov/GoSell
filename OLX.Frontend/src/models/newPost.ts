@@ -16,6 +16,7 @@ export interface ISettlement {
     ref: string;
     region: string;
     area: string;
+    warehouse:number
 }
 
 export interface IWirehouse{
