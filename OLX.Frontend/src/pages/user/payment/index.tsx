@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useGetAdvertByIdQuery } from "../../../redux/api/advertApi";
 import { BackButton } from "../../../components/buttons/back_button";
 import AdvertCard from "../../../components/advert_card";
@@ -11,11 +11,12 @@ import './styles.scss'
 
 const PaymentPage = () => {
     const { id } = useParams();
+    const [searchParams] = useSearchParams('');
     const { data: advert } = useGetAdvertByIdQuery(Number(id));
     const [paymentMethod, setPaymentMethod] = useState("bank-card");
 
     const onFinish = (data: any) => {
-        console.log(data);
+        console.log({...data,...Object.fromEntries(searchParams.entries())});
     };
 
     return (

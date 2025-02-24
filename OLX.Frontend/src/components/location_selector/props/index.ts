@@ -4,5 +4,6 @@ export interface LocationSelectorProps {
     placeholder?: string
     width?: string
     height?: string
+    newPost?:boolean
 }
 

@@ -6,7 +6,7 @@ import { LocationSelectorProps } from "./props";
 import '../../pages/user/create_advert/style.scss'
 
 
-const LocationSelector: React.FC<LocationSelectorProps> = ({ value, width, height, placeholder, onChange = () => { } }) => {
+const LocationSelector: React.FC<LocationSelectorProps> = ({ value, width, height, placeholder, onChange = () => { }, newPost = false }) => {
     const init = useRef<boolean>(true)
     const { data: settlement } = useGetSettlementsByIdQuery(value || '', { skip: !value || !init.current })
     const [areaRef, setAreaRef] = useState<any>()
@@ -47,7 +47,8 @@ const LocationSelector: React.FC<LocationSelectorProps> = ({ value, width, heigh
             })) : [], [regions]);
 
     const formattedSettlements = useMemo(() => settlements
-        ? settlements.slice().sort((a: ISettlement, b: ISettlement) => a.description.localeCompare(b.description))
+        ? settlements.filter((x: ISettlement) => x.warehouse === 1 === newPost)
+            .slice().sort((a: ISettlement, b: ISettlement) => a.description.localeCompare(b.description))
             .map((settlement: ISettlement) => ({
                 id: settlement.ref,
                 pId: settlement.region,

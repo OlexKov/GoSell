@@ -7,5 +7,6 @@
         public string SettlementTypeDescription { get; set; } = string.Empty;
         public string? Region { get; set; }
         public string? Area { get; set; }
+        public int Warehouse { get; set; }
     }
 }
