@@ -14,13 +14,11 @@ import { useGetAreasQuery, useGetRegionsByAreaQuery, useGetSettlementsByRegionQu
 import { MinusOutlined } from "@ant-design/icons";
 import { IArea, IRegion, ISettlement } from "../../../models/newPost";
 import { getQueryString } from "../../../utilities/common_funct";
-import { scrollTop } from "../../../redux/slices/appSlice";
 import './style.scss'
 
 const BuyAdvertPage: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams('');
     const user = useAppSelector(state => state.user.user)
-    const dispatch = useAppDispatch()
     const [form] = Form.useForm()
     const { id } = useParams();
     const { data: advert } = useGetAdvertByIdQuery(Number(id))
@@ -39,7 +37,6 @@ const BuyAdvertPage: React.FC = () => {
         const queryString = getQueryString(data)
         setSearchParams(queryString)
         navigate(`/user/advert/payment/${id}${queryString}`);
-        dispatch(scrollTop())
     }
 
     const onNewPostLocationChange = (value: string) => {
@@ -53,7 +50,6 @@ const BuyAdvertPage: React.FC = () => {
             region: undefined,
             settlement: undefined
         })
-
     }
 
     const onUkrPoshtaRegionChange = (value: string) => {

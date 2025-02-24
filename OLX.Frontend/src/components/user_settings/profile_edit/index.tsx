@@ -50,7 +50,6 @@ const UserEdit: React.FC = () => {
             okText: 'Видалити',
             footer: (_, { OkBtn, CancelBtn }) => (
                 <>
-
                     <CancelBtn />
                     <OkBtn />
                 </>
