@@ -15,6 +15,7 @@ import { MinusOutlined } from "@ant-design/icons";
 import { IArea, IRegion, ISettlement } from "../../../models/newPost";
 import { getQueryString } from "../../../utilities/common_funct";
 import { scrollTop } from "../../../redux/slices/appSlice";
+import './style.scss'
 
 const BuyAdvertPage: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams('');
@@ -101,7 +102,7 @@ const BuyAdvertPage: React.FC = () => {
                             street: searchParams.get('street'),
                             house: searchParams.get('house'),
                             room: searchParams.get('room'),
-                            wirehouse:searchParams.get('wirehouse')
+                            wirehouse: searchParams.get('wirehouse')
                         }}>
                         <div className='grid grid-cols-2 gap-y-[1.2vw]  gap-x-[2.1vw] mt-[2.8vh]'>
                             <Form.Item
@@ -185,9 +186,8 @@ const BuyAdvertPage: React.FC = () => {
 
                         <Form.Item
                             name='delivery'
-                            noStyle
-                        >
-                            <Radio.Group onChange={(e) => setDelivery(e.target.value)} className="flex gap-[3.3vw] mt-[4vh] ">
+                            noStyle>
+                            <Radio.Group onChange={(e) => setDelivery(e.target.value)} className="flex gap-[3.3vw] mt-[4vh] mb-[2.8vh] ">
                                 <div className="flex flex-col gap-[.5vh] ">
                                     <Radio className="big-radio" style={{ fontSize: 'clamp(14px, 1.9vh, 36px)', fontWeight: 500 }} key={"Укрпошта"} value={"Укрпошта"}>Укрпошта</Radio>
                                     <div className="font-montserrat text-adaptive-1_7_text ml-[1.7vw]">Безкоштовна доставка</div>
@@ -201,179 +201,183 @@ const BuyAdvertPage: React.FC = () => {
                                 </div>
                             </Radio.Group>
                         </Form.Item>
-                        <div className='mt-[2.8vh]'>
-                            {delivery !== "Самовивіз" && (delivery === "Укрпошта"
-                                ? <div className='grid grid-cols-2 gap-y-[1.2vw]  gap-x-[2.1vw] mt-[2.8vh]'>
-
-                                    <Form.Item
-                                        name="index"
-                                        label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Індекс</div>}
-                                        className="w-full custom-form-item"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть індекс</span>
-                                            },
-                                        ]}
-                                    >
-                                        <Input.OTP
-                                            formatter={(str) => isNaN(Number(str[str.length - 1])) ? str.slice(0, -1) : str}
-                                            separator={<MinusOutlined className="text-[#9B7A5B] text-[clamp(12px,2vh,20px)]" />}
-                                            length={5} />
-
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="area"
-                                        label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Область</div>}
-                                        className="w-full custom-form-item"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть область</span>
-                                            },
-                                        ]}
-                                    >
-                                        <Select
-                                            allowClear
-                                            onChange={onUkrPoshtaAreaChange}
-                                            loading={isAreasLoading}
-                                            options={areasData}
-                                            popupClassName="create-advert-select-popup"
-                                            className="create-advert-select h-[5vh]"
-                                            placeholder="Область" />
-
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="region"
-                                        label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Район</div>}
-                                        className="w-full custom-form-item"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть район</span>
-                                            },
-                                        ]}
-                                    >
-                                        <Select
-                                            allowClear
-                                            onChange={onUkrPoshtaRegionChange}
-                                            loading={isRegionsLoading}
-                                            options={regionsData}
-                                            popupClassName="create-advert-select-popup"
-                                            className="create-advert-select h-[5vh]"
-                                            placeholder="Район" />
-
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="settlement"
-                                        className="w-full custom-form-item"
-                                        label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Населений пункт</div>}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберыть населений пункт</span>
-                                            },
-                                        ]}
-                                    >
-                                        <Select
-                                            allowClear
-                                            loading={isSettlementsLoading}
-                                            options={settlementsData}
-                                            popupClassName="create-advert-select-popup"
-                                            className="create-advert-select h-[5vh]"
-                                            placeholder="Населений пункт" />
-
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="street"
-                                        label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Вулиця</div>}
-                                        className="w-full custom-form-item"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть назву вулиці</span>
-                                            },
-                                        ]}
-                                    >
-                                        <Input
-                                            className="h-[5vh] font-montserrat text-adaptive-1_6-text border-[#9B7A5B]"
-                                            placeholder="Вулиця" />
-
-                                    </Form.Item>
-                                    <div className="flex gap-[2.1vw]">
+                        {delivery !== "Самовивіз" &&
+                            <div>
+                                <hr className="mb-[3vh]" />
+                                {delivery === "Укрпошта"
+                                    ? <div className='grid grid-cols-2 gap-y-[1.2vw]  gap-x-[2.1vw] mt-[2.8vh]'>
                                         <Form.Item
-                                            name="house"
-                                            label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Будинок</div>}
+                                            name="index"
+                                            label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Індекс</div>}
                                             className="w-full custom-form-item"
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть номер будинку</span>
+                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть індекс</span>
+                                                },
+                                            ]}
+                                        >
+                                            <Input.OTP
+                                                formatter={(str) => isNaN(Number(str[str.length - 1])) ? str.slice(0, -1) : str}
+                                                separator={<MinusOutlined className="text-[#9B7A5B] text-[clamp(12px,2vh,20px)]" />}
+                                                length={5} />
+
+                                        </Form.Item>
+                                        <Form.Item
+                                            name="area"
+                                            label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Область</div>}
+                                            className="w-full custom-form-item"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть область</span>
+                                                },
+                                            ]}
+                                        >
+                                            <Select
+                                                allowClear
+                                                onChange={onUkrPoshtaAreaChange}
+                                                loading={isAreasLoading}
+                                                options={areasData}
+                                                popupClassName="create-advert-select-popup"
+                                                className="create-advert-select h-[5vh]"
+                                                placeholder="Область" />
+
+                                        </Form.Item>
+                                        <Form.Item
+                                            name="region"
+                                            label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Район</div>}
+                                            className="w-full custom-form-item"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть район</span>
+                                                },
+                                            ]}
+                                        >
+                                            <Select
+                                                allowClear
+                                                onChange={onUkrPoshtaRegionChange}
+                                                loading={isRegionsLoading}
+                                                options={regionsData}
+                                                popupClassName="create-advert-select-popup"
+                                                className="create-advert-select h-[5vh]"
+                                                placeholder="Район" />
+
+                                        </Form.Item>
+                                        <Form.Item
+                                            name="settlement"
+                                            className="w-full custom-form-item"
+                                            label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Населений пункт</div>}
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберыть населений пункт</span>
+                                                },
+                                            ]}
+                                        >
+                                            <Select
+                                                allowClear
+                                                loading={isSettlementsLoading}
+                                                options={settlementsData}
+                                                popupClassName="create-advert-select-popup"
+                                                className="create-advert-select h-[5vh]"
+                                                placeholder="Населений пункт" />
+
+                                        </Form.Item>
+                                        <Form.Item
+                                            name="street"
+                                            label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Вулиця</div>}
+                                            className="w-full custom-form-item"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть назву вулиці</span>
                                                 },
                                             ]}
                                         >
                                             <Input
                                                 className="h-[5vh] font-montserrat text-adaptive-1_6-text border-[#9B7A5B]"
-                                                placeholder="Номер будинку" />
+                                                placeholder="Вулиця" />
+
+                                        </Form.Item>
+                                        <div className="flex gap-[2.1vw]">
+
+                                            <Form.Item
+                                                name="house"
+                                                label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Будинок</div>}
+                                                className="w-full custom-form-item"
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть номер будинку</span>
+                                                    },
+                                                ]}
+                                            >
+                                                <Input
+                                                    className="h-[5vh] font-montserrat text-adaptive-1_6-text border-[#9B7A5B]"
+                                                    placeholder="Номер будинку" />
+
+                                            </Form.Item>
+                                            <Form.Item
+                                                name="room"
+                                                label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Квартира</div>}
+                                                className="w-full custom-form-item"
+                                            >
+                                                <Input
+                                                    className="h-[5vh] font-montserrat text-adaptive-1_6-text border-[#9B7A5B]"
+                                                    placeholder="Номер квартири" />
+
+                                            </Form.Item>
+                                        </div>
+                                    </div>
+
+
+                                    : <div className="flex flex-col gap-[1.2vw]">
+                                        <Form.Item
+                                            name="settlementRef"
+                                            className="w-full  custom-form-item"
+                                            label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Місто/Населений пункт</div>}
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть населений пункт</span>
+                                                }
+                                            ]}
+                                        >
+                                            <LocationSelector
+                                                newPost={true}
+                                                onChange={onNewPostLocationChange}
+                                                height="5vh"
+                                                width="100%"
+                                                placeholder="Місто/Населений пункт" />
 
                                         </Form.Item>
                                         <Form.Item
-                                            name="room"
-                                            label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Квартира</div>}
+                                            name="wirehouse"
                                             className="w-full custom-form-item"
+                                            label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Відділення</div>}
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть Відділення</span>
+                                                }
+                                            ]}
                                         >
-                                            <Input
-                                                className="h-[5vh] font-montserrat text-adaptive-1_6-text border-[#9B7A5B]"
-                                                placeholder="Номер квартири" />
+                                            <Select
+                                                allowClear
+                                                loading={isWirehousesLoading}
+                                                options={wirehousesSelectData}
+                                                popupClassName="create-advert-select-popup"
+                                                className="create-advert-select h-[5vh]"
+                                                placeholder="Відділення" />
 
                                         </Form.Item>
-                                    </div>
-                                </div>
+                                    </div>}
 
+                            </div>
+                        }
 
-                                : <div className="flex flex-col gap-[1.2vw]">
-                                    <Form.Item
-                                        name="settlementRef"
-                                        className="w-full  custom-form-item"
-                                        label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Місто/Населений пункт</div>}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть населений пункт</span>
-                                            }
-                                        ]}
-                                    >
-                                        <LocationSelector
-                                            newPost={true}
-                                            onChange={onNewPostLocationChange}
-                                            height="5vh"
-                                            width="100%"
-                                            placeholder="Місто/Населений пункт" />
-
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="wirehouse"
-                                        className="w-full custom-form-item"
-                                        label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Відділення</div>}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть Відділення</span>
-                                            }
-                                        ]}
-                                    >
-                                        <Select
-                                            allowClear
-                                            loading={isWirehousesLoading}
-                                            options={wirehousesSelectData}
-                                            popupClassName="create-advert-select-popup"
-                                            className="create-advert-select h-[5vh]"
-                                            placeholder="Відділення" />
-
-                                    </Form.Item>
-                                </div>)}
-
-                        </div>
                         <div className="font-montserrat text-adaptive-1_7_text">*Поля обов’язкові для заповнення</div>
 
                         <PrimaryButton
