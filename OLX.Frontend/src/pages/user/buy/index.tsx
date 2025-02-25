@@ -6,7 +6,7 @@ import { useGetAdvertByIdQuery } from "../../../redux/api/advertApi";
 import { Form, Input, Radio, Select } from "antd";
 import { app_regex } from "../../../constants/regex";
 import LocationSelector from "../../../components/location_selector";
-import { useAppDispatch, useAppSelector } from "../../../redux";
+import { useAppSelector } from "../../../redux";
 import PrimaryButton from "../../../components/buttons/primary_button";
 import '../../../components/price_filter/style.scss'
 import { useMemo, useState } from "react";

@@ -1,19 +1,31 @@
 import { formatPrice } from "../../utilities/common_funct";
 import EditButton from "../buttons/edit_button";
+
 import ToggleFavoriteButton from "../buttons/toggle_favorite_button";
 import { AdvertCardProps } from "./props"
 import { useNavigate } from "react-router-dom";
 
-const AdvertCard: React.FC<AdvertCardProps> = ({ id, image, title, price, settlement, isEditable = false, isFavorite = true ,className}) => {
+
+import AdvertButtonMenu from "../buttons/button_menu";
+
+
+const AdvertCard: React.FC<AdvertCardProps> = ({ id, image, title, price, settlement, isEditable = false, isFavorite = true, isCompleted = false, className }) => {
     const navigate = useNavigate();
-    const onClick  = ()=>{
+    const onClick = () => {
         navigate(`/advert/${id}`)
     }
     return (
         <div className={`rounded-bl-lg h-fit rounded-br-lg border border-[#9b7a5b]/20 p-0 relative transition-all duration-300 ease-in-out hover:border-[#9b7a5b]/80 hover:shadow-2xl ${className}`}>
             {
                 isEditable ?
-                    <EditButton className="absolute right-[0.5vh] top-[0.5vh] w-[30px] h-[30px] cursor-pointer transition-all duration-300 ease-in-out hover:scale-[1.1]" id={id} />
+                    <AdvertButtonMenu
+                        id={id}
+                        className=" absolute right-0 top-0"
+                        isEdit = {isEditable}
+                        isComplete = {!isCompleted}
+                        isDelete={isCompleted}
+                    />
+                    // <EditButton className="absolute right-[0.5vh] top-[0.5vh] w-[30px] h-[30px] cursor-pointer transition-all duration-300 ease-in-out hover:scale-[1.1]" id={id} />
                     : isFavorite ?
                         <ToggleFavoriteButton advertId={id} className="absolute right-[0px] top-[.5vh] transition-all duration-300 ease-in-out hover:scale-[1.1]" />
                         : <></>

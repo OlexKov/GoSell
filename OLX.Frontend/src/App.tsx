@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import './App.scss'
 import DefaultLayout from './components/layouts/default_layout/index';
 import ProtectedRoutes from './components/protected_routes';

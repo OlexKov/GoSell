@@ -8,7 +8,7 @@ export default {
     extend: {
       fontSize: {
         'adaptive-footer-icons': 'clamp(20px, 4.5vh, 40px)', 
-        'adaptive-icons': 'clamp(20px, 3vh, 40px)', 
+        'adaptive-icons': 'clamp(24px, 3vh, 40px)', 
         'adaptive-text': 'clamp(14px, 2vh, 36px)',
         'adaptive-login-header-text': 'clamp(14px, 3.8vh, 100px)',
         'adaptive-button-main-page-text': 'clamp(50px, 10vh, 100px)',
