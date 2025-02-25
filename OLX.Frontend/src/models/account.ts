@@ -1,4 +1,3 @@
-import { IAdminMesssage } from "./adminMesssage"
 
 export interface IUser {
     id: number
@@ -18,7 +17,6 @@ export interface IUserState {
     auth: IUserAuth
     token: string | null
     refreshToken: string | null
-    messages: IAdminMesssage[]
 }
 
 export interface IRegisterRequest {

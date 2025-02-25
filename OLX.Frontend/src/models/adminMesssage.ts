@@ -1,9 +1,14 @@
 export interface IAdminMesssage {
     id:number
-    content: string
     userName: string
     userId: number
     readed: boolean
+    message:IMesssage
+}
+
+export interface IMesssage{
+    id:number
+    content: string
     subject: string
 }
 

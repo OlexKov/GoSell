@@ -1,7 +1,6 @@
 import { createBaseQueryWithAuth } from "./baseQuery"
 import { IAdminMesssage, IAdminMesssageCreationModel } from "../../models/adminMesssage"
 import { createApi } from "@reduxjs/toolkit/query/react"
-import { setMessages } from "../slices/userSlice"
 
 export const adminMessageAuthApi = createApi({
     reducerPath: 'adminMessageAuthApi',
@@ -42,16 +41,6 @@ export const adminMessageAuthApi = createApi({
                 }
             },
             providesTags: ["Messeges"],
-            async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-                try {
-                    const result = await queryFulfilled;
-                    if (result.data && result.data.length > 0) {
-                        dispatch(setMessages(result.data))
-                    }
-                } catch (error) {
-                    console.error('Load admin messages failed:', error);
-                }
-            },
         }),
 
         getUserMessages: builder.query<IAdminMesssage[], void>({
@@ -62,17 +51,7 @@ export const adminMessageAuthApi = createApi({
                     // timeout: 10000,
                 }
             },
-            providesTags: ["Messeges"],
-             async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-                try {
-                    const result = await queryFulfilled;
-                    if (result.data && result.data.length > 0) {
-                        dispatch(setMessages(result.data))
-                    }
-                } catch (error) {
-                    console.error('Load user messages failed:', error);
-                }
-            },
+            providesTags: ["Messeges"]
         }),
     }),
 })

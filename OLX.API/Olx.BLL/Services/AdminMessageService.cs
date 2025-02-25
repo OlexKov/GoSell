@@ -102,7 +102,7 @@ namespace Olx.BLL.Services
                 await adminMessageRepo.SaveAsync();
                 var messageDto = mapper.Map<AdminMessageDto>(adminMessage);
                 await hubContext.Clients.Users(messageDto.UserId.ToString())
-                 .SendAsync(HubMethods.ReceiveAdminMessage, messageDto);
+                 .SendAsync(HubMethods.ReceiveAdminMessage);
                 return messageDto;
             }
             else 
@@ -139,12 +139,12 @@ namespace Olx.BLL.Services
                     if (!allUsers)
                     {
                         await hubContext.Clients.Users(usersIds.Select(x => x.ToString()).ToArray())
-                        .SendAsync(HubMethods.ReceiveAdminMessage, messageDto);
+                        .SendAsync(HubMethods.ReceiveAdminMessage);
                     }
                     else 
                     {
                         await hubContext.Clients.Group("Users")
-                       .SendAsync(HubMethods.ReceiveAdminMessage, messageDto);
+                       .SendAsync(HubMethods.ReceiveAdminMessage);
                     }
                    
                     return messageDto;

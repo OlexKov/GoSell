@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { addMessage, getAuth } from '../../../../redux/slices/userSlice';
+import { getAuth } from '../../../../redux/slices/userSlice';
 import { useAppDispatch, useAppSelector } from '../../../../redux';
 import { IAdminMesssage } from '../../../../models/adminMesssage';
 import { adminMessageAuthApi } from '../../../../redux/api/adminMessageApi';
@@ -16,14 +16,12 @@ const SignalRListener: React.FC = () => {
         if (isAuth) {
             (async () => {
                 if (isUser) {
-                    signalRConnection?.connection?.on('ReceiveAdminMessage', (message: IAdminMesssage) => {
-                        dispatcher(addMessage(message))
+                    signalRConnection?.connection?.on('ReceiveAdminMessage', () => {
                         dispatcher(adminMessageAuthApi.util.invalidateTags(['Messeges']))
                     });
                 }
                 else {
-                    signalRConnection?.connection?.on('ReceiveUserMessage', (message: IAdminMesssage) => {
-                        dispatcher(addMessage(message))
+                    signalRConnection?.connection?.on('ReceiveUserMessage', () => {
                         dispatcher(adminMessageAuthApi.util.invalidateTags(['Messeges']))
                     });
                 }

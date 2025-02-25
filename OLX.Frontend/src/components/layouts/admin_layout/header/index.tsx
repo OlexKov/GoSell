@@ -7,10 +7,10 @@ import { Images } from '../../../../constants/images';
 import { useSelector } from 'react-redux';
 import { getUserDescr } from '../../../../utilities/common_funct';
 import UserAvatar from '../../../user_avatar';
-import { getRefreshToken, getUnreadedCount, getUser } from '../../../../redux/slices/userSlice';
+import { getRefreshToken, getUser } from '../../../../redux/slices/userSlice';
 import { useLogoutMutation } from '../../../../redux/api/accountApi';
 import { useAppSelector } from '../../../../redux';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useGetAdminMessagesQuery } from '../../../../redux/api/adminMessageApi';
 import { useSignalR } from '../../../hendlers/signalR/signalRContext';
 
@@ -21,8 +21,7 @@ export const AdminHeader: React.FC = () => {
     const signalRConnection = useSignalR();
     const user = useSelector(getUser)
     const refreshToken = useAppSelector(getRefreshToken)
-    const unreadMesssageCount = useAppSelector(getUnreadedCount)
-    const { refetch } = useGetAdminMessagesQuery();
+    const { data:adminMessages, refetch } = useGetAdminMessagesQuery();
     const items: MenuProps['items'] = [
         {
             icon: <UserOutlined />,
@@ -47,7 +46,7 @@ export const AdminHeader: React.FC = () => {
             }
         },
     ];
-
+ const unreadedMessagesCount = useMemo(() =>adminMessages?.length && adminMessages.filter(x => !x.readed).length || 0, [adminMessages])
     useEffect(() => { refetch() }, [user])
     return (
         <div className='h-[60px] bg-header sticky top-0 items-center flex-shrink-0 flex justify-between z-50'  >
@@ -57,7 +56,7 @@ export const AdminHeader: React.FC = () => {
             </div>
             <div className='flex gap-7 h-full'>
                 <div className='flex gap-5 flex-shrink-0 items-center'>
-                    <Badge count={unreadMesssageCount} size='small' className={unreadMesssageCount > 0 ? "animate-pulse" : ''}>
+                    <Badge count={unreadedMessagesCount} size='small' className={unreadedMessagesCount > 0 ? "animate-pulse" : ''}>
                         <MailOutlined className='text-xl text-white' />
                     </Badge>
                 </div>
