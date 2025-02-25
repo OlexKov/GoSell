@@ -3,29 +3,71 @@ import { useGetFavoritesQuery } from "../../../redux/api/accountAuthApi";
 import PrimaryButton from "../../../components/buttons/primary_button";
 import { BackButton } from "../../../components/buttons/back_button";
 import AdvertsSection from "../../../components/adverts_section";
+import { APP_ENV } from "../../../constants/env";
+import { useGetAllAdvertsQuery } from "../../../redux/api/advertApi";
+import { IAdvert } from "../../../models/advert";
+import { useSelector } from "react-redux";
+import { getUser } from "../../../redux/slices/userSlice";
+import { useEffect, useState } from "react";
 
 const FavoritesAdverts = () => {
-    const { data: favorites, isLoading: isFavoriteLoading } = useGetFavoritesQuery();
     const navigate = useNavigate();
+    const user = useSelector(getUser);
+    const { data: favorites, isLoading: isFavoriteLoading } = useGetFavoritesQuery();
+    const { data: allAdverts } = useGetAllAdvertsQuery();
+    const [userFavorites, setUserFavorites] = useState<IAdvert[]>([]);
+    const [storageUpdated, setStorageUpdated] = useState(false);
+
+    useEffect(() => {
+        const handleStorageChange = () => {
+            setStorageUpdated(prev => !prev);
+        };
+
+        window.addEventListener("storage", handleStorageChange);
+        return () => window.removeEventListener("storage", handleStorageChange);
+    }, []);
+
+    useEffect(() => {
+        if (user) {
+            setUserFavorites(favorites || []);
+        } else if (allAdverts) {
+            const localFavoritesIds: number[] = JSON.parse(localStorage.getItem(APP_ENV.FAVORITES_KEY) || "[]");
+            const localFavorites = allAdverts.filter((ad: IAdvert) => localFavoritesIds.includes(ad.id));
+            setUserFavorites(localFavorites || []);
+        }
+    }, [favorites, user, allAdverts, storageUpdated]);
+
+
+
     return (
         <div className="w-[100%] my-[8vh] mx-[8vw]">
             <BackButton title="Назад" className="mb-[12vh] ml-[1vw] text-adaptive-1_9_text font-medium self-start" />
             <h2 className='text-[#3A211C] font-unbounded text-adaptive-3_5-text font-normal '>Обране</h2>
-            {favorites && favorites.length > 0 ?
+            {userFavorites.length > 0 ? (
                 <AdvertsSection
-                    adverts={favorites}
+                    adverts={userFavorites}
                     columns={4}
-                    className="gap-y-[2.5vh]  gap-x-[2.5vh] my-[6vh] "
-                    isLoading={isFavoriteLoading} />
-                :
+                    className="gap-y-[2.5vh] gap-x-[2.5vh] my-[6vh]"
+                    isLoading={isFavoriteLoading}
+                />
+            ) : (
                 <div className="w-[100%] py-[10vh] px-[8vw] h-[400px] flex-col justify-start items-center inline-flex">
                     <p className="font-semibold font-montserrat text-adaptive-card-price-text mb-[16px]">Тут поки нічого немає</p>
                     <p className="font-normal font-montserrat text-adaptive-card-price-text mb-[32px]">Додайте декілька оголошень до обраного</p>
-                    <PrimaryButton onButtonClick={() => { navigate(`/`) }} className="w-[16.4vw] h-[4.8vh]" title="На головну" brColor="#9B7A5B" bgColor="#9B7A5B" fontColor="white" fontSize="clamp(14px,1.9vh,36px)" isLoading={false} />
+                    <PrimaryButton
+                        onButtonClick={() => navigate(`/`)}
+                        className="w-[16.4vw] h-[4.8vh]"
+                        title="На головну"
+                        brColor="#9B7A5B"
+                        bgColor="#9B7A5B"
+                        fontColor="white"
+                        fontSize="clamp(14px,1.9vh,36px)"
+                        isLoading={false}
+                    />
                 </div>
-            }
+            )}
         </div>
-    )
-}
+    );
+};
 
-export default FavoritesAdverts
+export default FavoritesAdverts;

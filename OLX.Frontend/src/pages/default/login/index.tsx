@@ -10,6 +10,8 @@ import { useGoogleLoginMutation, useLoginMutation, useSendConfirmEmailMutation }
 import { BackButton } from '../../../components/buttons/back_button';
 import FormInput from '../../../components/inputs/form_input';
 import PrimaryButton from '../../../components/buttons/primary_button';
+import { useAddToFavoritesMutation } from '../../../redux/api/accountAuthApi';
+import { APP_ENV } from '../../../constants/env';
 
 const loginAction: string = 'login'
 
@@ -22,6 +24,7 @@ const LoginPage: React.FC = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
   const loginEmail = useRef<string | undefined>('')
   const remeber = useRef<boolean>(true)
+  const [addToFavorites] = useAddToFavoritesMutation();
 
   const glLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -36,6 +39,14 @@ const LoginPage: React.FC = () => {
         if ((result.error as IError).status === 403) {
           setEmailConfirmationError(true);
         }
+      }
+      const localFavorites: number[] = JSON.parse(localStorage.getItem(APP_ENV.FAVORITES_KEY) || "[]");
+      if (localFavorites.length > 0) {
+        Promise.all(localFavorites.map((id) => addToFavorites(id).unwrap()))
+          .then(() => {
+            localStorage.removeItem(APP_ENV.FAVORITES_KEY);
+          })
+          .catch((error) => console.error("Помилка при синхронізації обраного:", error));
       }
     }
   });
@@ -74,6 +85,15 @@ const LoginPage: React.FC = () => {
         toast("Ви успішно увійшли в свій акаунт", {
           type: "success"
         })
+      }
+
+      const localFavorites: number[] = JSON.parse(localStorage.getItem(APP_ENV.FAVORITES_KEY) || "[]");
+      if (localFavorites.length > 0) {
+        Promise.all(localFavorites.map((id) => addToFavorites(id).unwrap()))
+          .then(() => {
+            localStorage.removeItem(APP_ENV.FAVORITES_KEY);
+          })
+          .catch((error) => console.error("Помилка при синхронізації обраного:", error));
       }
     }
   }
