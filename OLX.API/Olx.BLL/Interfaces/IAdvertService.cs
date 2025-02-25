@@ -1,4 +1,5 @@
 ﻿using Olx.BLL.DTOs;
+using Olx.BLL.Entities;
 using Olx.BLL.Models.Advert;
 using Olx.BLL.Models.Page;
 

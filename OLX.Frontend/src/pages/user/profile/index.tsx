@@ -10,6 +10,7 @@ import CompletedAdverts from "../../../components/completed_adverts";
 import { useState } from "react";
 import { useDeleteCompletedUserAdvertsMutation, useGetCompletedUserAdvertsQuery, useGetUserAdvertsQuery } from "../../../redux/api/advertAuthApi";
 import { toast } from "react-toastify";
+import { confirm } from "../../../utilities/confirm_modal";
 
 
 
@@ -40,14 +41,21 @@ const UserProfile: React.FC = () => {
     ];
 
     const deleteCompleted = async () => {
-        const result = await removeCompleted()
-        if (!result.error) {
-            if (result.data && result.data > 0) {
-                toast(`Оголошення успішно видалені`, {
-                    type: "success"
-                })
-            }
-        }
+        confirm({
+            title: <span className="font-unbounded font-medium text-adaptive-1_7_text text-[red]">Видалення оголошень</span>,
+            content: <div className="font-montserrat text-adaptive-1_7_text my-[2vh] mr-[1.5vw]">Ви впевненні що хочете видалити всі завершені оголошення?</div>,
+            onOk: async () => {
+                const result = await removeCompleted()
+                if (!result.error) {
+                    if (result.data && result.data > 0) {
+                        toast(`Оголошення успішно видалені`, {
+                            type: "success"
+                        })
+                    }
+                }
+            },
+            okText: 'Видалити'
+        })
     }
 
 

@@ -107,10 +107,10 @@ export const advertAuthApi = createApi({
             providesTags: ["UserAdverts"],
         }),
 
-        completedUserAdvert: builder.mutation<void, number>({
+        completeUserAdvert: builder.mutation<void, number>({
             query: (advertId) => ({
                 url: `complete/${advertId}`,
-                method: "DELETE",
+                method: "POST",
             }),
             async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
                 try {
@@ -159,5 +159,6 @@ export const {
     useGetUserAdvertsQuery,
     useGetAdvertsByUserIdQuery,
     useGetCompletedUserAdvertsQuery,
-    useDeleteCompletedUserAdvertsMutation
+    useDeleteCompletedUserAdvertsMutation,
+    useCompleteUserAdvertMutation
 } = advertAuthApi;

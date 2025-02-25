@@ -77,7 +77,7 @@ namespace OLX.API.Controllers
         [HttpPut("create")]
         public async Task<IActionResult> Create([FromForm] AdvertCreationModel creationModel) => Ok(await advertService.CreateAsync(creationModel));
         
-        [Authorize(Roles = Roles.Admin)]
+        [Authorize]
         [HttpDelete("delete/{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {

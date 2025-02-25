@@ -367,6 +367,7 @@ const CreateAdvert: React.FC = () => {
                         fontSize="clamp(14px,1.9vh,36px)"
                         bgColor="#9B7A5B"
                         brColor="#9B7A5B" />
+                        
                 </Form>
             </div>
         </>)
