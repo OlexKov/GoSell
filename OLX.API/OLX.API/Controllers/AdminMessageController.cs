@@ -20,7 +20,11 @@ namespace OLX.API.Controllers
 
         [Authorize(Roles = Roles.User)]
         [HttpGet("get/user")]
-        public async Task<IActionResult> GetUserMessages() => Ok(await adminMessageService.GetUserMessages());
+        public async Task<IActionResult> GetUserMessages() => Ok(await adminMessageService.GetUserMessages(null));
+
+        [Authorize(Roles = Roles.User)]
+        [HttpGet("get/user/unreaded")]
+        public async Task<IActionResult> GetUserUnreadedMessages() => Ok(await adminMessageService.GetUserMessages(true));
 
         [Authorize(Roles = Roles.Admin)]
         [HttpGet("get/deleted")]

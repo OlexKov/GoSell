@@ -73,10 +73,12 @@ namespace Olx.BLL.Services
             return messages;
         }
 
-        public async Task<IEnumerable<AdminMessageDto>> GetUserMessages()
+        public async Task<IEnumerable<AdminMessageDto>> GetUserMessages(bool? unreaded)
         {
             var currentUser = await userManager.UpdateUserActivityAsync(httpContext);
-            var messages = await mapper.ProjectTo<AdminMessageDto>(adminMessageRepo.GetQuery().Where(x => x.User != null && !x.Deleted && x.User.Id == currentUser.Id)).ToArrayAsync();
+            var messages = await mapper.ProjectTo<AdminMessageDto>(adminMessageRepo.GetQuery()
+                .Where(x => x.User != null && !x.Deleted && x.User.Id == currentUser.Id && (!unreaded.HasValue || unreaded.Value == !x.Readed)))
+                .ToArrayAsync();
             return messages;
         }
 

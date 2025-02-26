@@ -1,13 +1,14 @@
 export interface IAdminMesssage {
-    id:number
+    id: number
     userName: string
     userId: number
     readed: boolean
-    message:IMesssage
+    message: IMesssage
+    created: string
 }
 
-export interface IMesssage{
-    id:number
+export interface IMesssage {
+    id: number
     content: string
     subject: string
 }
@@ -16,5 +17,5 @@ export interface IAdminMesssageCreationModel {
     content: string
     userId?: number
     subject: string
-    userIds?:number[]
+    userIds?: number[]
 }

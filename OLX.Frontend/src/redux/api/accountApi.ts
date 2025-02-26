@@ -6,6 +6,7 @@ import { getFormData } from '../../utilities/common_funct';
 import { accountApiAuth } from './accountAuthApi';
 import { advertApi } from './advertApi';
 import { advertAuthApi } from './advertAuthApi';
+import { adminMessageAuthApi } from './adminMessageApi';
 
 export const accountApi = createApi({
     reducerPath: 'accountApi',
@@ -31,6 +32,7 @@ export const accountApi = createApi({
                         dispatch(accountApiAuth.util.invalidateTags(["Favorites"]));
                         dispatch(advertApi.util.invalidateTags(["Advert","Adverts","Locked","NotApproved","AdvertImages"]));
                         dispatch(advertAuthApi.util.invalidateTags(["UserAdvert","UserAdverts"]));
+                        dispatch(adminMessageAuthApi.util.invalidateTags(["AdminMessages","Messeges","UnreadedMessages"]));
                     }
                 } catch (error) {
                     console.error('Login failed:', error);
@@ -73,6 +75,7 @@ export const accountApi = createApi({
                         dispatch(accountApiAuth.util.invalidateTags(["Favorites"]));
                         dispatch(advertApi.util.invalidateTags(["Advert","Adverts","Locked","NotApproved","AdvertImages"]));
                         dispatch(advertAuthApi.util.invalidateTags(["UserAdvert","UserAdverts"]));
+                        dispatch(adminMessageAuthApi.util.invalidateTags(["AdminMessages","Messeges","UnreadedMessages"]));
                     }
                 } catch (error) {
                     console.error('Google login failed:', error);

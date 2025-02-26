@@ -6,7 +6,7 @@ namespace Olx.BLL.Interfaces
     public interface IAdminMessageService
     {
         Task<IEnumerable<AdminMessageDto>> GetAdminMessages();
-        Task<IEnumerable<AdminMessageDto>> GetUserMessages();
+        Task<IEnumerable<AdminMessageDto>> GetUserMessages(bool? unreadedOnly);
         Task<IEnumerable<AdminMessageDto>> GetDeleted();
         Task<AdminMessageDto> GetById(int id);
         Task<AdminMessageDto> UserCreate(AdminMessageCreationModel messageCreationModel);

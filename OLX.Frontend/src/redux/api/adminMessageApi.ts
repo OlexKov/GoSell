@@ -5,7 +5,7 @@ import { createApi } from "@reduxjs/toolkit/query/react"
 export const adminMessageAuthApi = createApi({
     reducerPath: 'adminMessageAuthApi',
     baseQuery: createBaseQueryWithAuth('AdminMessage'),
-    tagTypes: ['Messeges'],
+    tagTypes: ['Messeges', 'AdminMessages', 'UnreadedMessages'],
     endpoints: (builder) => ({
 
         createAdminMessage: builder.mutation<IAdminMesssage, IAdminMesssageCreationModel>({
@@ -17,7 +17,7 @@ export const adminMessageAuthApi = createApi({
                     // timeout: 10000,
                 }
             },
-            invalidatesTags:['Messeges']
+            invalidatesTags: ['AdminMessages']
         }),
 
         createUserMessage: builder.mutation<IAdminMesssage, IAdminMesssageCreationModel>({
@@ -29,7 +29,7 @@ export const adminMessageAuthApi = createApi({
                     // timeout: 10000,
                 }
             },
-            invalidatesTags:['Messeges']
+            invalidatesTags: ['Messeges']
         }),
 
         getAdminMessages: builder.query<IAdminMesssage[], void>({
@@ -40,7 +40,7 @@ export const adminMessageAuthApi = createApi({
                     // timeout: 10000,
                 }
             },
-            providesTags: ["Messeges"],
+            providesTags: ["AdminMessages"],
         }),
 
         getUserMessages: builder.query<IAdminMesssage[], void>({
@@ -53,10 +53,50 @@ export const adminMessageAuthApi = createApi({
             },
             providesTags: ["Messeges"]
         }),
+
+        getUserUnreadedMessages: builder.query<IAdminMesssage[], void>({
+            query: () => {
+                return {
+                    url: 'get/user/unreaded',
+                    method: 'GET',
+                    // timeout: 10000,
+                }
+            },
+            providesTags: ["UnreadedMessages"]
+        }),
+
+        softDeleteUserMessage: builder.mutation<void, number>({
+            query: (id) => {
+                return {
+                    url: `delete/soft/${id}`,
+                    method: 'DELETE',
+
+                    // timeout: 10000,
+                }
+            },
+            invalidatesTags: ['Messeges', 'UnreadedMessages']
+        }),
+
+        setUserMessageReaded: builder.mutation<void, number>({
+            query: (id) => {
+                return {
+                    url: `readed/set/${id}`,
+                    method: 'POST',
+
+                    // timeout: 10000,
+                }
+            },
+            invalidatesTags: ['Messeges', 'UnreadedMessages']
+        }),
+
+
     }),
 })
 export const {
     useCreateAdminMessageMutation,
     useCreateUserMessageMutation,
     useGetAdminMessagesQuery,
-    useGetUserMessagesQuery } = adminMessageAuthApi
+    useGetUserMessagesQuery,
+    useGetUserUnreadedMessagesQuery,
+    useSoftDeleteUserMessageMutation,
+    useSetUserMessageReadedMutation } = adminMessageAuthApi

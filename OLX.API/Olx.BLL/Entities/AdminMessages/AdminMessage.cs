@@ -12,5 +12,6 @@ namespace Olx.BLL.Entities.AdminMessages
         public bool Deleted { get; set; }
         public Message Message { get; set; }
         public int MessageId { get; set; }
+        public DateTime Created { get; set; } = DateTime.UtcNow;
     }
 }
