@@ -144,7 +144,7 @@ const AdminMessagesPage: React.FC = () => {
                 open={messageViewerData.open}
                 onCancel={() => setMessageViewerData({ open: false, message: undefined })}
             >
-                <div className="flex flex-col p-[1vh]  font-montserrat ">
+                <div className="flex flex-col p-[1vh] min-h-[40vh]  font-montserrat ">
                     <p className="text-adaptive-1_7_text text-balance font-medium">{messageViewerData.message?.message.subject}</p>
                     <hr className="my-[2vh] w-full " />
                     <div className="flex gap-[1vw] ">
