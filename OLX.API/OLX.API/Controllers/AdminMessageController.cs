@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Olx.BLL.Helpers;
 using Olx.BLL.Interfaces;
-using Olx.BLL.Models;
+using Olx.BLL.Models.AdminMessage;
+using Olx.BLL.Models.AdminMessageModels;
 
 namespace OLX.API.Controllers
 {
@@ -20,11 +21,19 @@ namespace OLX.API.Controllers
 
         [Authorize(Roles = Roles.User)]
         [HttpGet("get/user")]
-        public async Task<IActionResult> GetUserMessages() => Ok(await adminMessageService.GetUserMessages());
+        public async Task<IActionResult> GetUserMessages() => Ok(await adminMessageService.GetUserMessages(null));
+
+        [Authorize(Roles = Roles.User)]
+        [HttpGet("get/user/unreaded")]
+        public async Task<IActionResult> GetUserUnreadedMessages() => Ok(await adminMessageService.GetUserMessages(true));
 
         [Authorize(Roles = Roles.Admin)]
         [HttpGet("get/deleted")]
         public async Task<IActionResult> Getdeleted() => Ok(await adminMessageService.GetDeleted());
+
+        [Authorize]
+        [HttpPost("get/page")]
+        public async Task<IActionResult> GetPage([FromBody] AdminMessagePageRequest pageRequest) => Ok(await adminMessageService.GetPageAsync(pageRequest));
 
         [Authorize]
         [HttpPost("readed/set/{messageId:int}")]
@@ -63,6 +72,14 @@ namespace OLX.API.Controllers
         public async Task<IActionResult> SoftDelete([FromRoute] int id)
         {
             await adminMessageService.SoftDelete(id);
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpDelete("delete/soft")]
+        public async Task<IActionResult> SoftDeleteRenge([FromBody] IEnumerable<int> ids)
+        {
+            await adminMessageService.SoftDeleteRange(ids);
             return Ok();
         }
 

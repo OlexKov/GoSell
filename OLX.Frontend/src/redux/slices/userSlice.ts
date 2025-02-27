@@ -3,10 +3,6 @@ import { IUser, IUserAuth, IUserState } from '../../models/account';
 import { APP_ENV } from '../../constants/env';
 import { jwtParse } from '../../utilities/jwtParser';
 import { RootState } from '..';
-import { IAdminMesssage } from '../../models/adminMesssage';
-
-
-
 
 const getUserFromToken = (token: string | null): IUser | null => token ? jwtParse(token) : null
 const getUserAuth = (user: IUser | null, remember?: boolean | undefined): IUserAuth => {
@@ -33,7 +29,6 @@ const userInit = (): IUserState => {
         user: user,
         token: token,
         auth: auth,
-        messages: [],
         refreshToken: refreshToken,
     })
 }
@@ -85,35 +80,15 @@ const userSlice = createSlice({
             state.user = null
             state.token = null
             state.refreshToken = null
-            state.messages = []
             state.auth = getUserAuth(null)
         },
-        setMessages: (state, action: { payload: IAdminMesssage[] }) => {
-            state.messages = action.payload
-        },
-        addMessage: (state, action: { payload: IAdminMesssage }) => {
-            state.messages.push(action.payload)
-        },
-        removeMessage: (state, action: { payload: number }) => {
-            state.messages = state.messages.filter(x => x.id !== action.payload)
-        },
-        setReaded: (state, action: { payload: number }) => {
-            const message = state.messages.find(x => x.id === action.payload)
-            if (message) {
-                message.readed = true;
-            }
-        },
-        clearMessages: (state) => {
-            state.messages = []
-        },
+       
     },
 })
 export const getUser = (state: RootState) => state.user.user;
 export const getAuth = (state: RootState) => state.user.auth;
 export const getToken = (state: RootState) => state.user.token;
 export const getRefreshToken = (state: RootState) => state.user.refreshToken
-export const getUnreadedCount = (state: RootState) => state.user.messages.filter(x => !x.readed).length;
-export const getMessages = (state: RootState) => state.user.messages;
 
-export const { setCredentials, updateAccessToken, logOut, addMessage, removeMessage, setReaded, clearMessages, setMessages } = userSlice.actions
+export const { setCredentials, updateAccessToken, logOut } = userSlice.actions
 export default userSlice.reducer

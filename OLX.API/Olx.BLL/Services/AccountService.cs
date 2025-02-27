@@ -15,6 +15,7 @@ using Olx.BLL.Helpers;
 using Olx.BLL.Helpers.Email;
 using Olx.BLL.Interfaces;
 using Olx.BLL.Models;
+using Olx.BLL.Models.AdminMessage;
 using Olx.BLL.Models.Authentication;
 using Olx.BLL.Models.User;
 using Olx.BLL.Resources;
@@ -38,12 +39,28 @@ namespace Olx.BLL.Services
         IConfiguration configuration,
         IMapper mapper,
         IImageService imageService,
+        IAdminMessageService adminMessageService,
         IValidator<ResetPasswordModel> resetPasswordModelValidator,
         IValidator<EmailConfirmationModel> emailConfirmationModelValidator,
         IValidator<UserCreationModel> userCreationModelValidator,
         IValidator<UserEditModel> userEditModelValidator) : IAccountService
     {
         private static readonly ConcurrentDictionary<int, SemaphoreSlim> _userSemaphores = new();
+
+        private string? GetUserDescription(OlxUser? user) 
+        {
+            string? description = user?.Email;
+            if (user != null) 
+            {
+                var userDescription = user.FirstName + " " + user.LastName;
+                if (!String.IsNullOrWhiteSpace(userDescription))
+                {
+                    description = userDescription;
+                }
+            }
+            return description;
+        }
+
         private async Task<string> CreateRefreshToken(int userId)
         {
             var refeshToken = jwtService.GetRefreshToken();
@@ -421,10 +438,18 @@ namespace Olx.BLL.Services
             var user = await GetCurrentUser();
             if (user.FavoriteAdverts.All(a => a.Id != advertId))
             {
-                var advert = await advertRepository.GetItemBySpec(new AdvertSpecs.GetById(advertId))
+                var advert = await advertRepository.GetItemBySpec(new AdvertSpecs.GetById(advertId, AdvertOpt.Images))
                     ?? throw new HttpException(Errors.InvalidAdvertId, HttpStatusCode.BadRequest);
                 user.FavoriteAdverts.Add(advert);
-            }
+                await adminMessageService.AdminCreate(
+                    new AdminMessageCreationModel
+                    {
+                        MessageLogo = advert.Images.FirstOrDefault(x => x.Priority == 0)?.Name,
+                        Content = $"Користувач \"{GetUserDescription(user)}\" додав ваше оголошення \"{advert.Title}\" в обрані",
+                        Subject = "Ваше оголошення було додане в обрані",
+                        UserId = advert.UserId
+                    });
+        }
             await userManager.UpdateAsync(user);
         }
 

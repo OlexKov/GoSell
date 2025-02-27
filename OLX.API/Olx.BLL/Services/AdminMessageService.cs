@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Olx.BLL.DTOs.AdminMessage;
+using Olx.BLL.DTOs.CategoryDtos;
 using Olx.BLL.Entities;
 using Olx.BLL.Entities.AdminMessages;
 using Olx.BLL.Exceptions;
@@ -12,7 +13,12 @@ using Olx.BLL.Exstensions;
 using Olx.BLL.Helpers;
 using Olx.BLL.Hubs;
 using Olx.BLL.Interfaces;
-using Olx.BLL.Models;
+using Olx.BLL.Models.AdminMessage;
+using Olx.BLL.Models.AdminMessageModels;
+using Olx.BLL.Models.Page;
+using Olx.BLL.Pagination.Filters;
+using Olx.BLL.Pagination.SortData;
+using Olx.BLL.Pagination;
 using Olx.BLL.Resources;
 using Olx.BLL.Specifications;
 using System.Net;
@@ -73,10 +79,12 @@ namespace Olx.BLL.Services
             return messages;
         }
 
-        public async Task<IEnumerable<AdminMessageDto>> GetUserMessages()
+        public async Task<IEnumerable<AdminMessageDto>> GetUserMessages(bool? unreaded)
         {
             var currentUser = await userManager.UpdateUserActivityAsync(httpContext);
-            var messages = await mapper.ProjectTo<AdminMessageDto>(adminMessageRepo.GetQuery().Where(x => x.User != null && !x.Deleted && x.User.Id == currentUser.Id)).ToArrayAsync();
+            var messages = await mapper.ProjectTo<AdminMessageDto>(adminMessageRepo.GetQuery()
+                .Where(x => x.User != null && !x.Deleted && x.User.Id == currentUser.Id && (!unreaded.HasValue || unreaded.Value == !x.Readed)))
+                .ToArrayAsync();
             return messages;
         }
 
@@ -102,7 +110,7 @@ namespace Olx.BLL.Services
                 await adminMessageRepo.SaveAsync();
                 var messageDto = mapper.Map<AdminMessageDto>(adminMessage);
                 await hubContext.Clients.Users(messageDto.UserId.ToString())
-                 .SendAsync(HubMethods.ReceiveAdminMessage, messageDto);
+                 .SendAsync(HubMethods.ReceiveAdminMessage);
                 return messageDto;
             }
             else 
@@ -139,12 +147,12 @@ namespace Olx.BLL.Services
                     if (!allUsers)
                     {
                         await hubContext.Clients.Users(usersIds.Select(x => x.ToString()).ToArray())
-                        .SendAsync(HubMethods.ReceiveAdminMessage, messageDto);
+                        .SendAsync(HubMethods.ReceiveAdminMessage);
                     }
                     else 
                     {
                         await hubContext.Clients.Group("Users")
-                       .SendAsync(HubMethods.ReceiveAdminMessage, messageDto);
+                       .SendAsync(HubMethods.ReceiveAdminMessage);
                     }
                    
                     return messageDto;
@@ -177,6 +185,34 @@ namespace Olx.BLL.Services
                 message.Readed = true;
             }
             await adminMessageRepo.SaveAsync();
+        }
+
+        public async Task SoftDeleteRange(IEnumerable<int> ids)
+        {
+            await userManager.UpdateUserActivityAsync(httpContext);
+            var messages = await adminMessageRepo.GetListBySpec(new AdminMessageSpecs.GetMessagesForUserByIds(ids));
+            if (!messages.Any())
+            { 
+                throw new HttpException(Errors.InvalidAdminMessageId, HttpStatusCode.BadRequest); 
+            }
+            foreach (var message in messages) 
+            {
+                message.Deleted = true;
+            }
+            await adminMessageRepo.SaveAsync();
+        }
+
+        public async Task<PageResponse<AdminMessageDto>> GetPageAsync(AdminMessagePageRequest pageRequest)
+        {
+            var query = mapper.ProjectTo<AdminMessageDto>(adminMessageRepo.GetQuery().AsNoTracking());
+            var paginationBuilder = new PaginationBuilder<AdminMessageDto>(query);
+            var adminMessageFilter = mapper.Map<AdminMessageFilter>(pageRequest);
+            var page = await paginationBuilder.GetPageAsync(pageRequest.Page, pageRequest.Size, adminMessageFilter, new AdminMessageSortData());
+            return new()
+            {
+                Total = page.Total,
+                Items = page.Items
+            };
         }
     }
 }

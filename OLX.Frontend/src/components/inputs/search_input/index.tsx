@@ -5,7 +5,7 @@ import { SearchOutlined } from '@mui/icons-material'
 import { SearchInputProps } from './props'
 import { useNavigate } from 'react-router-dom'
 
-const SearchInput: React.FC<SearchInputProps> = ({ className = '' }) => {
+const SearchInput: React.FC<SearchInputProps> = ({ className }) => {
     const [search,setSearch] = useState<string>('')
     const navigate = useNavigate()
     const onEnterPress = () => {
