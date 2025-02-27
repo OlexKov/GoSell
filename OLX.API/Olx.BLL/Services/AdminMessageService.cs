@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Olx.BLL.DTOs.AdminMessage;
-using Olx.BLL.DTOs.CategoryDtos;
 using Olx.BLL.Entities;
 using Olx.BLL.Entities.AdminMessages;
 using Olx.BLL.Exceptions;
@@ -22,7 +21,6 @@ using Olx.BLL.Pagination;
 using Olx.BLL.Resources;
 using Olx.BLL.Specifications;
 using System.Net;
-using System.Linq;
 
 
 namespace Olx.BLL.Services

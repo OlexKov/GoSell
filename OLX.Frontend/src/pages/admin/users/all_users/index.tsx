@@ -96,7 +96,7 @@ const UsersPage: React.FC = () => {
 
     const lockUser = (userId: number) => {
         selectedUser.current = userId;
-        adminModalTitle.current = adminModalTitle.current = `Блокування користувача "${getUserName(selectedUser.current)}"`
+        adminModalTitle.current = adminModalTitle.current = `Блокування користувача "${getUserName(userId)}"`
         setAminLockOpen(true)
     }
 
