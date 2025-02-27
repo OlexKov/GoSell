@@ -35,7 +35,7 @@ namespace Olx.BLL.Exstensions
             services.AddScoped<INewPostService, NewPostService>();
             services.AddHostedService<TokenCleanupService>();
             services.AddHostedService<ImageCeanupService>();
-           
+            services.AddHostedService<AdminMesssageCleanupService>();
 
 
             services.AddMailKit(optionBuilder =>

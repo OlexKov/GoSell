@@ -1,3 +1,4 @@
+import { APP_ENV } from "../../constants/env"
 import { Images } from "../../constants/images"
 import { IAdminMesssage } from "../../models/adminMesssage"
 import { getFormatDateTime } from "../../utilities/common_funct"
@@ -16,11 +17,11 @@ const AdminMessageCard: React.FC<AdminMessageCardProps> = ({ adminMessage, divid
         onDelete && onDelete(adminMessage.id)
     }
     return (
-        <div className={`${onClick ? 'cursor-pointer transition-all duration-500 ease-in-out hover:scale-[1.005]' : ''}`} onClick={() => onClick &&  onClick(adminMessage.id)}>
+        <div className={`${onClick ? 'cursor-pointer transition-all duration-500 ease-in-out hover:scale-[1.005]' : ''}`} onClick={() => onClick && onClick(adminMessage.id)}>
             <div className={`min-h-[70px]  ${className}`}>
                 <div className={`flex gap-[1vw] h-full  items-center rounded-md ${adminMessage.readed ? 'bg-white' : 'bg-slate-100'}`}>
                     <div className=" h-full aspect-square p-[0.5vh] bg-white rounded-md border border-[#9B7A5B]">
-                        <img className="h-full aspect-square" src={Images.logo} />
+                        <img className="h-full aspect-square" src={adminMessage.messageLogo ? APP_ENV.IMAGES_200_URL + adminMessage.messageLogo : Images.logo} />
                     </div>
 
                     <div className="flex flex-col justify-between font-montserrat  overflow-hidden text-[black]">

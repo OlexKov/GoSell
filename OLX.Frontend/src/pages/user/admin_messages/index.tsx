@@ -10,6 +10,8 @@ import { confirm } from "../../../utilities/confirm_modal";
 import { Modal, Pagination } from "antd";
 import { getDateTime } from "../../../utilities/common_funct";
 import './style.scss'
+import { APP_ENV } from "../../../constants/env";
+import { Images } from "../../../constants/images";
 
 const AdminMessagesPage: React.FC = () => {
     const [pageRequest, setPageRequest] = useState<IAdminMesssagePageRequest>({
@@ -144,7 +146,12 @@ const AdminMessagesPage: React.FC = () => {
                 <div className="flex flex-col p-[1vh] font-montserrat ">
                     <p className="text-adaptive-1_7_text text-balance font-medium">{messageViewerData.message?.message.subject}</p>
                     <hr className="pb-[1vh]" />
-                    <p className="text-adaptive-1_6-text text-balance ">{messageViewerData.message?.message.content}</p>
+                    <div className="flex gap-[1vw]">
+                        <div className=" h-[9vh] aspect-square p-[0.5vh] bg-white rounded-md border border-[#9B7A5B]">
+                            <img className="h-full aspect-square" src={messageViewerData.message?.messageLogo ? APP_ENV.IMAGES_200_URL + messageViewerData.message?.messageLogo : Images.logo} />
+                        </div>
+                        <p className="text-adaptive-1_6-text text-balance self-start">{messageViewerData.message?.message.content}</p>
+                    </div>
                 </div>
             </Modal>
         </>)

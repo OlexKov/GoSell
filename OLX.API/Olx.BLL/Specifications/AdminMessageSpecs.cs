@@ -9,9 +9,9 @@ namespace Olx.BLL.Specifications
         public class GetMessagesForAdmin : Specification<AdminMessage>
         {
             public GetMessagesForAdmin(bool tracking = false) =>
-                Query.Where(x=> x.User == null && !x.Deleted)
+                Query.Where(x => x.User == null && !x.Deleted)
                      .AsTracking(tracking)
-                     .Include(x=>x.Message);
+                     .Include(x => x.Message);
         }
 
         public class GetMessagesForUser : Specification<AdminMessage>
@@ -59,6 +59,14 @@ namespace Olx.BLL.Specifications
         {
             public GetDeleted(bool tracking = false) =>
                 Query.Where(x => x.Deleted)
+                     .AsTracking(tracking)
+                     .Include(x => x.Message);
+        }
+
+        public class GetDeletedExpDay : Specification<AdminMessage>
+        {
+            public GetDeletedExpDay(int expDays, bool tracking = false) =>
+                Query.Where(x => x.Deleted && x.Created.AddDays(expDays) >= DateTime.UtcNow)
                      .AsTracking(tracking)
                      .Include(x => x.Message);
         }

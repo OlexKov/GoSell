@@ -7,6 +7,7 @@ export interface IAdminMesssage {
     readed: boolean
     message: IMesssage
     created: string
+    messageLogo?:string
 }
 
 export interface IMesssage {

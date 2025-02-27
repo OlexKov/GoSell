@@ -10,6 +10,7 @@ namespace Olx.BLL.DTOs.AdminMessage
         public int UserId { get; set; }
         public bool Readed { get; set; }
         public bool Deleted { get; set; }
+        public string? MessageLogo { get; set; }
         public DateTime Created { get; set; }
         public MessageDto Message { get; set; }
     }
