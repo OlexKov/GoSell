@@ -62,10 +62,7 @@ function App() {
             </Route>
           </Route>
 
-          <Route path='user'>
-            <Route path='favorites' element={<FavoritesAdverts />} />
-          </Route>
-
+          <Route path='favorites' element={<FavoritesAdverts />} />
         </Route>
       </Route>
 
