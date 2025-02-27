@@ -1,5 +1,4 @@
 ﻿
-
 namespace Olx.BLL.Helpers
 {
     public static class HubMethods

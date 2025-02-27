@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Olx.BLL.Helpers;
 using Olx.BLL.Resources;
 
-
 namespace Olx.BLL.Validators.Extentions
 {
     public static class CustomValidationExtensions

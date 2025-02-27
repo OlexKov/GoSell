@@ -2,7 +2,6 @@
 using Olx.BLL.Models.Page;
 using Olx.BLL.Models.User;
 
-
 namespace Olx.BLL.Interfaces
 {
     public interface IUserService

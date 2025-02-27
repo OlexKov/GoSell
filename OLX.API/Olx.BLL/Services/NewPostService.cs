@@ -9,10 +9,8 @@ using Olx.BLL.Interfaces;
 using Olx.BLL.Models.NewPost;
 using Olx.BLL.Resources;
 using Olx.BLL.Specifications;
-using System.Collections.Concurrent;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Olx.BLL.Services
 {

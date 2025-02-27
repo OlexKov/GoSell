@@ -1,7 +1,4 @@
-﻿
-
-using Olx.BLL.Models.Page;
-
+﻿using Olx.BLL.Models.Page;
 
 namespace Olx.BLL.Models.Advert
 {

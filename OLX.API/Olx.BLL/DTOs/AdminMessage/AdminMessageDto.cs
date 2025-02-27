@@ -1,6 +1,4 @@
 ﻿
-
-
 namespace Olx.BLL.DTOs.AdminMessage
 {
     public class AdminMessageDto

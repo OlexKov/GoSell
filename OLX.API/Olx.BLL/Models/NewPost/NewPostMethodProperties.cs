@@ -1,5 +1,4 @@
 ﻿
-
 namespace Olx.BLL.Models.NewPost
 {
     public class NewPostMethodProperties

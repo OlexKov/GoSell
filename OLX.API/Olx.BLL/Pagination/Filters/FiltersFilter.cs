@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Olx.BLL.DTOs.FilterDtos;
-using Olx.BLL.Entities.FilterEntities;
+﻿using Olx.BLL.DTOs.FilterDtos;
 using Olx.BLL.Pagination.Interfaces;
 
 namespace Olx.BLL.Pagination.Filters

@@ -2,7 +2,6 @@
 using Olx.BLL.Pagination.Interfaces;
 using System.Linq.Expressions;
 
-
 namespace Olx.BLL.Pagination.SortData
 {
     public class AdvertSortData (bool descending,string sortKey) : IPaginationSortData<AdvertDto>

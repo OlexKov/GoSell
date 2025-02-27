@@ -33,7 +33,8 @@ namespace OLX.API.Controllers
 
         [Authorize]
         [HttpPost("get/page")]
-        public async Task<IActionResult> GetPage([FromBody] AdminMessagePageRequest pageRequest) => Ok(await adminMessageService.GetPageAsync(pageRequest));
+        public async Task<IActionResult> GetPage([FromBody] AdminMessagePageRequest pageRequest) => 
+            Ok(await adminMessageService.GetPageAsync(pageRequest));
 
         [Authorize]
         [HttpPost("readed/set/{messageId:int}")]
@@ -53,11 +54,13 @@ namespace OLX.API.Controllers
 
         [Authorize(Roles = Roles.Admin)]
         [HttpPut("create/admin")]
-        public async Task<IActionResult> AdminCreate([FromBody] AdminMessageCreationModel messageCreationModel) => Ok(await adminMessageService.AdminCreate(messageCreationModel));
+        public async Task<IActionResult> AdminCreate([FromBody] AdminMessageCreationModel messageCreationModel) =>
+            Ok(await adminMessageService.AdminCreate(messageCreationModel));
 
         [Authorize(Roles = Roles.User)]
         [HttpPut("create/user")]
-        public async Task<IActionResult> UserCreate([FromBody] AdminMessageCreationModel messageCreationModel) => Ok(await adminMessageService.UserCreate(messageCreationModel));
+        public async Task<IActionResult> UserCreate([FromBody] AdminMessageCreationModel messageCreationModel) =>
+            Ok(await adminMessageService.UserCreate(messageCreationModel));
 
         [Authorize(Roles = Roles.Admin)]
         [HttpDelete("delete/{id:int}")]

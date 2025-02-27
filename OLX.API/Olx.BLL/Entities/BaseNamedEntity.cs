@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-
 namespace Olx.BLL.Entities
 {
     public class BaseNamedEntity : BaseEntity

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 using Olx.BLL.Helpers;
 using Olx.BLL.Interfaces;
 using Olx.BLL.Models;
@@ -12,7 +11,7 @@ namespace OLX.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountController(IAccountService accountService, IConfiguration configuration) : ControllerBase
+    public class AccountController(IAccountService accountService) : ControllerBase
     {
        // private readonly string _refreshTokenCookiesName = configuration["RefreshTokenCookiesName"]!;
 

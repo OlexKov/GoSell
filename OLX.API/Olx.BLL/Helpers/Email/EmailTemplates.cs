@@ -1,7 +1,5 @@
 ﻿using System.Net;
 
-
-
 namespace Olx.BLL.Helpers.Email
 {
     internal static class EmailTemplates

@@ -3,7 +3,6 @@ using Olx.BLL.Models.User;
 using Olx.BLL.Resources;
 using Olx.BLL.Validators.Extentions;
 
-
 namespace Olx.BLL.Validators.User
 {
     public class UserCreationModelValidator : AbstractValidator<UserCreationModel>

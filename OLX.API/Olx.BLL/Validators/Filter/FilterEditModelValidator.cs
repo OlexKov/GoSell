@@ -1,5 +1,4 @@
-﻿
-using FluentValidation;
+﻿using FluentValidation;
 using Olx.BLL.Models.FilterModels;
 using Olx.BLL.Resources;
 

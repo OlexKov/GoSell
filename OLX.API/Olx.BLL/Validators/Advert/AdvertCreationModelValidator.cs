@@ -1,6 +1,4 @@
-﻿
-using FluentValidation;
-using Olx.BLL.Helpers;
+﻿using FluentValidation;
 using Olx.BLL.Models.Advert;
 using Olx.BLL.Resources;
 using Olx.BLL.Validators.Extentions;

@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 
-
 namespace Olx.BLL.Models.NewPost
 {
     public class NewPostRequestModel

@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Olx.BLL.Entities.NewPost;
 
-
 namespace Olx.DAL.Data.EntityConfigs.NewPost
 {
     public class SettlementConfig : IEntityTypeConfiguration<Settlement>

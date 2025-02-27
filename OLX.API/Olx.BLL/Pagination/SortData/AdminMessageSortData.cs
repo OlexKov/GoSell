@@ -1,7 +1,6 @@
 ﻿using Olx.BLL.DTOs.AdminMessage;
 using Olx.BLL.Pagination.Interfaces;
 
-
 namespace Olx.BLL.Pagination.SortData
 {
     public class AdminMessageSortData : IPaginationSortData<AdminMessageDto>

@@ -1,6 +1,4 @@
-﻿
-using Olx.BLL.DTOs.CategoryDtos;
-using Olx.BLL.Entities;
+﻿using Olx.BLL.DTOs.CategoryDtos;
 using Olx.BLL.Pagination.Interfaces;
 
 namespace Olx.BLL.Pagination.Filters

@@ -1,6 +1,4 @@
-﻿
-
-using Olx.BLL.Entities.NewPost;
+﻿using Olx.BLL.Entities.NewPost;
 
 namespace Olx.BLL.Models.NewPost
 {

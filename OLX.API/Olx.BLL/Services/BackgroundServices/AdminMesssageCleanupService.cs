@@ -1,12 +1,10 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Olx.BLL.Entities.AdminMessages;
 using Olx.BLL.Interfaces;
 using Olx.BLL.Specifications;
-using static MailKit.Net.Imap.ImapEvent;
 
 
 namespace Olx.BLL.Services.BackgroundServices

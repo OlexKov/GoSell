@@ -1,5 +1,4 @@
-﻿
-using Ardalis.Specification;
+﻿using Ardalis.Specification;
 using Olx.BLL.Entities.AdminMessages;
 
 namespace Olx.BLL.Specifications

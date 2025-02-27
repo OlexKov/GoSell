@@ -1,8 +1,6 @@
 ﻿using Ardalis.Specification;
 using Olx.BLL.Entities;
 
-
-
 namespace Olx.BLL.Specifications
 {
     public static class AdvertSpecs

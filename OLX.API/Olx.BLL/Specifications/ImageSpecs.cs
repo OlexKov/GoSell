@@ -1,6 +1,5 @@
 ﻿using Ardalis.Specification;
 using Olx.BLL.Entities;
-using Olx.BLL.Entities.FilterEntities;
 
 namespace Olx.BLL.Specifications
 {

@@ -1,5 +1,4 @@
 ﻿
-
 namespace Olx.BLL.Models.Authentication
 {
     public class AuthRequest

@@ -1,7 +1,6 @@
 ﻿using Olx.BLL.Entities;
 using System.Security.Claims;
 
-
 namespace Olx.BLL.Interfaces
 {
     public interface IJwtService

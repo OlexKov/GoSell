@@ -1,6 +1,4 @@
-﻿
-using Olx.BLL.DTOs.FilterDtos;
-
+﻿using Olx.BLL.DTOs.FilterDtos;
 
 namespace Olx.BLL.DTOs
 {

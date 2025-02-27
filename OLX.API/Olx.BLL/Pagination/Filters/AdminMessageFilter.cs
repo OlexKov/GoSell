@@ -1,7 +1,6 @@
 ﻿using Olx.BLL.DTOs.AdminMessage;
 using Olx.BLL.Pagination.Interfaces;
 
-
 namespace Olx.BLL.Pagination.Filters
 {
     public class AdminMessageFilter : IPaginationFilter<AdminMessageDto>

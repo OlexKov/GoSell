@@ -1,5 +1,4 @@
-﻿
-using FluentValidation;
+﻿using FluentValidation;
 using Olx.BLL.Models.AdminMessage;
 using Olx.BLL.Resources;
 using Olx.BLL.Validators.Extentions;

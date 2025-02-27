@@ -1,6 +1,4 @@
-﻿using Olx.BLL.Entities.ChatEntities;
-
-
+﻿
 namespace Olx.BLL.DTOs
 {
     public class ChatMessageDto
