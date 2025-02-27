@@ -1,10 +1,12 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Olx.BLL.Entities.AdminMessages;
 using Olx.BLL.Interfaces;
 using Olx.BLL.Specifications;
+using static MailKit.Net.Imap.ImapEvent;
 
 
 namespace Olx.BLL.Services.BackgroundServices
@@ -29,13 +31,21 @@ namespace Olx.BLL.Services.BackgroundServices
         {
             using var scope = serviceScopeFactory.CreateScope();
             var adminMessageRepo = scope.ServiceProvider.GetRequiredService<IRepository<AdminMessage>>();
-            var deletedMesseges = await adminMessageRepo.GetListBySpec(new AdminMessageSpecs.GetDeletedExpDay(messageExpDay));
+            var messageRepo = scope.ServiceProvider.GetRequiredService<IRepository<Message>>();
+            var deletedAdminMesseges = await adminMessageRepo.GetListBySpec(new AdminMessageSpecs.GetDeletedExpDay(messageExpDay));
+           
 
-            if (deletedMesseges.Any())
+            if (deletedAdminMesseges.Any())
             {
-                adminMessageRepo.DeleteRange(deletedMesseges);
+                adminMessageRepo.DeleteRange(deletedAdminMesseges);
                 await adminMessageRepo.SaveAsync();
-                Console.WriteLine($"Removed {deletedMesseges.Count()} admin messages");
+                var deletedMesseges = await messageRepo.GetQuery().Where(x => !x.AdminMessages.Any()).ToArrayAsync();
+                if (deletedMesseges.Length > 0) 
+                {
+                    messageRepo.DeleteRange(deletedMesseges);
+                    await messageRepo.SaveAsync();
+                }
+                Console.WriteLine($"Removed {deletedAdminMesseges.Count()} admin messages");
             }
         }
     }
