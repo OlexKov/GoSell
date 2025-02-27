@@ -124,11 +124,12 @@ const AdminMessagesPage: React.FC = () => {
 
             </div>
             <Modal
+                width={'40vw'}
                 centered={true}
                 title={
                     <div className="flex items-center justify-between font-montserrat ">
                         <p className="text-adaptive-1_6-text">{`Системне повідомлення`}</p>
-                        <span className="text-adaptive-1_3-text pr-[1vw] text-gray-500">{getDateTime(messageViewerData.message?.created || '')}</span>
+                        <span className="text-adaptive-1_3-text pr-[1.5vw] text-gray-500">{getDateTime(messageViewerData.message?.created || '')}</span>
                     </div>}
 
                 footer={
