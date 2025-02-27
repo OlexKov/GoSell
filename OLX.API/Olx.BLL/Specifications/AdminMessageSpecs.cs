@@ -22,6 +22,14 @@ namespace Olx.BLL.Specifications
                      .Include(x => x.Message);
         }
 
+        public class GetMessagesForUserByIds : Specification<AdminMessage>
+        {
+            public GetMessagesForUserByIds(IEnumerable<int> userIds, bool tracking = false) =>
+                Query.Where(x => x.User != null && !x.Deleted && userIds.Contains(x.Id))
+                     .AsTracking(tracking)
+                     .Include(x => x.Message);
+        }
+
         public class GetById : Specification<AdminMessage>
         {
             public GetById(int? id,bool tracking = false) =>

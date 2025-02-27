@@ -92,11 +92,11 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
 
     return (
         <div className={`h-[9vh] min-h-[60px] sticky px-[8vw] top-0 items-center bg-white flex-shrink-0 flex justify-between z-50 ${className}`}  >
-            <div className="h-[42.5%] cursor-pointer transition-all duration-300 ease-in-out hover:scale-[1.05] hover:rotate-1">
+            <div className="h-[42.5%] cursor-pointer  flex-shrink-0  transition-all duration-300 ease-in-out hover:scale-[1.05] hover:rotate-1">
                 <img alt="logo" onClick={() => navigate('/')} className="h-full w-full" src={Images.logo} />
             </div>
 
-            <SearchInput />
+            <SearchInput className="mx-[1vw]" />
             <div className='flex gap-10  items-center'>
                 {user && <Badge count={userUnreadedMessages?.length} size='small'>
                     <div className={`h-7  text-amber-950 cursor-pointer transition-all duration-300 ease-in-out hover:scale-[1.1]`}>

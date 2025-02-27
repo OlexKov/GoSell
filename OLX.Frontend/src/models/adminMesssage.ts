@@ -1,3 +1,5 @@
+import { PageRequest } from "./user"
+
 export interface IAdminMesssage {
     id: number
     userName: string
@@ -18,4 +20,9 @@ export interface IAdminMesssageCreationModel {
     userId?: number
     subject: string
     userIds?: number[]
+}
+
+export interface IAdminMesssagePageRequest extends PageRequest{
+    readed?:boolean
+    deleted?:boolean
 }
