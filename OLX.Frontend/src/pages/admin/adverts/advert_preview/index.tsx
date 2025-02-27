@@ -15,7 +15,7 @@ const AdminAdvertPreview: React.FC = () => {
                 icon={<Preview className="text-2xl" />}/>
             <BackButton className="my-5 text-adaptive-text" title="Назад" />
             {!isLoading &&
-                <div className="m-10">
+                <div className="m-10 h-[65%] aspect-video">
                     <AdvertViewer buttons={false} advert={advert} />
                 </div>
             }
