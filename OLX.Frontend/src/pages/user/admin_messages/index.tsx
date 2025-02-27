@@ -145,7 +145,7 @@ const AdminMessagesPage: React.FC = () => {
             >
                 <div className="flex flex-col p-[1vh] font-montserrat ">
                     <p className="text-adaptive-1_7_text text-balance font-medium">{messageViewerData.message?.message.subject}</p>
-                    <hr className="pb-[1vh]" />
+                    <hr className="my-[2vh]" />
                     <div className="flex gap-[1vw]">
                         <div className=" h-[9vh] aspect-square p-[0.5vh] bg-white rounded-md border border-[#9B7A5B]">
                             <img className="h-full aspect-square" src={messageViewerData.message?.messageLogo ? APP_ENV.IMAGES_200_URL + messageViewerData.message?.messageLogo : Images.logo} />
