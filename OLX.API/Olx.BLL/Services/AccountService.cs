@@ -47,7 +47,7 @@ namespace Olx.BLL.Services
     {
         private static readonly ConcurrentDictionary<int, SemaphoreSlim> _userSemaphores = new();
 
-        private string? GetUserDescription(OlxUser? user) 
+        private static string? GetUserDescription(OlxUser? user) 
         {
             string? description = user?.Email;
             if (user != null) 

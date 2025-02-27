@@ -60,6 +60,18 @@ namespace Olx.BLL.Specifications
             }
 
         }
+
+        public class GetAll : Specification<OlxUser>
+        {
+            public GetAll(IEnumerable<int>? excludeIds = null, UserOpt? options = null)
+            {
+                SetOptions(Query, options);
+                if (excludeIds != null && excludeIds.Any()) 
+                {
+                    Query.Where(x => !excludeIds.Contains(x.Id)).AsTracking(true);
+                }
+            }
+        }
         public class GetExcludIds : Specification<OlxUser>
         {
             public GetExcludIds(IEnumerable<int> ids, UserOpt? options = null)

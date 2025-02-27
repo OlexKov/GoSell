@@ -22,20 +22,35 @@ using Olx.BLL.Pagination;
 using Olx.BLL.Resources;
 using Olx.BLL.Specifications;
 using System.Net;
+using System.Linq;
 
 
 namespace Olx.BLL.Services
 {
     public class AdminMessageService(
         IRepository<AdminMessage> adminMessageRepo,
-        IRepository<Message> messageRepo,
         UserManager<OlxUser> userManager,
+        IRepository<OlxUser> userRepo,
+        IRepository<Message> messageRepo,
         IHttpContextAccessor httpContext,
         IValidator<AdminMessageCreationModel> validator,
         IMapper mapper,
-        IHubContext<MessageHub> hubContext
+        IHubContext<MessageHub> hubContext,
+        RoleManager<IdentityRole<int>> roleManager,
+        IRepository<IdentityUserRole<int>> userRolesRepo
         ) : IAdminMessageService
     {
+
+        private async Task<IEnumerable<int>> _getAdminsIds()
+        {
+            var adminRole = await roleManager.FindByNameAsync(Roles.Admin)
+                ?? throw new HttpException(Errors.InvalidRole, HttpStatusCode.InternalServerError);
+            var adminIds = userRolesRepo.GetQuery()
+                .Where(x => x.RoleId == adminRole.Id)
+                .Select(z => z.UserId);
+            return adminIds;
+        }
+
         public async Task<AdminMessageDto> UserCreate(AdminMessageCreationModel messageCreationModel)
         {
             validator.ValidateAndThrow(messageCreationModel);
@@ -104,10 +119,10 @@ namespace Olx.BLL.Services
             var adminMessage = mapper.Map<AdminMessage>(messageCreationModel);
             if (messageCreationModel.UserId is not null)
             {
-                var user = userManager.Users.FirstOrDefault(x => x.Id == messageCreationModel.UserId)
+                var user = userManager.Users.Include(x => x.AdminMessages).FirstOrDefault(x => x.Id == messageCreationModel.UserId)
                     ?? throw new HttpException(Errors.InvalidUserId, HttpStatusCode.BadRequest);
-                await adminMessageRepo.AddAsync(adminMessage);
-                await adminMessageRepo.SaveAsync();
+                user.AdminMessages.Add(adminMessage);
+                await userManager.UpdateAsync(user);
                 var messageDto = mapper.Map<AdminMessageDto>(adminMessage);
                 await hubContext.Clients.Users(messageDto.UserId.ToString())
                  .SendAsync(HubMethods.ReceiveAdminMessage);
@@ -115,47 +130,33 @@ namespace Olx.BLL.Services
             }
             else 
             {
-                IEnumerable<int> usersIds;
-                bool allUsers = false;
-                if (messageCreationModel.UserIds is null || !messageCreationModel.UserIds.Any())
-                {
-                    usersIds = await userManager.Users.Select(x => x.Id).ToArrayAsync();
-                    allUsers = true;
-                }
-                else 
-                {
-                    usersIds = messageCreationModel.UserIds;
-                }
+                IEnumerable<int>? usersIds = messageCreationModel.UserIds is not null && messageCreationModel.UserIds.Any()
+                    ? messageCreationModel.UserIds
+                    : await userRepo.GetQuery().Select(x => x.Id).ToArrayAsync();
                 
+
                 if (usersIds is not null && usersIds.Any())
                 {
-                    List<AdminMessage> messages = [];
-                    var message = adminMessage.Message;
-                    await messageRepo.AddAsync(message);
+                    var adminsIds = await _getAdminsIds();
+                    usersIds = usersIds.Where(x => !adminsIds.Contains(x));
+                    var messsage = adminMessage.Message;
+                    await messageRepo.AddAsync(messsage);
                     await messageRepo.SaveAsync();
-                    foreach (var id in usersIds)
+                    List<AdminMessage> messeges = [];
+                    foreach (var userId in usersIds)
                     {
                         adminMessage = mapper.Map<AdminMessage>(messageCreationModel);
-                        adminMessage.UserId = id;
-                        adminMessage.Message = message;
-                        messages.Add(adminMessage);
+                        adminMessage.Message = messsage;
+                        adminMessage.UserId = userId;
+                        messeges.Add(adminMessage);
                     }
-                    await adminMessageRepo.AddRangeAsync(messages);
+                    await adminMessageRepo.AddRangeAsync(messeges);
                     await adminMessageRepo.SaveAsync();
-                   
-                    var messageDto = mapper.Map<AdminMessageDto>(adminMessage);
-                    if (!allUsers)
-                    {
-                        await hubContext.Clients.Users(usersIds.Select(x => x.ToString()).ToArray())
-                        .SendAsync(HubMethods.ReceiveAdminMessage);
-                    }
-                    else 
-                    {
-                        await hubContext.Clients.Group("Users")
-                       .SendAsync(HubMethods.ReceiveAdminMessage);
-                    }
-                   
-                    return messageDto;
+
+                    await hubContext.Clients.Users(usersIds.Select(x => x.ToString()))
+                     .SendAsync(HubMethods.ReceiveAdminMessage);
+
+                    return mapper.Map<AdminMessageDto>(adminMessage);
                 }
             }
             throw new HttpException(Errors.InvalidUserId, HttpStatusCode.BadRequest);
@@ -204,7 +205,8 @@ namespace Olx.BLL.Services
 
         public async Task<PageResponse<AdminMessageDto>> GetPageAsync(AdminMessagePageRequest pageRequest)
         {
-            var query = mapper.ProjectTo<AdminMessageDto>(adminMessageRepo.GetQuery().AsNoTracking());
+            var currentUser = await userManager.UpdateUserActivityAsync(httpContext);
+            var query = mapper.ProjectTo<AdminMessageDto>(adminMessageRepo.GetQuery().Where(x => x.User != null && x.User.Id == currentUser.Id).AsNoTracking());
             var paginationBuilder = new PaginationBuilder<AdminMessageDto>(query);
             var adminMessageFilter = mapper.Map<AdminMessageFilter>(pageRequest);
             var page = await paginationBuilder.GetPageAsync(pageRequest.Page, pageRequest.Size, adminMessageFilter, new AdminMessageSortData());
