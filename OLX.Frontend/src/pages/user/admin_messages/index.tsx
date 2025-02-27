@@ -143,14 +143,14 @@ const AdminMessagesPage: React.FC = () => {
                 open={messageViewerData.open}
                 onCancel={() => setMessageViewerData({ open: false, message: undefined })}
             >
-                <div className="flex flex-col p-[1vh] font-montserrat ">
+                <div className="flex flex-col p-[1vh]  font-montserrat ">
                     <p className="text-adaptive-1_7_text text-balance font-medium">{messageViewerData.message?.message.subject}</p>
-                    <hr className="my-[2vh]" />
-                    <div className="flex gap-[1vw]">
+                    <hr className="my-[2vh] w-full " />
+                    <div className="flex gap-[1vw] ">
                         <div className=" h-[9vh] aspect-square p-[0.5vh] bg-white rounded-md border border-[#9B7A5B]">
                             <img className="h-full aspect-square" src={messageViewerData.message?.messageLogo ? APP_ENV.IMAGES_200_URL + messageViewerData.message?.messageLogo : Images.logo} />
                         </div>
-                        <p className="text-adaptive-1_6-text text-balance self-start">{messageViewerData.message?.message.content}</p>
+                        <p className="text-adaptive-1_6-text overflow-hidden text-balance self-start">{messageViewerData.message?.message.content}</p>
                     </div>
                 </div>
             </Modal>
