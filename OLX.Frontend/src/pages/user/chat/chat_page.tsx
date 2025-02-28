@@ -13,7 +13,7 @@ const ChatPage: React.FC = () => {
     const user = useAppSelector(state => state.user.user)
     const [selectedChat, setSelectedChat] = useState<IChat>()
     const { data: chats, isLoading: isChatsLoading } = useGetChatsQuery(undefined, { skip: !user })
-    const { data: chatMessages, isLoading: isChatMessagesLoading } = useGetChatMessagesQuery(selectedChat?.id || 0, { skip: !selectedChat })
+    const { data: chatMessages} = useGetChatMessagesQuery(selectedChat?.id || 0, { skip: !selectedChat })
     console.log(chats)
     const meseegesData = useMemo(() => chatMessages?.length && chatMessages.length > 0
         ? chatMessages.slice().sort((a: IChatMessage, b: IChatMessage) => a.createdAt.localeCompare(b.createdAt))
