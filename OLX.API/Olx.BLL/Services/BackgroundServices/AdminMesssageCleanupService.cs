@@ -27,24 +27,24 @@ namespace Olx.BLL.Services.BackgroundServices
 
         private async Task CleanupAdminMessagesAsync()
         {
-            using var scope = serviceScopeFactory.CreateScope();
-            var adminMessageRepo = scope.ServiceProvider.GetRequiredService<IRepository<AdminMessage>>();
-            var messageRepo = scope.ServiceProvider.GetRequiredService<IRepository<Message>>();
-            var deletedAdminMesseges = await adminMessageRepo.GetListBySpec(new AdminMessageSpecs.GetDeletedExpDay(messageExpDay));
+            //using var scope = serviceScopeFactory.CreateScope();
+            //var adminMessageRepo = scope.ServiceProvider.GetRequiredService<IRepository<AdminMessage>>();
+            //var messageRepo = scope.ServiceProvider.GetRequiredService<IRepository<Message>>();
+            //var deletedAdminMesseges = await adminMessageRepo.GetListBySpec(new AdminMessageSpecs.GetDeletedExpDay(messageExpDay));
            
 
-            if (deletedAdminMesseges.Any())
-            {
-                adminMessageRepo.DeleteRange(deletedAdminMesseges);
-                await adminMessageRepo.SaveAsync();
-                var deletedMesseges = await messageRepo.GetQuery().Where(x => !x.AdminMessages.Any()).ToArrayAsync();
-                if (deletedMesseges.Length > 0) 
-                {
-                    messageRepo.DeleteRange(deletedMesseges);
-                    await messageRepo.SaveAsync();
-                }
-                Console.WriteLine($"Removed {deletedAdminMesseges.Count()} admin messages");
-            }
+            //if (deletedAdminMesseges.Any())
+            //{
+            //    adminMessageRepo.DeleteRange(deletedAdminMesseges);
+            //    await adminMessageRepo.SaveAsync();
+            //    var deletedMesseges = await messageRepo.GetQuery().Where(x => !x.AdminMessages.Any()).ToArrayAsync();
+            //    if (deletedMesseges.Length > 0) 
+            //    {
+            //        messageRepo.DeleteRange(deletedMesseges);
+            //        await messageRepo.SaveAsync();
+            //    }
+            //    Console.WriteLine($"Removed {deletedAdminMesseges.Count()} admin messages");
+            //}
         }
     }
 }
