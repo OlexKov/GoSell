@@ -1,4 +1,4 @@
-﻿using Olx.BLL.DTOs;
+﻿using Olx.BLL.DTOs.AdvertDtos;
 using Olx.BLL.Models;
 using Olx.BLL.Models.Authentication;
 using Olx.BLL.Models.User;

@@ -1,6 +1,7 @@
 ﻿using Olx.BLL.DTOs.FilterDtos;
+using Olx.BLL.DTOs.OlxUserDtos;
 
-namespace Olx.BLL.DTOs
+namespace Olx.BLL.DTOs.AdvertDtos
 {
     public class AdvertDto
     {

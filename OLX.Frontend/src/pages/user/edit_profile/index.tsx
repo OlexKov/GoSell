@@ -30,8 +30,8 @@ const UserProfileEdit: React.FC = () => {
     ];
     return (
         <div className="w-[100%] gap-[5vh] mx-[8vw]   flex flex-col">
-            <BackButton className="text-adaptive-1_9_text mt-[5vh] font-medium self-start" title="Назад" />
-            <h1 className="font-unbounded text-adaptive-3_35-text mt-[9.3vh]">Мої налаштування</h1>
+            <BackButton className="text-adaptive-1_9_text my-[7.5vh] font-medium self-start" title="Назад" />
+            <h1 className="font-unbounded text-adaptive-3_35-text mt-[1.8vh]">Мої налаштування</h1>
             <Tabs
                 className="settings-tabs w-full font-montserrat"
                 defaultActiveKey="1"

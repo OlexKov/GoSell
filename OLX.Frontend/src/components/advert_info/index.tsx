@@ -48,7 +48,8 @@ const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
                             fontColor="#3A211C"
                             brColor="#9B7A5B"
                             fontSize="clamp(14px, 2.1vh, 36px)"
-                            className="h-[4.6vh] w-[22vw] border-2" />
+                            className="h-[4.6vh] w-[22vw] border-2" 
+                            onButtonClick={()=>navigate(`/user/chat?id=${advert?.id}`)} />
                     </div>
                 
                 :<div className="h-[6vh] content-center rounded-sm bg-slate-100 text-center text-slate-400 font-unbounded text-adaptive-card-price-text">

@@ -124,8 +124,8 @@ const CreateAdvert: React.FC = () => {
     return (
         <>
             <div className="flex w-[100%] items-start flex-col  gap-[5vh]  mb-[18vh]">
-                <BackButton className="text-adaptive-1_9_text ml-[9vw] font-medium mt-[7.9vh]" title="Назад" />
-                <h1 className=" mt-[7vh]  ml-[8vw] font-unbounded text-adaptive-3_35-text">{id ? "Змінити" : "Створити"} оголошення</h1>
+                <BackButton className="text-adaptive-1_9_text ml-[9vw] font-medium my-[7.5vh] " title="Назад" />
+                <h1 className=" ml-[8vw] font-unbounded text-adaptive-3_35-text">{id ? "Змінити" : "Створити"} оголошення</h1>
 
                 <Form
                     form={form}

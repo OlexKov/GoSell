@@ -26,7 +26,7 @@ const AdvertPage: React.FC = () => {
     }, [advert]);
 
     return (
-        <div className="w-[100%] gap-[8vh] flex flex-col my-[6vh]">
+        <div className="w-[100%] gap-[8vh] flex flex-col my-[7.5vh] ">
             <div className="mx-[8vw] gap-[8vh] items-start flex  flex-col">
                 <CategoryNavigation categoryId={advert?.categoryId} />
                 {!isLoading &&
