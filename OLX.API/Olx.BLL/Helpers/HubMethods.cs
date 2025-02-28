@@ -5,6 +5,7 @@ namespace Olx.BLL.Helpers
     {
         public const string ReceiveChatMessage = "ReceiveChatMessage";
         public const string DeleteChat = "DeleteChat";
+        public const string CreateChat = "CreateChat";
         public const string ReceiveAdminMessage = "ReceiveMessageFromAdmin";
         public const string ReceiveUserMessage = "ReceiveMessageFromUser";
         public const string SetReaded = "SetMessageReaded";
