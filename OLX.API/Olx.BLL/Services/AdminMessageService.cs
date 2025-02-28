@@ -59,7 +59,7 @@ namespace Olx.BLL.Services
             await userManager.UpdateAsync(currentUser);
             var messageDto = mapper.Map<AdminMessageDto>(adminMessage);
             await hubContext.Clients.Group("Admins")
-               .SendAsync(HubMethods.ReceiveUserMessage, adminMessage);
+               .SendAsync(HubMethods.ReceiveUserMessage);
             return messageDto;
         }
 
