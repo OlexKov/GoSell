@@ -112,7 +112,7 @@ namespace Olx.BLL.Services
        
         public async Task<PageResponse<AdvertDto>> GetPageAsync(AdvertPageRequest pageRequest)
         {
-            var query = mapper.ProjectTo<AdvertDto>(advertRepository.GetQuery());
+            var query = mapper.ProjectTo<AdvertDto>(advertRepository.GetQuery().Where(x => !x.Completed));
             var paginationBuilder = new PaginationBuilder<AdvertDto>(query);
             var filter = mapper.Map<AdvertFilter>(pageRequest);
             var sortData = new AdvertSortData(pageRequest.IsDescending, pageRequest.SortKey);
