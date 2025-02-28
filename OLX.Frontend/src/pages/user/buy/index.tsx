@@ -268,7 +268,7 @@ const BuyAdvertPage: React.FC = () => {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберыть населений пункт</span>
+                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть населений пункт</span>
                                                 },
                                             ]}
                                         >
@@ -356,7 +356,7 @@ const BuyAdvertPage: React.FC = () => {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть Відділення</span>
+                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть відділення</span>
                                                 }
                                             ]}
                                         >

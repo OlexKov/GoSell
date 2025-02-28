@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using Olx.BLL.Exstensions;
 using Olx.BLL.Entities.NewPost;
 using Microsoft.EntityFrameworkCore;
+using Olx.BLL.DTOs.AdvertDtos;
 
 
 namespace Olx.BLL.Services

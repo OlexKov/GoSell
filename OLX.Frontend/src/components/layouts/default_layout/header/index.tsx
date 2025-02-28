@@ -98,8 +98,8 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
 
             <SearchInput className="mx-[1vw]" />
             <div className='flex gap-10  items-center'>
-                {user && <Badge count={userUnreadedMessages?.length} size='small'>
-                    <div className={`h-7  text-amber-950 cursor-pointer transition-all duration-300 ease-in-out hover:scale-[1.1]`}>
+                {user && <Badge count={0} size='small'>
+                    <div onClick={()=>navigate(`/user/chat`)} className={`h-7  text-amber-950 cursor-pointer transition-all duration-300 ease-in-out hover:scale-[1.1]`}>
                         {true
                             ? <svg className="h-full w-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <g clip-path="url(#clip0_61_200)">

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using Olx.BLL.DTOs;
+using Olx.BLL.DTOs.OlxUserDtos;
 using Olx.BLL.Entities;
+using Olx.BLL.Exstensions;
 using Olx.BLL.Helpers;
 using Olx.BLL.Models.User;
 using Olx.BLL.Pagination.Filters;
@@ -11,6 +12,9 @@ namespace Olx.BLL.Mapper
     {
         public UserProfile()
         {
+            CreateMap<OlxUser,ChatOlxUserDto>()
+               .ForMember(x => x.Description, opt => opt.MapFrom(x => x.GetUserDescription()));
+
             CreateMap<UserCreationModel, OlxUser>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Email));
 

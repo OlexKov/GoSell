@@ -1,4 +1,4 @@
-﻿using Olx.BLL.DTOs;
+﻿using Olx.BLL.DTOs.OlxUserDtos;
 using Olx.BLL.Models.Page;
 using Olx.BLL.Models.User;
 

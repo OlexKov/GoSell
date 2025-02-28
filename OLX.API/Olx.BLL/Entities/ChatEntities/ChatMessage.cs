@@ -14,5 +14,7 @@ namespace Olx.BLL.Entities.ChatEntities
         public Chat Chat { get; set; }
         public int ChatId { get; set; }
         public bool Readed { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
     }
 }

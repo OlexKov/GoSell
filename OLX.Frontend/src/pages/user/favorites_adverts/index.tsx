@@ -9,7 +9,7 @@ const FavoritesAdverts = () => {
     const navigate = useNavigate();
     return (
         <div className="w-[100%] my-[8vh] mx-[8vw]">
-            <BackButton title="Назад" className="mb-[12vh] ml-[1vw] text-adaptive-1_9_text font-medium self-start" />
+            <BackButton title="Назад" className="my-[7.5vh]  ml-[1vw] text-adaptive-1_9_text font-medium self-start" />
             <h2 className='text-[#3A211C] font-unbounded text-adaptive-3_5-text font-normal '>Обране</h2>
             {favorites && favorites.length > 0 ?
                 <AdvertsSection

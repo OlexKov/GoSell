@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Olx.BLL.DTOs;
+using Olx.BLL.DTOs.Chat;
 using Olx.BLL.Entities;
 using Olx.BLL.Entities.ChatEntities;
 using Olx.BLL.Exceptions;

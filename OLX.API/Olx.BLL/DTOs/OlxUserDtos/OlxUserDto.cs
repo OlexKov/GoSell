@@ -1,5 +1,4 @@
-﻿
-namespace Olx.BLL.DTOs
+﻿namespace Olx.BLL.DTOs.OlxUserDtos
 {
     public class OlxUserDto
     {

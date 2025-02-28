@@ -42,6 +42,11 @@ export const getDateTime = (dateStr: string): string => {
   return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
 }
 
+export const getTime = (dateStr: string): string => {
+  const date = new Date(dateStr);
+  return date.toLocaleTimeString().slice(0,-3)
+}
+
 export const getFormData = (data: any): FormData => {
   const formData = new FormData();
   Object.keys(data).forEach(function (key) {
