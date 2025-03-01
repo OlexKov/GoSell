@@ -5,12 +5,12 @@ import UserImageSelector from "../../user_image_selector";
 import PrimaryButton from "../../buttons/primary_button";
 import LocationSelector from "../../location_selector";
 import '../../../pages/user/create_advert/style.scss';
-import { app_regex } from "../../../constants/regex";
 import { IUserEditModel } from "../../../models/account";
 import { useDeleteAccountMutation, useUserEditMutation } from "../../../redux/api/accountAuthApi";
 import { toast } from "react-toastify";
 import { logOut } from "../../../redux/slices/userSlice";
 import { confirm } from "../../../utilities/confirm_modal";
+import InputMask from 'react-input-mask';
 
 const UserEdit: React.FC = () => {
     const user = useAppSelector(state => state.user.user)
@@ -118,20 +118,28 @@ const UserEdit: React.FC = () => {
                             label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Номер телефону</div>}
                             rules={[
                                 {
-                                    pattern: RegExp(app_regex.phone),
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Невірно введений телефон!(xxx-xxx-xx-xx) (xxx xxx xx xx) (xxx xxx xxxx) (xxx-xxx-xxxx)</span>
+                                    min: 19,
+                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Невірно введений телефон! (+38 (XXX) XXX-XX-XX)</span>
                                 },
                             ]}
                         >
-                            <Input
-                                className="h-[5vh] font-montserrat text-adaptive-1_6-text border-[#9B7A5B]"
-                                placeholder="Номер телефону" />
+                            <InputMask
+                                mask="+38 (999) 999-99-99"
+                                maskChar=""
+                            >
+                                {({ props }) =>
+                                    <input {...props}
+                                        placeholder="Номер телефону"
+                                        className="h-[5vh] border-[1px]  border-[#9B7A5B] w-full rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text " />}
+                            </InputMask>
+
+
 
                         </Form.Item>
                         <PrimaryButton
                             title={'Підтвердити номер'}
                             isLoading={false}
-                            className="w-[25%]  h-[5vh] mt-[1vh]"
+                            className="w-[25%] h-[5vh] mt-[1vh]"
                             fontColor="white"
                             fontSize="clamp(14px,1.9vh,36px)"
                             bgColor="#9B7A5B"
