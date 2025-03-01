@@ -8,6 +8,7 @@ import { DatePicker, Form, Input, Radio } from "antd";
 import PrimaryButton from "../../../components/buttons/primary_button";
 import '../../../components/price_filter/style.scss'
 import './styles.scss'
+import InputMask from 'react-input-mask';
 
 const PaymentPage = () => {
     const { id } = useParams();
@@ -17,7 +18,7 @@ const PaymentPage = () => {
     const navigate = useNavigate();
     
     const onFinish = (data: any) => {
-        console.log({...data,...Object.fromEntries(searchParams.entries())});
+         console.log({...data,...Object.fromEntries(searchParams.entries())});
          navigate(`/user/advert/paymentsuccess`);
     };
 
@@ -81,17 +82,23 @@ const PaymentPage = () => {
                                         message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть номер карти</span>
                                     },
                                     {
-                                        min: 16,
-                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Мінімум 16 символів</span>,
+                                        min: 19,
+                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Не вірний номер картки</span>,
                                     },
                                 ]}
                             >
-                                <Input
-                                    disabled={paymentMethod === "postpaid"}
-                                    maxLength={19}
-                                    className="w-[15.6vw] h-[5vh] font-montserrat text-adaptive-1_6-text border-[#9B7A5B]"
-                                    placeholder="Номер карти"
-                                />
+                                <InputMask
+                                    mask="9999 9999 9999 9999"
+                                    maskChar=""
+                                    disabled={paymentMethod === "postpaid"}>
+                                    {({ props }) =>
+                                        <input
+                                            {...props}
+                                            disabled={paymentMethod === "postpaid"}
+                                            placeholder="Номер карти"
+                                            className="w-[15.6vw] h-[5vh] border-[1px]  border-[#9B7A5B]  rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text " />}
+                                </InputMask>
+
                             </Form.Item>
                             <Form.Item
                                 name="expiry-date"
@@ -119,17 +126,22 @@ const PaymentPage = () => {
                                         message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть CVV</span>
                                     },
                                     {
-                                        len: 3,
+                                        min: 3,
                                         message: <span className="font-montserrat text-adaptive-input-form-error-text">3 символи</span>,
                                     },
                                 ]}
                             >
-                                <Input
-                                    disabled={paymentMethod === "postpaid"}
-                                    maxLength={3}
-                                    className="w-[6.4vw] h-[5vh] font-montserrat text-adaptive-1_6-text border-[#9B7A5B]"
-                                    placeholder="CVV"
-                                />
+                                <InputMask
+                                    mask="999"
+                                    maskChar="" 
+                                    disabled={paymentMethod === "postpaid"}>
+                                    {({ props }) =>
+                                        <input {...props}
+                                            disabled={paymentMethod === "postpaid"}
+                                            placeholder="CVV"
+                                            className="w-[6.4vw] h-[5vh] border-[1px]  border-[#9B7A5B]  rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text " />}
+                                </InputMask>
+
                             </Form.Item>
                         </div>
 

@@ -1,6 +1,4 @@
 ﻿
-
-
 namespace Olx.BLL.DTOs.FilterDtos
 {
     public class FilterDto

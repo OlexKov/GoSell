@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Olx.BLL.Entities.NewPost;
 
-
 namespace Olx.DAL.Data.EntityConfigs.NewPost
 {
     public class AreaConfig : IEntityTypeConfiguration<Area>

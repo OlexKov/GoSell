@@ -7,7 +7,8 @@ import GlobalFallback from './components/global_fallback';
 import PaymentPage from './pages/user/payment';
 import SuccessPayment from './pages/user/success_payment';
 
-
+const PaymentPage = React.lazy(() => import('./pages/user/payment'));
+const AdminMessagesPage = React.lazy(() => import( './pages/user/admin_messages'));
 const FavoritesAdverts = React.lazy(() => import('./pages/user/favorites_adverts'));
 const BuyAdvertPage = React.lazy(() => import('./pages/user/buy'));
 const CreateAdvert = React.lazy(() => import('./pages/user/create_advert'));
@@ -59,6 +60,7 @@ function App() {
               <Route path='advert/buy/:id' element={<BuyAdvertPage />} />
               <Route path='advert/payment/:id' element={<PaymentPage />} />
               <Route path='advert/paymentsuccess' element={<SuccessPayment />} />
+              <Route path='messages' element={<AdminMessagesPage />} />
             </Route>
           </Route>
 

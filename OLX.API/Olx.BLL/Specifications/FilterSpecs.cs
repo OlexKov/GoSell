@@ -1,7 +1,6 @@
 ﻿using Ardalis.Specification;
 using Olx.BLL.Entities.FilterEntities;
 
-
 namespace Olx.BLL.Specifications
 {
     public static class FilterSpecs

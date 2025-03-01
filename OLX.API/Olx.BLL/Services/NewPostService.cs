@@ -9,10 +9,8 @@ using Olx.BLL.Interfaces;
 using Olx.BLL.Models.NewPost;
 using Olx.BLL.Resources;
 using Olx.BLL.Specifications;
-using System.Collections.Concurrent;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Olx.BLL.Services
 {
@@ -41,8 +39,9 @@ namespace Olx.BLL.Services
                 var requestResult = await response.Content.ReadAsStringAsync();
                 if (requestResult is not null)
                 {
-                    var result = JsonConvert.DeserializeObject <NewPostResponseModel<T>>(requestResult);
-                    if (result != null && result.Data.Length != 0)
+                    requestResult = requestResult.Trim('[', ']');
+                    var result = JsonConvert.DeserializeObject<NewPostResponseModel<T>>(requestResult);
+                    if (result != null && result.Data.Length > 0)
                     {
                         return result.Data;
                     }
@@ -89,7 +88,7 @@ namespace Olx.BLL.Services
             int page = 1;
             while (true)
             {
-                var result = await GetNewPostData<Settlement>("Address", "getSettlements", page++);
+                var result = await GetNewPostData<Settlement>("Address", "getSettlements", page++,500);
                 if (result.Any())
                 {
                     settlements.AddRange(result);
@@ -246,6 +245,8 @@ namespace Olx.BLL.Services
 
                 Console.WriteLine("Start warehouses update ...");
                 var warehousesData = await GetWarehousesDataAsync(areasData.Select(x => x.Ref));
+
+
                 var warehouses = await warehousRepository.GetListBySpec(new NewPostDataSpecs.GetWarehouses(true));
                 if (warehouses.Any())
                 {
@@ -268,10 +269,10 @@ namespace Olx.BLL.Services
                 }
                 await warehousRepository.SaveAsync();
                 Console.WriteLine("Update successfuly completed ...");
-                Console.WriteLine($"Areas - {areas.Count()}");
-                Console.WriteLine($"Regions - {regions.Count()}");
-                Console.WriteLine($"Settlements - {settlements.Count()}");
-                Console.WriteLine($"Warehouses - {warehouses.Count()}");
+                Console.WriteLine($"Areas - {areasData.Count()}");
+                Console.WriteLine($"Regions - {regionsData.Count()}");
+                Console.WriteLine($"Settlements - {settlementsData.Count()}");
+                Console.WriteLine($"Warehouses - {warehousesData.Count()}");
             }
             catch(Exception e) 
             {

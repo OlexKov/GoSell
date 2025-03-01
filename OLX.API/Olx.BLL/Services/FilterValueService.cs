@@ -5,8 +5,6 @@ using Olx.BLL.Entities.FilterEntities;
 using Olx.BLL.Interfaces;
 using Olx.BLL.Specifications;
 
-
-
 namespace Olx.BLL.Services
 {
     public class FilterValueService(

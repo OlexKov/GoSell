@@ -206,7 +206,10 @@ namespace OLX.API.Extensions
             }
         }
 
-        private async static Task<IEnumerable<Category>> GetCategories(IEnumerable<SeederCategoryModel> models,IEnumerable<Filter> filters,IImageService imageService)
+        private async static Task<IEnumerable<Category>> GetCategories(
+            IEnumerable<SeederCategoryModel> models,
+            IEnumerable<Filter> filters,
+            IImageService imageService)
         {
             var categoryTasks =  models.Select(async (x) => 
             {

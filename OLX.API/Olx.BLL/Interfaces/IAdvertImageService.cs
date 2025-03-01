@@ -1,8 +1,5 @@
 ﻿
-
 namespace Olx.BLL.Interfaces
 {
-    public interface IAdvertImageService
-    {
-    }
+    public interface IAdvertImageService{}
 }

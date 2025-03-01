@@ -6,9 +6,6 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Processing;
 
-
-
-
 namespace Olx.BLL.Services
 {
     public class ImageService(IConfiguration config) : IImageService

@@ -42,7 +42,7 @@ const ImagesViewer: React.FC<ImageViewerProps> = ({ className, advertImages }) =
                     <div className="h-full overflow-hidden">
                         <Image.PreviewGroup
                             items={imagesPaths}>
-                            <Image loading='lazy' className="self-center object-cover " width={"100%"} height={"100%"}  src={APP_ENV.IMAGES_1200_URL + imagesData.currentImage} />
+                            <Image loading='lazy' className="self-center object-contain " width={"100%"} height={"100%"}  src={APP_ENV.IMAGES_1200_URL + imagesData.currentImage} />
                         </Image.PreviewGroup>
                     </div>
                 </div>

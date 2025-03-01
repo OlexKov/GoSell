@@ -211,11 +211,17 @@ namespace Olx.DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<bool>("Deleted")
                         .HasColumnType("boolean");
 
                     b.Property<int>("MessageId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("MessageLogo")
+                        .HasColumnType("text");
 
                     b.Property<bool>("Readed")
                         .HasColumnType("boolean");

@@ -3,7 +3,6 @@ using Olx.BLL.Models.Authentication;
 using Olx.BLL.Resources;
 using Olx.BLL.Validators.Extentions;
 
-
 namespace Olx.BLL.Validators
 {
     public class AuthRequestValidator : AbstractValidator<AuthRequest>

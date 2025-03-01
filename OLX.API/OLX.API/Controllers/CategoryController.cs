@@ -24,15 +24,18 @@ namespace OLX.API.Controllers
         public async Task<IActionResult> GetTreeById([FromRoute]int id) => Ok(await categoryService.GetTreeAsync(id));
 
         [HttpPost("get/page")]
-        public async Task<IActionResult> GetPage([FromBody] CategoryPageRequest pageRequest) => Ok(await categoryService.GetPageAsync(pageRequest));
+        public async Task<IActionResult> GetPage([FromBody] CategoryPageRequest pageRequest) => 
+            Ok(await categoryService.GetPageAsync(pageRequest));
 
         [Authorize(Roles = Roles.Admin)]
         [HttpPost("edit")]
-        public async Task<IActionResult> Edit([FromForm] CategoryCreationModel categoryEditModel) => Ok(await categoryService.EditAsync(categoryEditModel));
+        public async Task<IActionResult> Edit([FromForm] CategoryCreationModel categoryEditModel) => 
+            Ok(await categoryService.EditAsync(categoryEditModel));
         
         [Authorize(Roles = Roles.Admin)]
         [HttpPut("create")]
-        public async Task<IActionResult> Create([FromForm] CategoryCreationModel categoryCreationModel) => Ok(await categoryService.CreateAsync(categoryCreationModel));
+        public async Task<IActionResult> Create([FromForm] CategoryCreationModel categoryCreationModel) => 
+            Ok(await categoryService.CreateAsync(categoryCreationModel));
       
         [Authorize(Roles = Roles.Admin)]
         [HttpDelete("delete/{id:int}")]

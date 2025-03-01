@@ -1,5 +1,4 @@
-﻿
-using Olx.BLL.DTOs;
+﻿using Olx.BLL.DTOs;
 using Olx.BLL.Pagination.Interfaces;
 using System.Linq.Expressions;
 

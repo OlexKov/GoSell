@@ -1,5 +1,4 @@
-﻿
-using Ardalis.Specification;
+﻿using Ardalis.Specification;
 using Olx.BLL.Entities.AdminMessages;
 
 namespace Olx.BLL.Specifications
@@ -9,15 +8,23 @@ namespace Olx.BLL.Specifications
         public class GetMessagesForAdmin : Specification<AdminMessage>
         {
             public GetMessagesForAdmin(bool tracking = false) =>
-                Query.Where(x=> x.User == null && !x.Deleted)
+                Query.Where(x => x.User == null && !x.Deleted)
                      .AsTracking(tracking)
-                     .Include(x=>x.Message);
+                     .Include(x => x.Message);
         }
 
         public class GetMessagesForUser : Specification<AdminMessage>
         {
             public GetMessagesForUser(int userId,bool tracking = false) =>
                 Query.Where(x => x.User != null && !x.Deleted && x.User.Id == userId)
+                     .AsTracking(tracking)
+                     .Include(x => x.Message);
+        }
+
+        public class GetMessagesForUserByIds : Specification<AdminMessage>
+        {
+            public GetMessagesForUserByIds(IEnumerable<int> userIds, bool tracking = false) =>
+                Query.Where(x => x.User != null && !x.Deleted && userIds.Contains(x.Id))
                      .AsTracking(tracking)
                      .Include(x => x.Message);
         }
@@ -53,6 +60,14 @@ namespace Olx.BLL.Specifications
                 Query.Where(x => x.Deleted)
                      .AsTracking(tracking)
                      .Include(x => x.Message);
+        }
+
+        public class GetDeletedExpDay : Specification<AdminMessage>
+        {
+            public GetDeletedExpDay(int expDays, bool tracking = false) =>
+                Query.Where(x => x.Deleted && x.Created.AddDays(expDays) >= DateTime.UtcNow)
+                     .AsTracking(tracking);
+                     
         }
 
     }

@@ -2,7 +2,6 @@
 using Olx.BLL.Models;
 using Olx.BLL.Resources;
 
-
 namespace Olx.BLL.Validators
 {
     public class EmailComfirmationModelValidator : AbstractValidator<EmailConfirmationModel>

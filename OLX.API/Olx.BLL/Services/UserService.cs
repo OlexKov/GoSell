@@ -14,7 +14,6 @@ using Olx.BLL.Pagination.SortData;
 using Olx.BLL.Resources;
 using System.Net;
 
-
 namespace Olx.BLL.Services
 {
     public class UserService(

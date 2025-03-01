@@ -3,7 +3,6 @@ using Olx.BLL.Models.Category;
 using Olx.BLL.Resources;
 using Olx.BLL.Validators.Extentions;
 
-
 namespace Olx.BLL.Validators
 {
     public class CategoryCreationModelValidator : AbstractValidator<CategoryCreationModel>

@@ -1,6 +1,5 @@
 ﻿using Olx.BLL.Models.Page;
 
-
 namespace Olx.BLL.Models.Category
 {
     public class CategoryPageRequest : PageRequest

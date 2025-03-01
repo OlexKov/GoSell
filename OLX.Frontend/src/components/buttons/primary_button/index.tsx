@@ -16,7 +16,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({ disabled, fontSize, onBut
         color: fontColor,
         borderColor: brColor
       }}
-      className={`primary-button rounded-[8px] min-w-[180px] min-h-[30px] text-adaptive-text font-normal font-montserrat leading-[28px] ${disabled ? 'opacity-40' : '' } hover:shadow-xl ${className}`}>
+      className={`primary-button rounded-[8px] min-w-[140px] min-h-[30px] text-adaptive-text font-normal font-montserrat leading-[28px] ${disabled ? 'opacity-40' : '' } hover:shadow-xl ${className}`}>
       {title}
     </Button>
   )

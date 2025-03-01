@@ -38,7 +38,8 @@ namespace OLX.API.Controllers
         public async Task<IActionResult> GetImagesByUserId([FromRoute] int id) => Ok(await advertService.GetImagesAsync(id));
 
         [HttpPost("get/page")]
-        public async Task<IActionResult> GetPage([FromBody] AdvertPageRequest advertPageRequest) => Ok(await advertService.GetPageAsync(advertPageRequest));
+        public async Task<IActionResult> GetPage([FromBody] AdvertPageRequest advertPageRequest) =>
+            Ok(await advertService.GetPageAsync(advertPageRequest));
 
         [HttpPost("get/range")]
         public async Task<IActionResult> GetRange([FromBody] IEnumerable<int> ids) => Ok(await advertService.GetRangeAsync(ids));
@@ -61,7 +62,8 @@ namespace OLX.API.Controllers
 
         [Authorize(Roles = Roles.User)]
         [HttpPost("update")]
-        public async Task<IActionResult> Update([FromForm] AdvertCreationModel creationModel) => Ok(await advertService.UpdateAsync(creationModel));
+        public async Task<IActionResult> Update([FromForm] AdvertCreationModel creationModel) => 
+            Ok(await advertService.UpdateAsync(creationModel));
 
 
         [Authorize(Roles = Roles.User)]
@@ -75,7 +77,8 @@ namespace OLX.API.Controllers
 
         [Authorize(Roles = Roles.User)]
         [HttpPut("create")]
-        public async Task<IActionResult> Create([FromForm] AdvertCreationModel creationModel) => Ok(await advertService.CreateAsync(creationModel));
+        public async Task<IActionResult> Create([FromForm] AdvertCreationModel creationModel) => 
+            Ok(await advertService.CreateAsync(creationModel));
         
         [Authorize]
         [HttpDelete("delete/{id:int}")]

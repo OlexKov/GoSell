@@ -35,7 +35,6 @@ namespace Olx.BLL.Entities
         [Unicode(false)]
         public string SettlementRef { get; set; }
         public Settlement Settlement { get; set; }
-
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         public ICollection<FilterValue> FilterValues { get; set; }  = new HashSet<FilterValue>();

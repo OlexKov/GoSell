@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using Olx.BLL.Entities;
 
 namespace Olx.BLL.DTOs

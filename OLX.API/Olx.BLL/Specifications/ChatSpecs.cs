@@ -1,7 +1,4 @@
-﻿
-
-using Ardalis.Specification;
-using Olx.BLL.Entities;
+﻿using Ardalis.Specification;
 using Olx.BLL.Entities.ChatEntities;
 
 namespace Olx.BLL.Specifications

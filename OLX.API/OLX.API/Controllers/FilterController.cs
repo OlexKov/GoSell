@@ -25,7 +25,8 @@ namespace OLX.API.Controllers
         
         [Authorize(Roles = Roles.Admin)]
         [HttpPut("create")]
-        public async Task<IActionResult> Create([FromBody] FilterCreationModel filterCreationModel) => Ok(await filterService.CreateAsync(filterCreationModel));
+        public async Task<IActionResult> Create([FromBody] FilterCreationModel filterCreationModel) =>
+            Ok(await filterService.CreateAsync(filterCreationModel));
         
         [Authorize(Roles = Roles.Admin)]
         [HttpDelete("delete/{id:int}")]

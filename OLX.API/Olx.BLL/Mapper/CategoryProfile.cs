@@ -3,7 +3,6 @@ using Olx.BLL.DTOs.CategoryDtos;
 using Olx.BLL.Entities;
 using Olx.BLL.Models.Category;
 
-
 namespace Olx.BLL.Mapper
 {
     public class CategoryProfile : Profile

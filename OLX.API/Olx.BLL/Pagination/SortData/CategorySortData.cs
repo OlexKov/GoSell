@@ -1,8 +1,6 @@
 ﻿using Olx.BLL.DTOs.CategoryDtos;
-using Olx.BLL.Entities;
 using Olx.BLL.Pagination.Interfaces;
 using System.Linq.Expressions;
-
 
 namespace Olx.BLL.Pagination.SortData
 {
