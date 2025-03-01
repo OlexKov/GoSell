@@ -4,7 +4,6 @@ import './App.scss'
 import DefaultLayout from './components/layouts/default_layout/index';
 import ProtectedRoutes from './components/protected_routes';
 import GlobalFallback from './components/global_fallback';
-import PaymentPage from './pages/user/payment';
 import SuccessPayment from './pages/user/success_payment';
 
 const PaymentPage = React.lazy(() => import('./pages/user/payment'));
