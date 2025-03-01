@@ -245,17 +245,6 @@ namespace Olx.BLL.Services
 
                 Console.WriteLine("Start warehouses update ...");
                 var warehousesData = await GetWarehousesDataAsync(areasData.Select(x => x.Ref));
-                //if (warehousesData.Any())
-                //{
-
-                //    foreach (var warehouse in warehousesData)
-                //    {
-                //        if(settlementsData.All(x=>x.Ref != warehouse.SettlementRef))
-                //            Console.WriteLine(warehouse.SettlementRef);
-                                        
-                //    }
-
-                //}
                 var warehouses = await warehousRepository.GetListBySpec(new NewPostDataSpecs.GetWarehouses(true));
                 if (warehouses.Any())
                 {
