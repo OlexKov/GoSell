@@ -19,7 +19,7 @@ const SortableImage: React.FC<SortableItemProps> = ({ file, uploadSize, onDelete
     return (
         <div ref={setNodeRef} className="h-[100%]" style={style} {...attributes} {...listeners}>
             <div className={`relative h-[100%] aspect-[16/16]  transition-all duration-300 ease-in-out hover:scale-[1.05]`} >
-                <img className="h-full  rounded-lg object-cover w-full" src={file.thumbUrl} />
+                <img className="h-full  rounded-lg object-contain w-full" src={file.thumbUrl} />
                 <div className="transition-opacity duration-500 w-full  rounded-lg h-full absolute bg-black top-0 opacity-0  hover:opacity-50" >
                     <div className=" flex gap-[15%] justify-center my-[42.5%] w-full h-[15%] absolute  top-0 " >
                         <svg onMouseDown={onPrevievClick} className="h-full w-auto" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
