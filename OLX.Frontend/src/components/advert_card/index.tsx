@@ -27,7 +27,7 @@ const AdvertCard: React.FC<AdvertCardProps> = ({ id, image, title, price, settle
                         <ToggleFavoriteButton advertId={id} className="absolute right-[0px] top-[.5vh] transition-all duration-300 ease-in-out hover:scale-[1.1]" />
                         : <></>
             }
-            <img className=" object-cover w-[100%] aspect-[12/13]" src={image} />
+            <img className=" object-contain w-[100%] aspect-[12/13]" src={image} />
             <div className="p-2.5 mb-[16px] mt-[16px] cursor-pointer" onClick={onClick}>
                 <h4 className="font-unbounded text-[#3a211c] text-adaptive-card-price-text font-medium mb-[10px] hover:underline truncate">{title}</h4>
                 <p className="text-[#3a211c] text-adaptive-card-price-text font-medium font-montserrat">{formatPrice(price)} грн</p>
