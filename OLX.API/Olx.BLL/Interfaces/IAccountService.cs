@@ -20,6 +20,7 @@ namespace Olx.BLL.Interfaces
         Task RemoveAccountAsync(int id);
         Task<string> EditUserAsync(UserEditModel userEditModel,bool isAdmin = false);
         Task AddToFavoritesAsync(int advertId);
+        Task AddToFavoritesRangeAsync(IEnumerable<int> advertIds);
         Task RemoveFromFavoritesAsync(int advertId);
         Task<IEnumerable<AdvertDto>> GetFavoritesAsync();
     }

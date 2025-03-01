@@ -4,7 +4,8 @@ import './App.scss'
 import DefaultLayout from './components/layouts/default_layout/index';
 import ProtectedRoutes from './components/protected_routes';
 import GlobalFallback from './components/global_fallback';
-
+import PaymentPage from './pages/user/payment';
+import SuccessPayment from './pages/user/success_payment';
 
 const PaymentPage = React.lazy(() => import('./pages/user/payment'));
 const AdminMessagesPage = React.lazy(() => import( './pages/user/admin_messages'));
@@ -56,13 +57,14 @@ function App() {
               <Route path='edit' element={<UserProfileEdit />} />
               <Route path='advert/create' element={<CreateAdvert />} />
               <Route path='advert/edit/:id' element={<CreateAdvert />} />
-              <Route path='favorites' element={<FavoritesAdverts />} />
               <Route path='advert/buy/:id' element={<BuyAdvertPage />} />
               <Route path='advert/payment/:id' element={<PaymentPage />} />
+              <Route path='advert/paymentsuccess' element={<SuccessPayment />} />
               <Route path='messages' element={<AdminMessagesPage />} />
             </Route>
           </Route>
 
+          <Route path='favorites' element={<FavoritesAdverts />} />
         </Route>
       </Route>
 
