@@ -66,8 +66,8 @@ namespace Olx.BLL.Specifications
         {
             public GetDeletedExpDay(int expDays, bool tracking = false) =>
                 Query.Where(x => x.Deleted && x.Created.AddDays(expDays) >= DateTime.UtcNow)
-                     .AsTracking(tracking)
-                     .Include(x => x.Message);
+                     .AsTracking(tracking);
+                     
         }
 
     }
