@@ -49,7 +49,7 @@ const UserEdit: React.FC = () => {
                     })
                 }
             },
-            okText: 'Видалити всі'
+            okText: 'Видалити'
         })
     }
 
@@ -126,9 +126,10 @@ const UserEdit: React.FC = () => {
                             <InputMask
                                 mask="+38 (999) 999-99-99"
                                 maskChar=""
+                                disabled={false}
                             >
-                                {({ props }) =>
-                                    <input {...props}
+                                {( inputProps:any ) =>
+                                    <input {...inputProps}
                                         placeholder="Номер телефону"
                                         className="h-[5vh] border-[1px]  border-[#9B7A5B] w-full rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text " />}
                             </InputMask>

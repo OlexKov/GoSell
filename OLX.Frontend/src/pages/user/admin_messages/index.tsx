@@ -93,7 +93,7 @@ const AdminMessagesPage: React.FC = () => {
     return (
         <>
             <div className="mx-auto mb-[8vh] w-[84vw]">
-                <BackButton title="Назад" className=" my-[7vh] ml-[1vw] text-adaptive-1_9_text font-medium self-start" />
+                <BackButton title="Назад" className=" my-[7.5vh]  ml-[1vw] text-adaptive-1_9_text font-medium self-start" />
                 <div className="flex items-center my-[6vh] justify-between">
                     <h2 className='text-[#3A211C] font-unbounded  text-adaptive-3_5-text font-normal '>Усі сповіщення</h2>
                     <div className="flex font-unbounded text-gray-500 font-light text-adaptive-1_5-text gap-[1vw]">

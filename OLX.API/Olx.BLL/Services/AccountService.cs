@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NETCore.MailKit.Core;
 using Newtonsoft.Json;
-using Olx.BLL.DTOs;
+using Olx.BLL.DTOs.AdvertDtos;
 using Olx.BLL.Entities;
 using Olx.BLL.Entities.NewPost;
 using Olx.BLL.Exceptions;
@@ -46,20 +46,6 @@ namespace Olx.BLL.Services
         IValidator<UserEditModel> userEditModelValidator) : IAccountService
     {
         private static readonly ConcurrentDictionary<int, SemaphoreSlim> _userSemaphores = new();
-
-        private static string? GetUserDescription(OlxUser? user) 
-        {
-            string? description = user?.Email;
-            if (user != null) 
-            {
-                var userDescription = user.FirstName + " " + user.LastName;
-                if (!String.IsNullOrWhiteSpace(userDescription))
-                {
-                    description = userDescription;
-                }
-            }
-            return description;
-        }
 
         private async Task<string> CreateRefreshToken(int userId)
         {
@@ -445,7 +431,7 @@ namespace Olx.BLL.Services
                     new AdminMessageCreationModel
                     {
                         MessageLogo = advert.Images.FirstOrDefault(x => x.Priority == 0)?.Name,
-                        Content = $"Користувач \"{GetUserDescription(user)}\" додав ваше оголошення \"{advert.Title}\" в обрані",
+                        Content = $"Користувач \"{user.GetUserDescription()}\" додав ваше оголошення \"{advert.Title}\" в обрані",
                         Subject = "Ваше оголошення було додане в обрані",
                         UserId = advert.UserId
                     });

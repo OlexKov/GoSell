@@ -2,7 +2,6 @@ import { useMemo } from "react"
 import PrimaryButton from "../buttons/primary_button"
 import ScrolledContainer from "../scrolled_container"
 import AdvertCard from "../advert_card"
-import { APP_ENV } from "../../constants/env"
 import { useNavigate } from "react-router-dom"
 import { IAdvert } from "../../models/advert"
 
@@ -11,12 +10,7 @@ const ActiveAdverts: React.FC<{adverts:IAdvert[]}> = ({adverts = []}) => {
     const advertsCards = useMemo(() =>adverts.length ? adverts?.map(advert => (
         <AdvertCard
             key={advert.id}
-            id={advert.id}
-            title={advert.title}
-            image={APP_ENV.IMAGES_400_URL + advert.images.find(img => img.priority === 0)?.name}
-            price={advert.price}
-            settlement={advert.settlementName}
-            isEditable={true}
+            advert={advert}
             className="min-w-[14vw] max-w-[14vw]"
         />
     )) : [], [adverts])

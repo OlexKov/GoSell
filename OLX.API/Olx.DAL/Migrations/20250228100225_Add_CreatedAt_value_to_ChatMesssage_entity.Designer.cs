@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Olx.DAL.Data;
@@ -11,9 +12,11 @@ using Olx.DAL.Data;
 namespace Olx.DAL.Migrations
 {
     [DbContext(typeof(OlxDbContext))]
-    partial class OlxDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250228100225_Add_CreatedAt_value_to_ChatMesssage_entity")]
+    partial class Add_CreatedAt_value_to_ChatMesssage_entity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -305,8 +308,8 @@ namespace Olx.DAL.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(19)
-                        .HasColumnType("character varying(19)");
+                        .HasMaxLength(13)
+                        .HasColumnType("character varying(13)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
@@ -987,7 +990,7 @@ namespace Olx.DAL.Migrations
             modelBuilder.Entity("Olx.BLL.Entities.NewPost.Warehous", b =>
                 {
                     b.HasOne("Olx.BLL.Entities.NewPost.Settlement", "Settlement")
-                        .WithMany("Warehouses")
+                        .WithMany("Warehous")
                         .HasForeignKey("SettlementRef")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1060,7 +1063,7 @@ namespace Olx.DAL.Migrations
 
                     b.Navigation("Users");
 
-                    b.Navigation("Warehouses");
+                    b.Navigation("Warehous");
                 });
 
             modelBuilder.Entity("Olx.BLL.Entities.OlxUser", b =>

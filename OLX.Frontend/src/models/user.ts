@@ -32,6 +32,12 @@ export interface IShortOlxUser{
     settlementDescrption?: string | undefined
 }
 
+export interface IChatOlxUserDto{
+    id: number
+    photo?: string | undefined
+    description:string
+}
+
 export interface PageRequest {
     size: number | undefined
     page: number | undefined

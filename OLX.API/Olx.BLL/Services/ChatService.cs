@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Olx.BLL.DTOs;
+using Olx.BLL.DTOs.AdminMessage;
+using Olx.BLL.DTOs.Chat;
 using Olx.BLL.Entities;
 using Olx.BLL.Entities.ChatEntities;
 using Olx.BLL.Exceptions;
 using Olx.BLL.Exstensions;
+using Olx.BLL.Helpers;
+using Olx.BLL.Hubs;
 using Olx.BLL.Interfaces;
 using Olx.BLL.Resources;
 using Olx.BLL.Specifications;
@@ -19,7 +23,8 @@ namespace Olx.BLL.Services
         IHttpContextAccessor httpContext,
         IRepository<Chat> chatRepository,
         IRepository<Advert> advertRepository,
-        IMapper mapper
+        IMapper mapper,
+        IHubContext<MessageHub> hubContext
         ) : IChatService
     {
         public async Task<Chat> CreateAsync(int advertId, string? message = null)
@@ -43,6 +48,8 @@ namespace Olx.BLL.Services
                 });
             }
             chat.IsDeletedForSeller = false;
+            await hubContext.Clients.Users(advert.UserId.ToString())
+                .SendAsync(HubMethods.CreateChat);
             return chat;
         }
 
@@ -88,6 +95,8 @@ namespace Olx.BLL.Services
             }
             else chat.IsDeletedForSeller = true;
             await chatRepository.SaveAsync();
+            await hubContext.Clients.Users(user.Id.ToString())
+               .SendAsync(HubMethods.DeleteChat);
         }
 
         public async Task RemoveForUserAsync(IEnumerable<int> chatIds)
@@ -105,6 +114,8 @@ namespace Olx.BLL.Services
                 else chat.IsDeletedForSeller = true;
             }
             await chatRepository.SaveAsync();
+            await hubContext.Clients.Users(user.Id.ToString())
+              .SendAsync(HubMethods.DeleteChat);
         }
 
         public async Task SendMessageAsync(int chatId, string message)
@@ -117,6 +128,8 @@ namespace Olx.BLL.Services
                 Content = message,
                 Sender = user
             });
+            await hubContext.Clients.Users(user.Id.ToString())
+             .SendAsync(HubMethods.ReceiveChatMessage);
         }
     }
 }

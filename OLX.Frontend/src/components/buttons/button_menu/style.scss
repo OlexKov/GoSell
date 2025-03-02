@@ -1,14 +1,12 @@
 @keyframes fadeInScale {
     0% {
-        transform:  translateY(-10vh);
+        transform: translateY(-10vh);
         opacity: 0;
         max-height: 0;
     }
 
-    
-
     100% {
-        transform:  translateY(0px);
+        transform: translateY(0px);
         opacity: 1;
         max-height: 100%;
     }
@@ -17,42 +15,37 @@
 @keyframes fadeOutScale {
     100% {
         transform: translateY(-10vh);
+        max-height: 0;
+    }
+    85% {
         opacity: 0;
-        height: 0;
+        max-height: 0;
     }
 
     0% {
-        transform:  translateY(0px);
+        transform: translateY(0px);
         opacity: 1;
         max-height: 100%;
     }
 }
 
-
-
 .button-menu {
-    height: fit-content;
-    margin: 0.5vh;
     overflow: hidden;
-    grid-template-columns:3vh;
     display: grid;
     row-gap: 2vh;
-       
-    .button-menu-container {
-        max-height: 0; 
-        opacity: 0; 
+    
+   .button-menu-container {
+        max-height: 0;
+        opacity: 0;
         transform: translateY(-10vh);
-        
     }
 
-    .open{
+    .open {
         animation: fadeInScale 0.7s ease-in-out forwards;
     }
-    
-    .close{
+
+    .close {
         animation: fadeOutScale 0.7s ease-in-out forwards;
     }
-    
+
 }
-
-

@@ -1,4 +1,4 @@
-﻿using Olx.BLL.DTOs;
+﻿using Olx.BLL.DTOs.Chat;
 using Olx.BLL.Entities.ChatEntities;
 
 namespace Olx.BLL.Interfaces

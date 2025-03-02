@@ -1,4 +1,4 @@
-﻿using Olx.BLL.DTOs;
+﻿using Olx.BLL.DTOs.AdvertDtos;
 using Olx.BLL.Pagination.Interfaces;
 
 namespace Olx.BLL.Pagination.Filters
