@@ -63,19 +63,16 @@ const FavoritesAdverts = () => {
     };
 
     return (
-        <div className="w-[100%] my-[8vh] mx-[8vw]">
+        <div className="w-[100%] my-[8vh] mx-[8vw] relative">
             <BackButton title="Назад" className="mb-[12vh] ml-[1vw] text-adaptive-1_9_text font-medium self-start" />
-            <div className="flex justify-between items-start ">
-                <h2 className='text-[#3A211C] font-unbounded text-adaptive-3_5-text font-normal '>Обране</h2>
-                <Collapsed
-                    title="Сортувати"
-                    className="text-adaptive-1_5-text text-[#3A211C] font-unbounded">
-                    <AdvertSort
-                        className="filter-radio-small"
-                        onChange={onSort} />
-                </Collapsed>
-            </div>
-
+            <h2 className='text-[#3A211C] font-unbounded text-adaptive-3_5-text font-normal '>Обране</h2>
+            <Collapsed
+                title="Сортувати"
+                className="text-adaptive-1_5-text text-[#3A211C] font-unbounded absolute right-0 top-0">
+                <AdvertSort
+                    className="filter-radio-small"
+                    onChange={onSort} />
+            </Collapsed>
 
             {userFavorites.length > 0 ? (
                 <AdvertsSection
