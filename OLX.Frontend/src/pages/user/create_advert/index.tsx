@@ -52,6 +52,7 @@ const CreateAdvert: React.FC = () => {
             imageFiles: imageFiles,
             contactPersone: data.contactPersone
         }
+        
         const result = id ? await updateAdvert(advertCreationModel) : await createAdvert(advertCreationModel);
         if (!result.error) {
             toast(`Оголошення успішно ${id ? 'оновлено' : 'опубліковане'}`, {
