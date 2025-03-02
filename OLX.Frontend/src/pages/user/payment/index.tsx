@@ -3,7 +3,6 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useGetAdvertByIdQuery } from "../../../redux/api/advertApi";
 import { BackButton } from "../../../components/buttons/back_button";
 import AdvertCard from "../../../components/advert_card";
-import { APP_ENV } from "../../../constants/env";
 import { DatePicker, Form, Input, Radio } from "antd";
 import PrimaryButton from "../../../components/buttons/primary_button";
 import '../../../components/price_filter/style.scss'
