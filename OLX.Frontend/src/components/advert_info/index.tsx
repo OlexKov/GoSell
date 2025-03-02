@@ -14,7 +14,7 @@ const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
     return (
         <div className=" flex flex-1 flex-col justify-between gap-[8vh]">
             <div className=" flex flex-col gap-[8vh]">
-                <div className="flex  justify-between">
+                <div className="flex  justify-between relative">
                     <div className="flex  flex-col gap-[3vh]">
                         <span className="font-unbounded text-adaptive-advert-page-price-text font-medium">{formatPrice(advert?.price || 0)} грн.</span>
                         <span className="font-unbounded text-adaptive-card-price-text font-medium">{advert?.title}</span>
@@ -24,11 +24,12 @@ const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
                             ? <ToggleFavoriteButton
                                 advertId={advert?.id || 0}
                                 isAdvertPage
-                                className="transition-all duration-300 ease-in-out hover:scale-[1.1]" />
+                                className="w-[7%] absolute right-0" />
                             : <AdvertButtonMenu
                                 id={advert?.id || 0}
                                 isEdit={true}
-                                isComplete={true}/>
+                                isComplete={true}
+                                className="w-[7%] absolute right-0"/>
                         : <></>
                     }
                 </div>

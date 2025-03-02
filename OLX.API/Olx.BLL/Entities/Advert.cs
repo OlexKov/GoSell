@@ -12,7 +12,7 @@ namespace Olx.BLL.Entities
     {
         public int UserId { get; set; }
         public OlxUser User { get; set; }
-        [StringLength(13)]
+        [StringLength(19)]
         public string PhoneNumber { get; set; } = string.Empty;
 
         [StringLength(128)]

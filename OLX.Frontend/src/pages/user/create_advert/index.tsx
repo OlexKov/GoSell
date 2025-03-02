@@ -16,7 +16,6 @@ import { toast } from "react-toastify"
 import { useGetAdvertByIdQuery } from "../../../redux/api/advertApi"
 import { APP_ENV } from "../../../constants/env"
 import LocationSelector from "../../../components/location_selector"
-import { app_regex } from "../../../constants/regex"
 import InputMask from 'react-input-mask';
 
 
@@ -65,7 +64,7 @@ const CreateAdvert: React.FC = () => {
     const categoryFilters = useMemo(() => {
         const categoryFilters = getAllParentFilterIds(categories || [], selectedCategoryId);
         return <div className="ml-[8vw] flex flex-col gap-[2.5vh]">
-            {filters?.filter(x => categoryFilters?.includes(x.id)).map(filter =>
+            {filters?.length && filters?.filter(x => categoryFilters?.includes(x.id)).map(filter =>
                 <Form.Item
                     label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">{filter.name}</div>}
                     key={filter.id}
@@ -316,9 +315,11 @@ const CreateAdvert: React.FC = () => {
                             <InputMask
                                 mask="+38 (999) 999-99-99"
                                 maskChar=""
+                                disabled={false}
+                                
                             >
-                                {({ props }) =>
-                                    <input {...props}
+                                {( inputProps:any ) =>
+                                  <input {...inputProps}
                                         placeholder="Номер телефону"
                                         className="h-[5vh] border-[1px]  border-[#9B7A5B] w-full rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text " />}
                             </InputMask>

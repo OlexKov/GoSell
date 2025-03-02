@@ -20,13 +20,13 @@ const AdvertCard: React.FC<AdvertCardProps> = ({ advert, isFavorite = true, isCo
     const activeButton = useMemo(() => user?.id == advert?.userId ?
         <AdvertButtonMenu
             id={advert?.id || 0}
-            className=" absolute right-0 top-0"
+            className=" absolute  w-[11%] right-[0.5vw] top-[0.5vw]"
             isEdit={true}
             isComplete={!isCompleted}
             isDelete={isCompleted}
         />
         : isFavorite ?
-            <ToggleFavoriteButton advertId={advert?.id || 0} className="absolute right-[0px] top-[.5vh] transition-all duration-300 ease-in-out hover:scale-[1.1]" />
+            <ToggleFavoriteButton advertId={advert?.id || 0} className="absolute w-[3vw] right-[0.5vh] top-[0.5vh]" />
             : <></>, [advert, user])
 
     return (

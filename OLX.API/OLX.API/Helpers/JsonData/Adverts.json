@@ -1,7 +1,7 @@
 ﻿[
   {
     "UserId": 5,
-    "PhoneNumber": "+380671234567",
+    "PhoneNumber": "+38 (067) 123-45-67",
     "ContactEmail": "user1@example.com",
     "ContactPersone": "Іван Іванов",
     "Title": "Samsung Galaxy S24",
@@ -15,7 +15,7 @@
   },
   {
     "UserId": 2,
-    "PhoneNumber": "+380631234567",
+    "PhoneNumber": "+38 (063) 123-45-67",
     "ContactEmail": "user2@example.com",
     "ContactPersone": "Олена Петрівна",
     "Title": "Apple MacBook Air M2",
@@ -29,7 +29,7 @@
   },
   {
     "UserId": 3,
-    "PhoneNumber": "+380501234567",
+    "PhoneNumber": "+38 (050) 123-45-67",
     "ContactEmail": "user3@example.com",
     "ContactPersone": "Микола Іванович",
     "Title": "Sony PlayStation 5",
@@ -43,7 +43,7 @@
   },
   {
     "UserId": 4,
-    "PhoneNumber": "+380671234568",
+    "PhoneNumber": "+38 (067) 123-45-68",
     "ContactEmail": "user4@example.com",
     "ContactPersone": "Анна Вікторівна",
     "Title": "Samsung Galaxy Watch 6",
@@ -57,7 +57,7 @@
   },
   {
     "UserId": 5,
-    "PhoneNumber": "+380681234567",
+    "PhoneNumber": "+38 (068) 123-45-67",
     "ContactEmail": "user5@example.com",
     "ContactPersone": "Юрій Сергійович",
     "Title": "Xiaomi Mi 11",
@@ -71,7 +71,7 @@
   },
   {
     "UserId": 3,
-    "PhoneNumber": "+380691234567",
+    "PhoneNumber": "+38 (069) 123-45-67",
     "ContactEmail": "user6@example.com",
     "ContactPersone": "Марина Олексіївна",
     "Title": "LG OLED TV 55''",
@@ -85,7 +85,7 @@
   },
   {
     "UserId": 2,
-    "PhoneNumber": "+380701234567",
+    "PhoneNumber": "+38 (070) 123-45-67",
     "ContactEmail": "user7@example.com",
     "ContactPersone": "Віктор Іванович",
     "Title": "Air Pods Pro",
@@ -99,7 +99,7 @@
   },
   {
     "UserId": 4,
-    "PhoneNumber": "+380711234567",
+    "PhoneNumber": "+38 (071) 123-45-67",
     "ContactEmail": "user8@example.com",
     "ContactPersone": "Ігор Михайлович",
     "Title": "GoPro HERO11",
@@ -113,7 +113,7 @@
   },
   {
     "UserId": 3,
-    "PhoneNumber": "+380721234567",
+    "PhoneNumber": "+38 (072) 123-45-67",
     "ContactEmail": "user9@example.com",
     "ContactPersone": "Катерина Павлівна",
     "Title": "Dyson V15 Detect",
@@ -127,7 +127,7 @@
   },
   {
     "UserId": 5,
-    "PhoneNumber": "+380731234567",
+    "PhoneNumber": "+38 (073) 123-45-67",
     "ContactEmail": "user10@example.com",
     "ContactPersone": "Дмитро Олександрович",
     "Title": "Canon EOS 90D",
@@ -141,7 +141,7 @@
   },
   {
     "UserId": 3,
-    "PhoneNumber": "+380741234567",
+    "PhoneNumber": "+38 (074) 123-45-67",
     "ContactEmail": "user11@example.com",
     "ContactPersone": "Софія Миколаївна",
     "Title": "Nintendo Switch OLED",
