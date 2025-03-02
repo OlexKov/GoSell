@@ -8,6 +8,7 @@ const Collapsed: React.FC<CollpaseProps> = ({ title, className, children, onOpen
     return (
         <div className="collapsed">
             <Collapse
+                accordion={true}
                 defaultActiveKey={isOpen ? ['1'] : undefined}
                 onChange={onOpen}
                 className={className}
