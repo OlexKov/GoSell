@@ -1,5 +1,4 @@
 import { useMemo } from "react"
-import { APP_ENV } from "../../constants/env"
 import AdvertCard from "../advert_card"
 import { AdvertsSectionProps } from "./props"
 
@@ -8,11 +7,7 @@ const AdvertsSection: React.FC<AdvertsSectionProps> = ({ title, adverts, isLoadi
   const advertsCards = useMemo(() => adverts?.map(advert => (
     <AdvertCard
       key={advert.id}
-      id={advert.id}
-      title={advert.title}
-      image={APP_ENV.IMAGES_400_URL + advert.images.find(x => x.priority === 0)?.name}
-      price={advert.price}
-      settlement={advert.settlementName} />
+      advert={advert} />
   )) || [], [adverts])
 
   return (

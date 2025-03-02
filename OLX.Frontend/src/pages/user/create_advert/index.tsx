@@ -17,6 +17,7 @@ import { useGetAdvertByIdQuery } from "../../../redux/api/advertApi"
 import { APP_ENV } from "../../../constants/env"
 import LocationSelector from "../../../components/location_selector"
 import { app_regex } from "../../../constants/regex"
+import InputMask from 'react-input-mask';
 
 
 
@@ -307,15 +308,20 @@ const CreateAdvert: React.FC = () => {
                                     message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть номер телефону</span>
                                 },
                                 {
-                                    pattern: RegExp(app_regex.phone),
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Невірно введений телефон!(xxx-xxx-xx-xx) (xxx xxx xx xx) (xxx xxx xxxx) (xxx-xxx-xxxx)</span>
+                                    min: 19,
+                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Невірно введений телефон! (+38 (XXX) XXX-XX-XX)</span>
                                 },
                             ]}
                         >
-                            <Input
-                                className="h-[5vh] font-montserrat text-adaptive-1_6-text border-[#9B7A5B]"
-                                placeholder="Номер телефону" />
-
+                            <InputMask
+                                mask="+38 (999) 999-99-99"
+                                maskChar=""
+                            >
+                                {({ props }) =>
+                                    <input {...props}
+                                        placeholder="Номер телефону"
+                                        className="h-[5vh] border-[1px]  border-[#9B7A5B] w-full rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text " />}
+                            </InputMask>
                         </Form.Item>
 
                         <Form.Item
@@ -367,7 +373,7 @@ const CreateAdvert: React.FC = () => {
                         fontSize="clamp(14px,1.9vh,36px)"
                         bgColor="#9B7A5B"
                         brColor="#9B7A5B" />
-                        
+
                 </Form>
             </div>
         </>)

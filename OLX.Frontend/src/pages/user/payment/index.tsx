@@ -13,7 +13,7 @@ import InputMask from 'react-input-mask';
 const PaymentPage = () => {
     const { id } = useParams();
     const [searchParams] = useSearchParams('');
-    const { data: advert } = useGetAdvertByIdQuery(Number(id));
+    const { data: advert } = useGetAdvertByIdQuery(Number(id), { skip: !id });
     const [paymentMethod, setPaymentMethod] = useState("bank-card");
 
     const onFinish = (data: any) => {
@@ -25,11 +25,7 @@ const PaymentPage = () => {
             <BackButton className="text-adaptive-1_9_text my-[7.5vh] ml-[1vw] font-medium self-start" title="Назад" />
             <div className="grid grid-cols-[20.5vw,34.4vw] gap-[8vw] mt-[5vh] mb-[15vh]">
                 <AdvertCard
-                    id={Number(id)}
-                    image={APP_ENV.IMAGES_400_URL + advert?.images.find(x => x.priority === 0)?.name}
-                    title={advert?.title || ''}
-                    price={advert?.price || 0}
-                    settlement={advert?.settlementName || ''}
+                    advert={advert}
                     isFavorite={false}
                 />
                 <div className="flex flex-col">
@@ -131,7 +127,7 @@ const PaymentPage = () => {
                             >
                                 <InputMask
                                     mask="999"
-                                    maskChar="" 
+                                    maskChar=""
                                     disabled={paymentMethod === "postpaid"}>
                                     {({ props }) =>
                                         <input {...props}

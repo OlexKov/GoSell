@@ -5,8 +5,6 @@
         max-height: 0;
     }
 
-    
-
     100% {
         transform:  translateY(0px);
         opacity: 1;
@@ -28,8 +26,6 @@
     }
 }
 
-
-
 .button-menu {
     height: fit-content;
     margin: 0.5vh;
@@ -37,12 +33,12 @@
     grid-template-columns:3vh;
     display: grid;
     row-gap: 2vh;
+    padding: 1vh;
        
     .button-menu-container {
         max-height: 0; 
         opacity: 0; 
         transform: translateY(-10vh);
-        
     }
 
     .open{
