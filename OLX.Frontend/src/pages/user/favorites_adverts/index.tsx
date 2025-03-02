@@ -69,9 +69,9 @@ const FavoritesAdverts = () => {
                 <h2 className='text-[#3A211C] font-unbounded text-adaptive-3_5-text font-normal '>Обране</h2>
                 <Collapsed
                     title="Сортувати"
-                    className="text-adaptive-card-price-text text-[#3A211C] font-unbounded">
+                    className="text-adaptive-1_5-text text-[#3A211C] font-unbounded">
                     <AdvertSort
-                        className="mt-[2vh]"
+                        className="filter-radio-small"
                         onChange={onSort} />
                 </Collapsed>
             </div>

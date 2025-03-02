@@ -20,7 +20,6 @@ const advertPageSize: number = 6;
 const updatedPageRequest = (searchParams: URLSearchParams): IAdvertSearchPageData => ({
     priceFrom: Number(searchParams.get("priceFrom")),
     priceTo: Number(searchParams.get("priceTo")),
-    // approved: true,
     blocked: false,
     completed: false,
     size: Number(searchParams.get("size")) || advertPageSize,
@@ -139,7 +138,6 @@ const AdvertsPage: React.FC = () => {
                     </div>
 
                     <div className="flex-1 flex flex-col gap-[8vh]">
-                        {/* Search result */}
                         <div className="flex justify-end items-center gap-[1vw] w-[100%]">
                             <span className="font-unbounded text-[#3a211c]  font-normal text-adaptive-3_3-text mr-auto self-center">Ми знайшли {getAdCountText(adverts?.total)}</span>
                             <LocationSelect

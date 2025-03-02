@@ -2,6 +2,8 @@ import { Radio } from "antd"
 import { useRef } from "react"
 import { AdvertSortData } from "./models"
 import { useSearchParams } from "react-router-dom"
+import '../price_filter/style.scss'
+
 
 interface AdvertSortProps {
     onChange?: (value: AdvertSortData) => void
@@ -30,11 +32,11 @@ const AdvertSort: React.FC<AdvertSortProps> = ({ onChange, className }) => {
     }
 
     return (
-        <div className={`.filter-radio ${className}`}>
+        <div >
             <Radio.Group
                 value={sortData.current}
                 onChange={(e) => change(e.target.value)}
-                className="mb-[1vh] font-unbounded filter-radio flex flex-col gap-[.3vh]">
+                className={`mb-[1vh] font-unbounded filter-radio flex flex-col gap-[.3vh] ${className}`}>
                 <Radio value={'newest'}>найновіші</Radio>
                 <Radio value={'oldest'}>найстаріші</Radio>
                 <Radio value={'smallprice'}>найдешевші</Radio>

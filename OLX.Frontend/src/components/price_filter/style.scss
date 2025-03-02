@@ -22,6 +22,25 @@
     }
 }
 
+.filter-radio-small {
+    @extend .filter-radio;
+
+    .ant-radio-wrapper {
+        font-family: 'Montserrat', sans-serif !important;
+        font-size: clamp(14px, 1.5vh, 36px) !important;
+        &:hover {
+            color: #9B7A5B;
+        }
+    }
+
+    
+    .ant-radio-inner {
+        width: 14px;
+        height: 14px;
+        border-color: #9B7A5B !important;
+    }
+}
+
 .big-radio {
     @extend .filter-radio;
 
