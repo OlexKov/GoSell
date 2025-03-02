@@ -81,6 +81,15 @@ export const accountApiAuth = createApi({
             invalidatesTags: ["Favorites"],
         }),
 
+        addToFavoritesRange: builder.mutation<void, number[]>({
+            query: (advertIds) => ({
+                url: "favorites/add/range",
+                method: "POST",
+                body: advertIds 
+            }),
+            invalidatesTags: ["Favorites"],
+        }),
+
         removeFromFavorites: builder.mutation<void, number>({
             query: (advertId) => ({
                 url: `favorites/remove/${advertId}`,
@@ -95,6 +104,7 @@ export const {
     useLockUnlockUsersMutation,
     useGetFavoritesQuery,
     useAddToFavoritesMutation,
+    useAddToFavoritesRangeMutation,
     useRemoveFromFavoritesMutation ,
     useUserEditMutation,
     useDeleteAccountMutation

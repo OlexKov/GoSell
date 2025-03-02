@@ -439,6 +439,36 @@ namespace Olx.BLL.Services
             await userManager.UpdateAsync(user);
         }
 
+        public async Task AddToFavoritesRangeAsync(IEnumerable<int> advertIds)
+        {
+            if (advertIds == null || !advertIds.Any())
+            {
+                throw new HttpException("Advert IDs cannot be empty.", HttpStatusCode.BadRequest);
+            }
+
+            var user = await GetCurrentUser();
+            var existingFavoriteIds = user.FavoriteAdverts.Select(a => a.Id).ToHashSet();
+            var newAdvertIds = advertIds.Where(id => !existingFavoriteIds.Contains(id)).ToList();
+
+            if (!newAdvertIds.Any())
+            {
+                return;
+            }
+
+            var advertsToAdd = await advertRepository.GetListBySpec(new AdvertSpecs.GetByIds(newAdvertIds));
+            if (!advertsToAdd.Any())
+            {
+                throw new HttpException("No valid adverts found.", HttpStatusCode.BadRequest);
+            }
+
+            foreach (var advert in advertsToAdd)
+            {
+                user.FavoriteAdverts.Add(advert);
+            }
+            await userManager.UpdateAsync(user);
+
+        }
+
         public async Task RemoveFromFavoritesAsync(int advertId)
         {
             var user = await GetCurrentUser();

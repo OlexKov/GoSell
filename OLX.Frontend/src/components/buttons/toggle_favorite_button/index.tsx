@@ -27,6 +27,7 @@ const ToggleFavoriteButton: React.FC<ToggleFavoriteButtonProps> = ({ className, 
             if (isFavorite) {
                 const updatedFavorites = localFavorites.filter((id: number) => id !== advertId);
                 localStorage.setItem(APP_ENV.FAVORITES_KEY, JSON.stringify(updatedFavorites));
+                window.dispatchEvent(new Event('storage'));
             } else {
                 localFavorites.push(advertId);
                 localStorage.setItem(APP_ENV.FAVORITES_KEY, JSON.stringify(localFavorites));

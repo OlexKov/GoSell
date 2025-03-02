@@ -10,6 +10,8 @@ import { useGoogleLoginMutation, useLoginMutation, useSendConfirmEmailMutation }
 import { BackButton } from '../../../components/buttons/back_button';
 import FormInput from '../../../components/inputs/form_input';
 import PrimaryButton from '../../../components/buttons/primary_button';
+import { useAddToFavoritesRangeMutation } from '../../../redux/api/accountAuthApi';
+import { APP_ENV } from '../../../constants/env';
 
 const loginAction: string = 'login'
 
@@ -22,6 +24,7 @@ const LoginPage: React.FC = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
   const loginEmail = useRef<string | undefined>('')
   const remeber = useRef<boolean>(true)
+  const [addToFavorites] = useAddToFavoritesRangeMutation();
 
   const glLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -36,6 +39,12 @@ const LoginPage: React.FC = () => {
         if ((result.error as IError).status === 403) {
           setEmailConfirmationError(true);
         }
+      }
+      const localFavorites: number[] = JSON.parse(localStorage.getItem(APP_ENV.FAVORITES_KEY) || "[]");
+      if (localFavorites.length > 0) {
+        addToFavorites(localFavorites).then(() => {
+          localStorage.removeItem(APP_ENV.FAVORITES_KEY);
+        });
       }
     }
   });
@@ -74,6 +83,13 @@ const LoginPage: React.FC = () => {
         toast("Ви успішно увійшли в свій акаунт", {
           type: "success"
         })
+      }
+
+      const localFavorites: number[] = JSON.parse(localStorage.getItem(APP_ENV.FAVORITES_KEY) || "[]");
+      if (localFavorites.length > 0) {
+        addToFavorites(localFavorites).then(() => {
+          localStorage.removeItem(APP_ENV.FAVORITES_KEY);
+        });
       }
     }
   }
@@ -141,7 +157,7 @@ const LoginPage: React.FC = () => {
           <Button onClick={() => navigate('register')} className='text-[#3A211C] text-adaptive-input-form-error-text shadow-none font-montserrat border-none forget-password ml-[5px]' variant="link">Зареєструватись тут</Button>
         </div>
       </Form>
-      
+
     </div>
   )
 }

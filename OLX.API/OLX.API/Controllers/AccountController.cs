@@ -135,6 +135,14 @@ namespace OLX.API.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = Roles.User)]
+        [HttpPost("favorites/add/range")]
+        public async Task<IActionResult> AddToFavoritesRange([FromBody] IEnumerable<int> advertIds)
+        {
+            await accountService.AddToFavoritesRangeAsync(advertIds);
+            return Ok();
+        }
+
         [Authorize(Roles = Roles.Admin)]
         [HttpPut("register/admin")]
         public async Task<IActionResult> AddAdmin([FromForm] UserCreationModel adminModel)
@@ -157,6 +165,7 @@ namespace OLX.API.Controllers
             await accountService.RemoveFromFavoritesAsync(advertId);
             return Ok();
         }
+
 
         [Authorize]
         [HttpDelete("delete")]

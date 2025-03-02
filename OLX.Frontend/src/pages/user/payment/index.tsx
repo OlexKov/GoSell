@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useGetAdvertByIdQuery } from "../../../redux/api/advertApi";
 import { BackButton } from "../../../components/buttons/back_button";
 import AdvertCard from "../../../components/advert_card";
@@ -15,9 +15,11 @@ const PaymentPage = () => {
     const [searchParams] = useSearchParams('');
     const { data: advert } = useGetAdvertByIdQuery(Number(id), { skip: !id });
     const [paymentMethod, setPaymentMethod] = useState("bank-card");
-
+    const navigate = useNavigate();
+    
     const onFinish = (data: any) => {
-        console.log({ ...data, ...Object.fromEntries(searchParams.entries()) });
+         console.log({...data,...Object.fromEntries(searchParams.entries())});
+         navigate(`/user/advert/paymentsuccess`);
     };
 
     return (
