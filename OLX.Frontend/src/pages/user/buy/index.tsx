@@ -1,7 +1,6 @@
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import AdvertCard from "../../../components/advert_card";
 import { BackButton } from "../../../components/buttons/back_button"
-import { APP_ENV } from "../../../constants/env";
 import { useGetAdvertByIdQuery } from "../../../redux/api/advertApi";
 import { Form, Input, Radio, Select } from "antd";
 import LocationSelector from "../../../components/location_selector";
@@ -66,14 +65,7 @@ const BuyAdvertPage: React.FC = () => {
         <div className="w-[100%] gap-[5vh] mx-[8vw] flex flex-col">
             <BackButton className="text-adaptive-1_9_text my-[7.5vh] ml-[1vw] font-medium self-start" title="Назад" />
             <div className="grid grid-cols-[20.5vw,47.5vw] gap-[8vw]">
-                <AdvertCard
-                    id={Number(id)}
-                    image={APP_ENV.IMAGES_400_URL + advert?.images.find(x => x.priority === 0)?.name}
-                    title={advert?.title || ''}
-                    price={advert?.price || 0}
-                    settlement={advert?.settlementName || ''}
-                    isFavorite={false}
-                />
+                <AdvertCard advert={advert}/>
                 <div className="flex flex-col ">
                     <h1 className="font-unbounded text-adaptive-3_35-text mb-[7vh]">Купити з доставкою</h1>
                     <div className="flex flex-col gap-[.6vh]">
