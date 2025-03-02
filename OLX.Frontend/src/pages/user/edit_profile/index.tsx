@@ -2,6 +2,7 @@ import { Tabs } from "antd";
 import './style.scss'
 import { BackButton } from "../../../components/buttons/back_button";
 import UserEdit from "../../../components/user_settings/profile_edit";
+import PrivacySettings from "../../../components/privacy_settings";
 
 const UserProfileEdit: React.FC = () => {
 
@@ -23,9 +24,7 @@ const UserProfileEdit: React.FC = () => {
             key: "3",
             label: "Налаштування конфіденційності",
             children:
-                <div className="w-full h-[500px] bg-slate-400">
-                    Налаштування конфіденційності
-                </div>
+                <PrivacySettings />
         },
     ];
     return (
