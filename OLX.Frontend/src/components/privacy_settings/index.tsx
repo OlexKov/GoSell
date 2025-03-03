@@ -1,18 +1,38 @@
 import { Form, Radio } from "antd"
 import '../price_filter/style.scss' 
 import PrimaryButton from "../buttons/primary_button"
+import { useAppSelector } from "../../redux"
+import { useEffect, useState } from "react"
 
 const PrivacySettings = () => {
+    const user = useAppSelector(state => state.user.user);
+    const defaultSettings = {
+        visibility: "public-profile",
+        contactDetails: "all-users",
+        advertise: "enabled"
+    };
+    const storageKey = `privacySettings_${user?.id}`;
+
+    const [settings, setSettings] = useState(() => {
+        const savedSettings = localStorage.getItem(storageKey);
+        return savedSettings ? JSON.parse(savedSettings) : defaultSettings;
+    });
+
+    useEffect(() => {
+        const savedSettings = localStorage.getItem(storageKey);
+        setSettings(savedSettings ? JSON.parse(savedSettings) : defaultSettings);
+    }, [user]);
+
+    const handleSave = (values : any) => {
+        localStorage.setItem(storageKey, JSON.stringify(values));
+    };
     return (
         <div className="w-full">
             <Form
                 layout="vertical"
                 className="flex flex-col gap-[7vh] mb-[10vh]"
-                initialValues={{
-                    visibility: "public-profile",
-                    contactDetails: "all-users",
-                    advertise: "enabled"
-                }}
+                initialValues={settings}
+                onFinish={handleSave}
             >
                 <Form.Item
                     name="visibility"
