@@ -52,6 +52,16 @@ export const chatAuthApi = createApi({
             invalidatesTags: ['Chats']
         }),
 
+        removeChat: builder.mutation<void, number>({
+            query: (chatId) => {
+                return {
+                    url: `user/delete/${chatId}`,
+                    method: 'DELETE',
+                }
+            },
+            invalidatesTags: ['Chats']
+        }),
+
         removeMessageFromUser: builder.mutation<void, number>({
             query: (chatId) => {
                 return {
@@ -83,6 +93,5 @@ export const {
     useCreateChatMutation,
     useRemoveMessageFromUserMutation,
     useRemoveMessagesFromUserMutation,
-    
-
+    useRemoveChatMutation,
 } = chatAuthApi

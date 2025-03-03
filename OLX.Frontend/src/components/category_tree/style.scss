@@ -1,8 +1,7 @@
  .custom-scrollbar {
-
      /* При наведенні змінюється колір */
      &::-webkit-scrollbar-thumb:hover {
-         background: #9B7A5B;
+         background: #b69779;
      }
 
      /* Колір бігунка (самого повзунка) */
@@ -14,7 +13,7 @@
 
      /* Колір доріжки (фон скролбару) */
      &::-webkit-scrollbar-track {
-         background: lightgray;
+         background: rgb(0, 0, 0, 0.05);
          border-radius: 4px;
      }
 
@@ -36,7 +35,7 @@
      }
 
      .ant-tree-indent-unit {
-        width: 10px !important;
+         width: 10px !important;
      }
 
      .ant-tree-node-content-wrapper:hover {
@@ -45,8 +44,9 @@
 
      .ant-tree-switcher {
          width: 10px !important;
-         &::before{
-            background-color: transparent !important;
+
+         &::before {
+             background-color: transparent !important;
          }
      }
  }

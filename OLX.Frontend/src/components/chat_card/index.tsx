@@ -8,15 +8,16 @@ interface ChatCardProps {
     chat: IChat
     className?: string
     selected?: boolean
-    onClick?: (chat:IChat) => void
+    onClick?: (chat: IChat) => void
 }
 
 const ChatCard: React.FC<ChatCardProps> = ({ chat, className, selected, onClick }) => {
     const user = useAppSelector(state => state.user.user)
     const userData = useMemo(() => ({
-        userPhoto: user?.id === chat.buyer.id ? chat.buyer.photo : chat.seller.photo,
-        userName: user?.id === chat.buyer.id ? chat.buyer.description : chat.seller.description,
+        userPhoto: user?.id == chat.buyer.id ? chat.seller.photo : chat.buyer.photo,
+        userName: user?.id == chat.buyer.id ? chat.seller.description : chat.buyer.description,
     }), [chat, user])
+    
     return (
         <div
             onClick={() => onClick && onClick(chat)}

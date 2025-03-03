@@ -30,14 +30,14 @@ namespace Olx.BLL.Services
         public async Task<Chat> CreateAsync(int advertId, string? message = null)
         {
             var user = await userManager.UpdateUserActivityAsync(httpContext);
-            var advert = await advertRepository.GetItemBySpec( new AdvertSpecs.GetById(advertId,AdvertOpt.User))
+            var advert = await advertRepository.GetItemBySpec( new AdvertSpecs.GetById(advertId))
                 ?? throw new HttpException(Errors.InvalidAdvertId,HttpStatusCode.BadRequest);
             var chat = await chatRepository.GetItemBySpec(new ChatSpecs.FindExisting(advertId, user.Id))
                 ?? new Chat()
                 {
                     Advert = advert,
                     Buyer = user,
-                    Seller = advert.User
+                    SellerId = advert.UserId
                 };
             if (message is not null)
             {
@@ -48,6 +48,11 @@ namespace Olx.BLL.Services
                 });
             }
             chat.IsDeletedForSeller = false;
+            if (chat.Id == 0) 
+            {
+                await chatRepository.AddAsync(chat);
+            }
+            await chatRepository.SaveAsync();
             await hubContext.Clients.Users(advert.UserId.ToString())
                 .SendAsync(HubMethods.CreateChat);
             return chat;
@@ -63,7 +68,9 @@ namespace Olx.BLL.Services
         public async Task<IEnumerable<ChatDto>> GetUserChatsAsync()
         {
             var user =  await userManager.UpdateUserActivityAsync(httpContext);
-            var chats = await mapper.ProjectTo<ChatDto>(chatRepository.GetQuery().Where(x => x.Buyer.Id == user.Id || x.Seller.Id == user.Id)).ToArrayAsync();
+            var chats = await mapper.ProjectTo<ChatDto>(chatRepository.GetQuery()
+                .Where(x => (x.Buyer.Id == user.Id && !x.IsDeletedForBuyer) || (x.Seller.Id == user.Id && !x.IsDeletedForSeller)))
+                .ToArrayAsync();
             return chats;
         }
 
@@ -95,8 +102,6 @@ namespace Olx.BLL.Services
             }
             else chat.IsDeletedForSeller = true;
             await chatRepository.SaveAsync();
-            await hubContext.Clients.Users(user.Id.ToString())
-               .SendAsync(HubMethods.DeleteChat);
         }
 
         public async Task RemoveForUserAsync(IEnumerable<int> chatIds)
@@ -114,8 +119,6 @@ namespace Olx.BLL.Services
                 else chat.IsDeletedForSeller = true;
             }
             await chatRepository.SaveAsync();
-            await hubContext.Clients.Users(user.Id.ToString())
-              .SendAsync(HubMethods.DeleteChat);
         }
 
         public async Task SendMessageAsync(int chatId, string message)
@@ -128,7 +131,20 @@ namespace Olx.BLL.Services
                 Content = message,
                 Sender = user
             });
-            await hubContext.Clients.Users(user.Id.ToString())
+
+            var receiverUserId = chat.SellerId == user.Id ? chat.BuyerId : chat.SellerId;
+
+            var buyerRestore = receiverUserId == chat.BuyerId && chat.IsDeletedForBuyer;
+            var sellerRestore = receiverUserId == chat.SellerId && chat.IsDeletedForSeller;
+            if (buyerRestore || sellerRestore)
+            {
+                chat.IsDeletedForBuyer = !buyerRestore;
+                chat.IsDeletedForSeller = !sellerRestore;
+                await hubContext.Clients.Users(receiverUserId.ToString())
+                  .SendAsync(HubMethods.CreateChat);
+            }
+            await chatRepository.SaveAsync();
+            await hubContext.Clients.Users(receiverUserId.ToString())
              .SendAsync(HubMethods.ReceiveChatMessage);
         }
     }

@@ -25,9 +25,6 @@ const SignalRListener: React.FC = () => {
                     signalRConnection?.connection?.on('SetMessageReaded', () => {
                         dispatcher(chatAuthApi.util.invalidateTags(['ChatMessages']))
                     });
-                    signalRConnection?.connection?.on('DeleteChat', () => {
-                        dispatcher(chatAuthApi.util.invalidateTags(['Chats']))
-                    });
                     signalRConnection?.connection?.on('CreateChat', () => {
                         dispatcher(chatAuthApi.util.invalidateTags(['Chats','ChatMessages']))
                     });

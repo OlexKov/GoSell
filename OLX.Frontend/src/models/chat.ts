@@ -33,5 +33,5 @@ export interface IChatMessageSendModel {
 
 export interface IChatCreationModel {
     message: string
-    advertId: string
+    advertId: number
 }

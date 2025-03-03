@@ -153,8 +153,11 @@ export const formattedDate = (date: Date) => date.toLocaleDateString('uk-UA', {
   year: 'numeric'
 }).replace(/(\d+) (\w+) (\d+)/, '$1 $2 $3 р.');
 
-export const getFormatDateTime = (date: Date): string => {
+export const getFormatDateTime = (date?: Date): string => {
   const today: Date = new Date();
+  if(!date){
+    date = today
+  }
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
   const time = date.toLocaleTimeString().slice(0, -3);

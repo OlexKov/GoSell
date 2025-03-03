@@ -13,7 +13,7 @@ const ChatMessageCard: React.FC<ChatMessageCardProps> = ({ message, clasName }) 
     return (
         <div className={`flex gap-[1vw] ${message.sender.id == user?.id ? 'justify-end' : ''} ${clasName}`}>
             {message.sender.id != user?.id &&
-                <img className="h-full rounded-full aspect-square object-cover" src={APP_ENV.IMAGES_100_URL + message.sender.photo} />
+                <img className="h-[5.5vh] rounded-full aspect-square object-cover" src={APP_ENV.IMAGES_100_URL + message.sender.photo} />
             }
             <div className={`flex flex-col ${message.sender.id == user?.id ? 'items-end' : ''} max-w-[40%] gap-[1vh]`}>
                 <p className="text-pretty font-montserrat text-adaptive-1_7_text" >{message.content}</p>
