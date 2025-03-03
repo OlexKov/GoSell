@@ -48,13 +48,14 @@ namespace Olx.BLL.Services
                 });
             }
             chat.IsDeletedForSeller = false;
+            chat.IsDeletedForBuyer = false;
             if (chat.Id == 0) 
             {
                 await chatRepository.AddAsync(chat);
             }
             await chatRepository.SaveAsync();
             await hubContext.Clients.Users(advert.UserId.ToString())
-                .SendAsync(HubMethods.CreateChat);
+                .SendAsync(HubMethods.CreateChat,chat.Id);
             return chat;
         }
 
@@ -65,11 +66,13 @@ namespace Olx.BLL.Services
             return mapper.Map<IEnumerable<ChatMessageDto>>(chat.Messages);
         }
 
-        public async Task<IEnumerable<ChatDto>> GetUserChatsAsync()
+        public async Task<IEnumerable<ChatDto>> GetUserChatsAsync(int? advertId)
         {
             var user =  await userManager.UpdateUserActivityAsync(httpContext);
             var chats = await mapper.ProjectTo<ChatDto>(chatRepository.GetQuery()
-                .Where(x => (x.Buyer.Id == user.Id && !x.IsDeletedForBuyer) || (x.Seller.Id == user.Id && !x.IsDeletedForSeller)))
+                .Where(x =>
+                (x.Buyer.Id == user.Id && ((advertId.HasValue && x.AdvertId == advertId.Value) || !x.IsDeletedForBuyer)) ||
+                (x.Seller.Id == user.Id && ((advertId.HasValue && x.AdvertId == advertId.Value) || !x.IsDeletedForSeller))))
                 .ToArrayAsync();
             return chats;
         }
@@ -132,20 +135,13 @@ namespace Olx.BLL.Services
                 Sender = user
             });
 
-            var receiverUserId = chat.SellerId == user.Id ? chat.BuyerId : chat.SellerId;
+            chat.IsDeletedForBuyer = false;
+            chat.IsDeletedForSeller = false;
 
-            var buyerRestore = receiverUserId == chat.BuyerId && chat.IsDeletedForBuyer;
-            var sellerRestore = receiverUserId == chat.SellerId && chat.IsDeletedForSeller;
-            if (buyerRestore || sellerRestore)
-            {
-                chat.IsDeletedForBuyer = !buyerRestore;
-                chat.IsDeletedForSeller = !sellerRestore;
-                await hubContext.Clients.Users(receiverUserId.ToString())
-                  .SendAsync(HubMethods.CreateChat);
-            }
             await chatRepository.SaveAsync();
+            var receiverUserId = chat.SellerId == user.Id ? chat.BuyerId : chat.SellerId;
             await hubContext.Clients.Users(receiverUserId.ToString())
-             .SendAsync(HubMethods.ReceiveChatMessage);
+             .SendAsync(HubMethods.ReceiveChatMessage,chatId);
         }
     }
 }

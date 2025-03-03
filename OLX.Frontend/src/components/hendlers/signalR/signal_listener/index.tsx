@@ -9,7 +9,7 @@ import { chatAuthApi } from '../../../../redux/api/chatAuthApi';
 
 
 const SignalRListener: React.FC = () => {
-    const dispatcher = useAppDispatch();
+    const dispatch = useAppDispatch();
     const { isUser, isAuth } = useAppSelector(getAuth)
     const signalRConnection = useSignalR();
     useEffect(() => {
@@ -17,21 +17,23 @@ const SignalRListener: React.FC = () => {
             (async () => {
                 if (isUser) {
                     signalRConnection?.connection?.on('ReceiveMessageFromAdmin', () => {
-                        dispatcher(adminMessageAuthApi.util.invalidateTags(['Messeges','UnreadedMessages']))
+                        dispatch(adminMessageAuthApi.util.invalidateTags(['Messeges','UnreadedMessages']))
                     });
-                    signalRConnection?.connection?.on('ReceiveChatMessage', () => {
-                        dispatcher(chatAuthApi.util.invalidateTags(['ChatMessages']))
+                    signalRConnection?.connection?.on('ReceiveChatMessage', (chatId) => {
+                        dispatch(chatAuthApi.util.invalidateTags(['Chats']))
+                        dispatch(chatAuthApi.util.invalidateTags([{ type: "ChatMessages", id: chatId }]));
                     });
                     signalRConnection?.connection?.on('SetMessageReaded', () => {
-                        dispatcher(chatAuthApi.util.invalidateTags(['ChatMessages']))
+                        dispatch(chatAuthApi.util.invalidateTags(['ChatMessages']))
                     });
-                    signalRConnection?.connection?.on('CreateChat', () => {
-                        dispatcher(chatAuthApi.util.invalidateTags(['Chats','ChatMessages']))
+                    signalRConnection?.connection?.on('CreateChat', (chatId) => {
+                        dispatch(chatAuthApi.util.invalidateTags(['Chats']))
+                        dispatch(chatAuthApi.util.invalidateTags([{ type: "ChatMessages", id: chatId }]));
                     });
                 }
                 else {
                     signalRConnection?.connection?.on('ReceiveMessageFromUser', () => {
-                        dispatcher(adminMessageAuthApi.util.invalidateTags(['AdminMessages']))
+                        dispatch(adminMessageAuthApi.util.invalidateTags(['AdminMessages']))
                     });
                 }
             })()

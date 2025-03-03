@@ -16,6 +16,7 @@ import { Popconfirm } from "antd"
 const createNewChat = (userId: number, advert: IAdvert | undefined): IChat => {
     return {
         id: 0,
+        unreadedCount:0,
         buyer: {
             id: userId,
             photo: undefined,
@@ -36,17 +37,18 @@ const createNewChat = (userId: number, advert: IAdvert | undefined): IChat => {
     }
 }
 const ChatPage: React.FC = () => {
-    const messageChatBottom = useRef<HTMLDivElement | null>(null)
+    const chatMesssageContainer = useRef<HTMLDivElement | null>(null)
     const [createChat, { isLoading: isChatCreating }] = useCreateChatMutation();
     const [sendMessage, { isLoading: isMesssageSending }] = useSendChatMessageMutation();
     const [deleteChat] = useRemoveChatMutation();
     const [message, setMessage] = useState<string>('');
-    const [searchParam, setSearchParams] = useSearchParams()
+    const [searchParam] = useSearchParams()
+    const advertId = Number(searchParam.get('id'));
     const [newChat, setNewChat] = useState<IChat>();
-    const { data: advert } = useGetAdvertByIdQuery(Number(searchParam.get('id')) || 0, { skip: !searchParam.has('id') || Number(searchParam.get('id')) < 1 })
+    const { data: advert } = useGetAdvertByIdQuery(advertId || 0, { skip: !searchParam.has('id') || advertId < 1 })
     const user = useAppSelector(state => state.user.user)
     const [selectedChat, setSelectedChat] = useState<IChat>()
-    const { data: chats, isLoading: isChatsLoading } = useGetChatsQuery(undefined, { skip: !user })
+    const { data: chats, isLoading: isChatsLoading } = useGetChatsQuery(advertId, { skip: !user })
     const { data: chatMessages } = useGetChatMessagesQuery(selectedChat?.id || 0, { skip: !selectedChat || selectedChat.id === 0 })
 
     const messagesData = useMemo(() =>
@@ -61,30 +63,34 @@ const ChatPage: React.FC = () => {
             : [], [chatMessages, selectedChat])
 
     useEffect(() => {
-        messageChatBottom.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+        if (chatMesssageContainer.current) {
+            chatMesssageContainer.current.scrollTop = chatMesssageContainer.current.scrollHeight;
+          }
     }, [messagesData])
 
     useEffect(() => {
-        if (searchParam.has('id')) {
-            let currentChat;
-            if (chats?.length && chats.length > 0) {
-                currentChat = chats.find(x => x.advert.id === Number(searchParam.get('id')))
-            }
-            if (!currentChat && advert) {
-                currentChat = createNewChat(user?.id || 0,advert)
-                setNewChat(currentChat);
-            }
-            setSelectedChat(currentChat)
+        let currentChat;
+        if (chats?.length && chats.length > 0) {
+            currentChat = chats.find(x => x.advert.id === advertId)
+            setNewChat(undefined);
         }
+        if (searchParam.has('id') && !currentChat && advert) {
+            currentChat = createNewChat(user?.id || 0, advert)
+            setNewChat(currentChat);
+        }
+        setSelectedChat(currentChat)
+      
+
     }, [advert, chats])
 
     const chatItems = useMemo(() => {
         const items = [newChat, ...chats || []].filter(x => x !== undefined)
         return !isChatsLoading && items && items.length > 0
-            ? items.map((chat, index) =>
+            ? items .sort((a: IChat, b: IChat) => b.createAt.localeCompare(a.createAt))
+             .map((chat, index) =>
                 <ChatCard
                     key={index}
-                    className="h-[15vh] w-full "
+                    className="h-[15vh] w-full flex-shrink-0"
                     chat={chat}
                     selected={selectedChat?.id === chat?.id}
                     onClick={setSelectedChat} />)
@@ -97,6 +103,7 @@ const ChatPage: React.FC = () => {
         if (str && str.length > 0 && !isChatCreating && !isMesssageSending) {
             if (selectedChat?.id === 0) {
                 await createChat({ advertId: advert?.id || 0, message: str })
+
             }
             else {
                 await sendMessage({ chatId: selectedChat?.id || 0, message: str })
@@ -108,9 +115,6 @@ const ChatPage: React.FC = () => {
     const onChatRemove = async () => {
         if (selectedChat?.id !== 0) {
             await deleteChat(selectedChat?.id || 0)
-        }
-        else {
-            setSearchParams('')
         }
         setNewChat(undefined)
         setSelectedChat(undefined)
@@ -148,9 +152,8 @@ const ChatPage: React.FC = () => {
                                 </div>
                             </div>
                             <hr className="my-[1.8vh]" />
-                            <div className="flex-col flex gap-[2vh] flex-1 overflow-auto custom-scrollbar  ">
+                            <div ref={chatMesssageContainer}  className="flex-col flex gap-[2vh] flex-1 overflow-auto custom-scrollbar  ">
                                 {messagesData}
-                                <div ref={messageChatBottom} />
                             </div>
                             <div className="flex h-[3.2vh]  mx-[3.5vw] my-[.5vh] gap-[.8vw]">
                                 <svg className="w-auto h-full cursor-pointer transition-all duration-300 ease-in-out hover:scale-[1.1]" xmlns="http://www.w3.org/2000/svg" width="31" height="30" viewBox="0 0 31 30" fill="none">

@@ -6,6 +6,7 @@ export interface IChat {
     seller:IChatOlxUserDto
     createAt: string
     advert:ISmallAdvert
+    unreadedCount:number
 }
 
 

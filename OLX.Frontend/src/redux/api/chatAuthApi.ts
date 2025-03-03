@@ -9,10 +9,10 @@ export const chatAuthApi = createApi({
     tagTypes: ['Chats', 'ChatMessages'],
     endpoints: (builder) => ({
 
-        getChats: builder.query<IChat[], void>({
-            query: () => {
+        getChats: builder.query<IChat[], number | undefined>({
+            query: (advertId) => {
                 return {
-                    url: `chats`,
+                    url: `chats?advertId=${advertId}`,
                     method: 'GET',
                 }
             },
@@ -26,7 +26,7 @@ export const chatAuthApi = createApi({
                     method: 'GET',
                 }
             },
-            providesTags: ["ChatMessages"]
+            providesTags: (_result, _error, chatId) => [{ type: "ChatMessages", id: chatId }],
         }),
 
         sendChatMessage: builder.mutation<void, IChatMessageSendModel>({
@@ -38,7 +38,7 @@ export const chatAuthApi = createApi({
                     body: messageSendModel
                 }
             },
-            invalidatesTags: ['ChatMessages']
+            invalidatesTags: (_result, _error, messageSendModel) => [{ type: "ChatMessages", id: messageSendModel.chatId }]
         }),
 
         createChat: builder.mutation<void, IChatCreationModel>({

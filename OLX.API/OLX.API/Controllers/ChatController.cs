@@ -12,7 +12,7 @@ namespace OLX.API.Controllers
     {
         [Authorize(Roles = Roles.User)]
         [HttpGet("chats")]
-        public async Task<IActionResult> GetChats() => Ok(await chatService.GetUserChatsAsync());
+        public async Task<IActionResult> GetChats([FromQuery] int? advertId) => Ok(await chatService.GetUserChatsAsync(advertId));
 
         [Authorize(Roles = Roles.User)]
         [HttpGet("messages/{chatId:int}")]

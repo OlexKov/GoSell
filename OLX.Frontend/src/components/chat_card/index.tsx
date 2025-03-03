@@ -17,12 +17,16 @@ const ChatCard: React.FC<ChatCardProps> = ({ chat, className, selected, onClick 
         userPhoto: user?.id == chat.buyer.id ? chat.seller.photo : chat.buyer.photo,
         userName: user?.id == chat.buyer.id ? chat.seller.description : chat.buyer.description,
     }), [chat, user])
-    
     return (
         <div
             onClick={() => onClick && onClick(chat)}
-            className={`flex cursor-pointer p-[1vh] min-h-[100px] min-w-[300px]  hover:bg-[#9B7A5B]/10 ${selected ? 'bg-[#9B7A5B]/10' : ''} gap-[.5vw] ${className}`}
+            className={`flex relative cursor-pointer p-[1vh] min-h-[100px] min-w-[300px]  hover:bg-[#9B7A5B]/10 ${selected ? 'bg-[#9B7A5B]/10' : ''} gap-[.5vw] ${className}`}
         >
+            {chat.unreadedCount > 0 &&
+                    <div className=" absolute rounded-full text-white bg-red-700 px-2">
+                        <span>{chat.unreadedCount}</span>
+                    </div>
+                }
             <img className="h-[56%] ml-[0.5vw] object-cover aspect-square rounded-full" src={APP_ENV.IMAGES_100_URL + userData.userPhoto} />
             <div className="flex flex-col h-full justify-between w-full">
                 <div className="flex  justify-between ">
