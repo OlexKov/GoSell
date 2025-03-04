@@ -1,14 +1,21 @@
 import { BackButton } from "../../../components/buttons/back_button"
 import '../../../components/category_tree/style.scss'
 import { useAppSelector } from "../../../redux"
-import { useCreateChatMutation, useGetChatMessagesQuery, useGetChatsQuery, useRemoveChatMutation, useSendChatMessageMutation } from "../../../redux/api/chatAuthApi"
+import {
+    useCreateChatMutation,
+    useGetChatMessagesQuery,
+    useGetChatsQuery,
+    useRemoveChatMutation,
+    useSendChatMessageMutation,
+    useSetChatMessagesReadedMutation
+} from "../../../redux/api/chatAuthApi"
 import { useEffect, useMemo, useRef, useState } from "react"
 import ChatCard from "../../../components/chat_card"
 import { IChat, IChatMessage } from "../../../models/chat"
 import { APP_ENV } from "../../../constants/env"
 import { formatPrice, getUserDescr } from "../../../utilities/common_funct"
 import ChatMessageCard from "../../../components/chat_message_card"
-import { useSearchParams } from "react-router-dom"
+import { useLocation, useSearchParams } from "react-router-dom"
 import { useGetAdvertByIdQuery } from "../../../redux/api/advertApi"
 import { IAdvert } from "../../../models/advert"
 import { Popconfirm } from "antd"
@@ -16,7 +23,8 @@ import { Popconfirm } from "antd"
 const createNewChat = (userId: number, advert: IAdvert | undefined): IChat => {
     return {
         id: 0,
-        unreadedCount:0,
+        sellerUnreaded: 0,
+        buyerUnreaded: 0,
         buyer: {
             id: userId,
             photo: undefined,
@@ -37,18 +45,19 @@ const createNewChat = (userId: number, advert: IAdvert | undefined): IChat => {
     }
 }
 const ChatPage: React.FC = () => {
+    const [searchParam] = useSearchParams()
+    const [advertId, setAdvertId] = useState<number | undefined>()
     const chatMesssageContainer = useRef<HTMLDivElement | null>(null)
+    const selectedMesssageRef = useRef<HTMLDivElement | null>(null)
     const [createChat, { isLoading: isChatCreating }] = useCreateChatMutation();
     const [sendMessage, { isLoading: isMesssageSending }] = useSendChatMessageMutation();
     const [deleteChat] = useRemoveChatMutation();
+    const [setMessegesReaded] = useSetChatMessagesReadedMutation();
     const [message, setMessage] = useState<string>('');
-    const [searchParam] = useSearchParams()
-    const advertId = Number(searchParam.get('id'));
-    const [newChat, setNewChat] = useState<IChat>();
-    const { data: advert } = useGetAdvertByIdQuery(advertId || 0, { skip: !searchParam.has('id') || advertId < 1 })
-    const user = useAppSelector(state => state.user.user)
     const [selectedChat, setSelectedChat] = useState<IChat>()
-    const { data: chats, isLoading: isChatsLoading } = useGetChatsQuery(advertId, { skip: !user })
+    const { data: advert } = useGetAdvertByIdQuery(advertId || 0, { skip: !advertId })
+    const user = useAppSelector(state => state.user.user)
+    const { data: chats} = useGetChatsQuery(advertId, { skip: !user })
     const { data: chatMessages } = useGetChatMessagesQuery(selectedChat?.id || 0, { skip: !selectedChat || selectedChat.id === 0 })
 
     const messagesData = useMemo(() =>
@@ -62,48 +71,63 @@ const ChatPage: React.FC = () => {
                         clasName="px-[1vh]" />)
             : [], [chatMessages, selectedChat])
 
+    const unreadedMessages = useMemo(() => chatMessages && chatMessages.length > 0
+        ? chatMessages?.filter(x => !x.readed && x.sender.id != user?.id).map(x => x.id)
+        : [], [chatMessages])
+
+
+    const chatItems = useMemo(() => {
+        let items = chats
+            ? !advertId || chats.some(x => x.advert.id === advertId)
+                ? chats
+                : [createNewChat(user?.id || 0, advert), ...chats]
+            : []
+        return items.length > 0
+            ? items.slice().sort((a: IChat, b: IChat) => b.createAt.localeCompare(a.createAt))
+            : []
+    }, [advert, chats])
+
     useEffect(() => {
+        setAdvertId(Number(searchParam.get('id')) == 0 ? undefined : Number(searchParam.get('id')))
+    }, [])
+
+    useEffect(() => {
+        (async () => {
+            if (unreadedMessages.length > 0) {
+                await setMessegesReaded(unreadedMessages)
+            }
+        })()
         if (chatMesssageContainer.current) {
             chatMesssageContainer.current.scrollTop = chatMesssageContainer.current.scrollHeight;
-          }
+        }
     }, [messagesData])
 
     useEffect(() => {
-        let currentChat;
-        if (chats?.length && chats.length > 0) {
-            currentChat = chats.find(x => x.advert.id === advertId)
-            setNewChat(undefined);
+        if (selectedChat && selectedMesssageRef.current) {
+            selectedMesssageRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',
+            })
         }
-        if (searchParam.has('id') && !currentChat && advert) {
-            currentChat = createNewChat(user?.id || 0, advert)
-            setNewChat(currentChat);
+    }, [selectedChat])
+
+    useEffect(() => {
+        if (chatItems.length > 0) {
+            const selected = chatItems.find(x => x.advert.id === advertId) || (advertId ? chatItems[0] : undefined)
+            setSelectedChat(selected)
         }
-        setSelectedChat(currentChat)
-      
+    }, [advertId])
 
-    }, [advert, chats])
+    const onChatSelect = (chat: IChat) => {
+        setSelectedChat(chat)
+    }
 
-    const chatItems = useMemo(() => {
-        const items = [newChat, ...chats || []].filter(x => x !== undefined)
-        return !isChatsLoading && items && items.length > 0
-            ? items .sort((a: IChat, b: IChat) => b.createAt.localeCompare(a.createAt))
-             .map((chat, index) =>
-                <ChatCard
-                    key={index}
-                    className="h-[15vh] w-full flex-shrink-0"
-                    chat={chat}
-                    selected={selectedChat?.id === chat?.id}
-                    onClick={setSelectedChat} />)
-            : []
-    }, [newChat, chats, selectedChat])
 
     const onMessageSend = async () => {
         const str = message?.trim();
-
         if (str && str.length > 0 && !isChatCreating && !isMesssageSending) {
             if (selectedChat?.id === 0) {
                 await createChat({ advertId: advert?.id || 0, message: str })
-
             }
             else {
                 await sendMessage({ chatId: selectedChat?.id || 0, message: str })
@@ -113,10 +137,15 @@ const ChatPage: React.FC = () => {
     }
 
     const onChatRemove = async () => {
-        if (selectedChat?.id !== 0) {
-            await deleteChat(selectedChat?.id || 0)
+        if (selectedChat && selectedChat.id !== 0) {
+            const result =  await deleteChat(selectedChat.id || 0)
+            if(!result.error && selectedChat?.advert.id == advertId ){
+                setAdvertId(undefined)
+            }
         }
-        setNewChat(undefined)
+        else {
+            setAdvertId(undefined)
+        }
         setSelectedChat(undefined)
     }
 
@@ -127,7 +156,14 @@ const ChatPage: React.FC = () => {
                 <div className=" border rounded-lg border-[#9B7A5B]/50 w-[33.4%] flex flex-col">
                     <h2 className="ml-[2vh] mb-[2vh] mt-[1.7vh] text-adaptive-1_9_text font-montserrat font-medium">Вхідні</h2>
                     <div className="my-[1vh] flex flex-col gap-[2.5vh] overflow-auto custom-scrollbar">
-                        {chatItems}
+                        {chatItems.map((chat) =>
+                            <ChatCard
+                                key={chat.id}
+                                className="h-[15vh] w-full flex-shrink-0"
+                                chat={chat}
+                                selected={selectedChat?.id === chat?.id}
+                                ref={selectedChat?.id === chat?.id ? selectedMesssageRef : undefined}
+                                onClick={onChatSelect} />)}
                     </div>
                 </div>
 
@@ -152,7 +188,7 @@ const ChatPage: React.FC = () => {
                                 </div>
                             </div>
                             <hr className="my-[1.8vh]" />
-                            <div ref={chatMesssageContainer}  className="flex-col flex gap-[2vh] flex-1 overflow-auto custom-scrollbar  ">
+                            <div ref={chatMesssageContainer} className="flex-col flex gap-[2vh] flex-1 overflow-auto custom-scrollbar  ">
                                 {messagesData}
                             </div>
                             <div className="flex h-[3.2vh]  mx-[3.5vw] my-[.5vh] gap-[.8vw]">

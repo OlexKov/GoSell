@@ -9,7 +9,8 @@ namespace Olx.BLL.Mapper
         public ChatProfile()
         {
             CreateMap<Chat, ChatDto>()
-                .ForMember(x => x.UnreadedCount, opt => opt.MapFrom(x => x.Messages.Where(z => !z.Readed).Count()));
+                .ForMember(x => x.SellerUnreaded, opt => opt.MapFrom(x => x.Messages.Where(z => !z.Readed && x.SellerId !=  z.SenderId).Count()))
+                .ForMember(x => x.BuyerUnreaded, opt => opt.MapFrom(x => x.Messages.Where(z => !z.Readed && x.BuyerId != z.SenderId).Count()));
         }
     }
 }

@@ -9,5 +9,6 @@ namespace Olx.BLL.Helpers
         public const string ReceiveAdminMessage = "ReceiveMessageFromAdmin";
         public const string ReceiveUserMessage = "ReceiveMessageFromUser";
         public const string SetReaded = "SetMessageReaded";
+        public const string SetChatMessageReaded = "SetChatMessageReaded";
     }
 }

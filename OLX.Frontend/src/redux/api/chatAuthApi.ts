@@ -12,7 +12,7 @@ export const chatAuthApi = createApi({
         getChats: builder.query<IChat[], number | undefined>({
             query: (advertId) => {
                 return {
-                    url: `chats?advertId=${advertId}`,
+                    url: advertId ? `chats?advertId=${advertId}` : 'chats',
                     method: 'GET',
                 }
             },
@@ -39,6 +39,16 @@ export const chatAuthApi = createApi({
                 }
             },
             invalidatesTags: (_result, _error, messageSendModel) => [{ type: "ChatMessages", id: messageSendModel.chatId }]
+        }),
+
+        setChatMessagesReaded: builder.mutation<void, number[]>({
+            query: (messageIds) => {
+                return {
+                    url: `set/readed`,
+                    method: 'POST',
+                    body: messageIds
+                }
+            },
         }),
 
         createChat: builder.mutation<void, IChatCreationModel>({
@@ -77,7 +87,7 @@ export const chatAuthApi = createApi({
                 return {
                     url: `user/delete`,
                     method: 'DELETE',
-                    body:chatIds
+                    body: chatIds
                 }
             },
             invalidatesTags: ['ChatMessages']
@@ -94,4 +104,5 @@ export const {
     useRemoveMessageFromUserMutation,
     useRemoveMessagesFromUserMutation,
     useRemoveChatMutation,
+    useSetChatMessagesReadedMutation,
 } = chatAuthApi

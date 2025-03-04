@@ -27,6 +27,14 @@ namespace OLX.API.Controllers
         }
 
         [Authorize(Roles = Roles.User)]
+        [HttpPost("set/readed")]
+        public async Task<IActionResult> SetReaded([FromBody]IEnumerable<int> messegesIds)
+        {
+            await chatService.SetMessegesReadedAsync(messegesIds);
+            return Ok();
+        }
+
+        [Authorize(Roles = Roles.User)]
         [HttpPut("create")]
         public async Task<IActionResult> Create([FromBody] ChatCreationModel creationModel)
         {
@@ -54,7 +62,7 @@ namespace OLX.API.Controllers
         [HttpDelete("delete")]
         public async Task<IActionResult> RemoveAsync([FromBody] IEnumerable<int> chatId)
         {
-            await chatService.Remove(chatId);
+            await chatService.RemoveAsync(chatId);
             return Ok();
         }
 
