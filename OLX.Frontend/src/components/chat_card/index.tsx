@@ -6,22 +6,27 @@ import { ChatCardProps } from "./props"
 
 
 
-const ChatCard = forwardRef<HTMLDivElement, ChatCardProps>(({ chat, className, selected, onClick },ref) => {
+const ChatCard = forwardRef<HTMLDivElement, ChatCardProps>(({ chat, className, selected, onClick }, ref) => {
     const user = useAppSelector(state => state.user.user)
-    const userData = useMemo(() => ({
-        userPhoto: user?.id == chat.buyer.id ? chat.seller.photo : chat.buyer.photo,
-        userName: user?.id == chat.buyer.id ? chat.seller.description : chat.buyer.description,
-        unreaded: user?.id == chat.buyer.id ? chat.buyerUnreaded : chat.sellerUnreaded
-    }), [chat, user])
-    
+    const userData = useMemo(() => {
+        const unreaded = user?.id == chat.buyer.id ? chat.buyerUnreaded : chat.sellerUnreaded
+        const aspect = unreaded.toString().length * 3 - ((unreaded.toString().length - 1) * 2)
+        return ({
+            userPhoto: user?.id == chat.buyer.id ? chat.seller.photo : chat.buyer.photo,
+            userName: user?.id == chat.buyer.id ? chat.seller.description : chat.buyer.description,
+            unreaded: unreaded,
+            badgeAspect: aspect
+        })
+    }, [chat, user])
+
     return (
         <div
             ref={ref}
             onClick={() => onClick && onClick(chat)}
             className={`flex relative cursor-pointer p-[1vh] min-h-[100px] min-w-[300px]  hover:bg-[#9B7A5B]/10 ${selected ? 'bg-[#9B7A5B]/10' : ''} gap-[.5vw] ${className}`}
         >
-            { userData.unreaded > 0 &&
-                <div className={`flex absolute items-center justify-center px-1 pt-[2px] pb-[1px] aspect-[${userData.unreaded.toString().length}/1] rounded-full text-white bg-red-600  top-0 animate-pulse`}>
+            {userData.unreaded > 0 &&
+                <div style={{ aspectRatio: `${userData.badgeAspect}/3` }} className={`flex absolute h-[2vh] items-center justify-center rounded-full text-white bg-red-600  top-0 animate-pulse`}>
                     <span className="font-montserrat  leading-none text-adaptive-1_3-text">{userData.unreaded}</span>
                 </div>
             }

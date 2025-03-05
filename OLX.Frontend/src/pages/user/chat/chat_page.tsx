@@ -14,12 +14,12 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import ChatCard from "../../../components/chat_card"
 import { IChat, IChatMessage } from "../../../models/chat"
 import { APP_ENV } from "../../../constants/env"
-import { formatPrice, getUserDescr } from "../../../utilities/common_funct"
+import { formatPrice, getFormatDate, getUserDescr } from "../../../utilities/common_funct"
 import ChatMessageCard from "../../../components/chat_message_card"
 import { useSearchParams } from "react-router-dom"
 import { useGetAdvertByIdQuery } from "../../../redux/api/advertApi"
 import { IAdvert } from "../../../models/advert"
-import { Popconfirm } from "antd"
+import { Divider, Popconfirm } from "antd"
 
 const createNewChat = (userId: number, advert: IAdvert | undefined): IChat => {
     return {
@@ -59,20 +59,34 @@ const ChatPage: React.FC = () => {
     const [selectedChat, setSelectedChat] = useState<IChat>()
     const { data: advert } = useGetAdvertByIdQuery(advertId || 0, { skip: !advertId })
     const user = useAppSelector(state => state.user.user)
-    const { data: chats } = useGetChatsQuery(advertId, { skip: !user })
+    const { data: chats, refetch } = useGetChatsQuery(advertId, { skip: !user })
     const { data: chatMessages } = useGetChatMessagesQuery(selectedChat?.id || 0, { skip: !selectedChat || selectedChat.id === 0 })
 
+    const messagesMap = useMemo(() => {
+        const messages = new Map<string, IChatMessage[]>()
+        if (chatMessages?.length && selectedChat?.id !== 0) {
 
-    const messagesData = useMemo(() =>
-        chatMessages?.length && chatMessages.length > 0 && selectedChat?.id !== 0
-            ? chatMessages.slice()
+            chatMessages?.slice()
                 .sort((a: IChatMessage, b: IChatMessage) => a.createdAt.localeCompare(b.createdAt))
-                .map((message) =>
-                    <ChatMessageCard
-                        message={message}
-                        key={message.id}
-                        clasName="px-[1vh]" />)
-            : [], [chatMessages, selectedChat])
+                .forEach((message: IChatMessage) => {
+                    const key = getFormatDate(new Date(message.createdAt))
+                    const existingMessages = messages.get(key) || []
+                    messages.set(key, [...existingMessages, message])
+                })
+        }
+        return Array.from(messages.entries()).flatMap(([key, value]) => [
+            <Divider key={key}>
+                <span className="font-montserrat text-adaptive-1_4-text">{key}</span>
+            </Divider>,
+            ...value.map(message => (
+                <ChatMessageCard
+                    message={message}
+                    key={message.id}
+                    clasName="px-[1vh]"
+                />
+            ))
+        ])
+    }, [chatMessages, selectedChat])
 
 
     const chatItems = useMemo(() => {
@@ -88,6 +102,9 @@ const ChatPage: React.FC = () => {
 
     useEffect(() => {
         const queryAdvertId = Number(searchParam.get('id')) == 0 ? undefined : Number(searchParam.get('id'))
+        if (!queryAdvertId) {
+            refetch()
+        }
         setAdvertId(queryAdvertId)
     }, [])
 
@@ -101,8 +118,8 @@ const ChatPage: React.FC = () => {
                         dispatch(
                             chatAuthApi.util.updateQueryData("getChats", advertId, (draft) => {
                                 if (!draft) return;
-                                let chat =  draft.find(x=>x.id === selectedChat?.id)
-                                if(chat){
+                                let chat = draft.find(x => x.id === selectedChat?.id)
+                                if (chat) {
                                     chat.buyerUnreaded = 0;
                                     chat.sellerUnreaded = 0;
                                 }
@@ -130,7 +147,7 @@ const ChatPage: React.FC = () => {
             const selected = chatItems.find(x => x.advert.id === advertId) || (advertId ? chatItems[0] : undefined)
             setSelectedChat(selected)
         }
-    }, [advertId,chatItems])
+    }, [advertId, chatItems])
 
     const onChatSelect = (chat: IChat) => {
         setSelectedChat(chat)
@@ -138,9 +155,9 @@ const ChatPage: React.FC = () => {
 
     const onMessageSend = async () => {
         const str = message?.trim();
-        if (str && str.length > 0 && !isChatCreating && !isMesssageSending && selectedChat ) {
+        if (str && str.length > 0 && !isChatCreating && !isMesssageSending && selectedChat) {
             if (selectedChat.id === 0 && advertId) {
-                await createChat({ advertId: advertId , message: str })
+                await createChat({ advertId: advertId, message: str })
             }
             else {
                 await sendMessage({ chatId: selectedChat.id, message: str })
@@ -202,7 +219,7 @@ const ChatPage: React.FC = () => {
                             </div>
                             <hr className="my-[1.8vh]" />
                             <div ref={chatMesssageContainer} className="flex-col flex gap-[2vh] flex-1 overflow-auto custom-scrollbar  ">
-                                {messagesData}
+                                {messagesMap}
                             </div>
                             <div className="flex h-[3.2vh]  mx-[3.5vw] my-[.5vh] gap-[.8vw]">
                                 <svg className="w-auto h-full cursor-pointer transition-all duration-300 ease-in-out hover:scale-[1.1]" xmlns="http://www.w3.org/2000/svg" width="31" height="30" viewBox="0 0 31 30" fill="none">
