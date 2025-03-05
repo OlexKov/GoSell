@@ -35,11 +35,14 @@ const SignalRListener: React.FC = () => {
                     });
 
                     signalRConnection?.connection?.on('SetChatMessageReaded', (data: ISetMessageReadedData) => {
-                        dispatch(chatAuthApi.util.invalidateTags(['Chats']))
                         dispatch(
                             chatAuthApi.util.updateQueryData("getChatMessages", data.chatId, (draft) => {
                                 if (!draft) return;
-                                draft.forEach(x => { x.readed = data.messegesIds.includes(x.id) })
+                                draft.forEach(x => {
+                                    if (data.messegesIds.includes(x.id)) {
+                                        x.readed = true;
+                                    }
+                                })
                             }))
                     });
 

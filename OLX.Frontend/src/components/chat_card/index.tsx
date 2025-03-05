@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useMemo } from "react"
+import { forwardRef, useMemo } from "react"
 import { APP_ENV } from "../../constants/env"
 import { useAppSelector } from "../../redux"
 import { getFormatDateTime } from "../../utilities/common_funct"
@@ -20,7 +20,7 @@ const ChatCard = forwardRef<HTMLDivElement, ChatCardProps>(({ chat, className, s
             onClick={() => onClick && onClick(chat)}
             className={`flex relative cursor-pointer p-[1vh] min-h-[100px] min-w-[300px]  hover:bg-[#9B7A5B]/10 ${selected ? 'bg-[#9B7A5B]/10' : ''} gap-[.5vw] ${className}`}
         >
-            { !selected && userData.unreaded > 0 &&
+            { userData.unreaded > 0 &&
                 <div className={`flex absolute items-center  rounded-full text-white bg-red-600 px-[.4vw] py-[.2vw] top-0 animate-pulse`}>
                     <span className="font-montserrat leading-none text-adaptive-1_3-text">{userData.unreaded}</span>
                 </div>

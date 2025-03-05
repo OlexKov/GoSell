@@ -57,9 +57,10 @@ const ChatPage: React.FC = () => {
     const [selectedChat, setSelectedChat] = useState<IChat>()
     const { data: advert } = useGetAdvertByIdQuery(advertId || 0, { skip: !advertId })
     const user = useAppSelector(state => state.user.user)
-    const { data: chats} = useGetChatsQuery(advertId, { skip: !user })
+    const { data: chats, refetch: refetchChats } = useGetChatsQuery(advertId, { skip: !user })
     const { data: chatMessages } = useGetChatMessagesQuery(selectedChat?.id || 0, { skip: !selectedChat || selectedChat.id === 0 })
 
+    
     const messagesData = useMemo(() =>
         chatMessages?.length && chatMessages.length > 0 && selectedChat?.id !== 0
             ? chatMessages.slice()
@@ -70,10 +71,6 @@ const ChatPage: React.FC = () => {
                         key={message.id}
                         clasName="px-[1vh]" />)
             : [], [chatMessages, selectedChat])
-
-    const unreadedMessages = useMemo(() => chatMessages && chatMessages.length > 0
-        ? chatMessages?.filter(x => !x.readed && x.sender.id != user?.id).map(x => x.id)
-        : [], [chatMessages])
 
 
     const chatItems = useMemo(() => {
@@ -93,14 +90,20 @@ const ChatPage: React.FC = () => {
 
     useEffect(() => {
         (async () => {
-            if (unreadedMessages.length > 0) {
-                await setMessegesReaded(unreadedMessages)
+            if (chatMessages && chatMessages.length > 0) {
+                const messages = chatMessages?.filter(x => !x.readed && (x.sender.id != user?.id)).map(x => x.id)
+                if (messages && messages.length > 0) {
+                    const result = await setMessegesReaded(messages)
+                    if (!result.error) {
+                        refetchChats()
+                    }
+                }
             }
         })()
         if (chatMesssageContainer.current) {
             chatMesssageContainer.current.scrollTop = chatMesssageContainer.current.scrollHeight;
         }
-    }, [messagesData])
+    }, [chatMessages])
 
     useEffect(() => {
         if (selectedChat && selectedMesssageRef.current) {
@@ -138,8 +141,8 @@ const ChatPage: React.FC = () => {
 
     const onChatRemove = async () => {
         if (selectedChat && selectedChat.id !== 0) {
-            const result =  await deleteChat(selectedChat.id || 0)
-            if(!result.error && selectedChat?.advert.id == advertId ){
+            const result = await deleteChat(selectedChat.id || 0)
+            if (!result.error && selectedChat?.advert.id == advertId) {
                 setAdvertId(undefined)
             }
         }
@@ -161,8 +164,8 @@ const ChatPage: React.FC = () => {
                                 key={chat.id}
                                 className="h-[15vh] w-full flex-shrink-0"
                                 chat={chat}
-                                selected={selectedChat?.id === chat?.id}
-                                ref={selectedChat?.id === chat?.id ? selectedMesssageRef : undefined}
+                                selected={selectedChat?.advert.id === chat?.advert.id}
+                                ref={selectedChat?.advert.id === chat?.advert.id ? selectedMesssageRef : undefined}
                                 onClick={onChatSelect} />)}
                     </div>
                 </div>
