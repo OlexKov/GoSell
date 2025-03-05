@@ -153,8 +153,11 @@ export const formattedDate = (date: Date) => date.toLocaleDateString('uk-UA', {
   year: 'numeric'
 }).replace(/(\d+) (\w+) (\d+)/, '$1 $2 $3 р.');
 
-export const getFormatDateTime = (date: Date): string => {
+export const getFormatDateTime = (date?: Date): string => {
   const today: Date = new Date();
+  if(!date){
+    date = today
+  }
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
   const time = date.toLocaleTimeString().slice(0, -3);
@@ -169,6 +172,26 @@ export const getFormatDateTime = (date: Date): string => {
     return formattedDate(date)
   }
   return `${formattedDate(date).slice(0, -7)} в ${time}`
+}
+
+export const getFormatDate = (date?: Date): string => {
+  const today: Date = new Date();
+  if(!date){
+    date = today
+  }
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  
+  if (today.toDateString() === date.toDateString()) {
+    return `согодні`
+  }
+  if (yesterday.toDateString() === date.toDateString()) {
+    return `вчора`
+  }
+  if (date.getFullYear() < today.getFullYear()) {
+    return formattedDate(date)
+  }
+  return `${formattedDate(date).slice(0, -7)}`
 }
 
 export const getAdvertPageRequest = (pageData: IAdvertSearchPageData, categories: ICategory[]): IAdvertPageRequest => {

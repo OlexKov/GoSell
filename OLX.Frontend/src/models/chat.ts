@@ -6,6 +6,8 @@ export interface IChat {
     seller:IChatOlxUserDto
     createAt: string
     advert:ISmallAdvert
+    sellerUnreaded:number
+    buyerUnreaded:number
 }
 
 
@@ -33,5 +35,5 @@ export interface IChatMessageSendModel {
 
 export interface IChatCreationModel {
     message: string
-    advertId: string
+    advertId: number
 }

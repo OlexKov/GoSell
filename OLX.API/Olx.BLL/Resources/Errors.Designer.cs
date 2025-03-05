@@ -169,6 +169,15 @@ namespace Olx.BLL.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Invalid chat messeges ids.
+        /// </summary>
+        internal static string InvalidChatMessegesIds {
+            get {
+                return ResourceManager.GetString("InvalidChatMessegesIds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Invalid chatt id.
         /// </summary>
         internal static string InvalidChattId {

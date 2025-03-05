@@ -9,10 +9,10 @@ export const chatAuthApi = createApi({
     tagTypes: ['Chats', 'ChatMessages'],
     endpoints: (builder) => ({
 
-        getChats: builder.query<IChat[], void>({
-            query: () => {
+        getChats: builder.query<IChat[], number | undefined>({
+            query: (advertId) => {
                 return {
-                    url: `chats`,
+                    url: advertId ? `chats?advertId=${advertId}` : 'chats',
                     method: 'GET',
                 }
             },
@@ -26,7 +26,7 @@ export const chatAuthApi = createApi({
                     method: 'GET',
                 }
             },
-            providesTags: ["ChatMessages"]
+            providesTags: (_result, _error, chatId) => [{ type: "ChatMessages", id: chatId }],
         }),
 
         sendChatMessage: builder.mutation<void, IChatMessageSendModel>({
@@ -38,7 +38,17 @@ export const chatAuthApi = createApi({
                     body: messageSendModel
                 }
             },
-            invalidatesTags: ['ChatMessages']
+            invalidatesTags: (_result, _error, messageSendModel) => [{ type: "ChatMessages", id: messageSendModel.chatId }]
+        }),
+
+        setChatMessagesReaded: builder.mutation<void, number[]>({
+            query: (messageIds) => {
+                return {
+                    url: `set/readed`,
+                    method: 'POST',
+                    body: messageIds
+                }
+            },
         }),
 
         createChat: builder.mutation<void, IChatCreationModel>({
@@ -47,6 +57,16 @@ export const chatAuthApi = createApi({
                     url: `create`,
                     method: 'PUT',
                     body: chatCreationModel
+                }
+            },
+            invalidatesTags: ['Chats']
+        }),
+
+        removeChat: builder.mutation<void, number>({
+            query: (chatId) => {
+                return {
+                    url: `user/delete/${chatId}`,
+                    method: 'DELETE',
                 }
             },
             invalidatesTags: ['Chats']
@@ -67,7 +87,7 @@ export const chatAuthApi = createApi({
                 return {
                     url: `user/delete`,
                     method: 'DELETE',
-                    body:chatIds
+                    body: chatIds
                 }
             },
             invalidatesTags: ['ChatMessages']
@@ -83,6 +103,6 @@ export const {
     useCreateChatMutation,
     useRemoveMessageFromUserMutation,
     useRemoveMessagesFromUserMutation,
-    
-
+    useRemoveChatMutation,
+    useSetChatMessagesReadedMutation,
 } = chatAuthApi

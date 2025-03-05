@@ -12,7 +12,7 @@ namespace OLX.API.Controllers
     {
         [Authorize(Roles = Roles.User)]
         [HttpGet("chats")]
-        public async Task<IActionResult> GetChats() => Ok(await chatService.GetUserChatsAsync());
+        public async Task<IActionResult> GetChats([FromQuery] int? advertId) => Ok(await chatService.GetUserChatsAsync(advertId));
 
         [Authorize(Roles = Roles.User)]
         [HttpGet("messages/{chatId:int}")]
@@ -23,6 +23,14 @@ namespace OLX.API.Controllers
         public async Task<IActionResult> Send([FromBody] ChatMessageSendModel sendModel)
         {
             await chatService.SendMessageAsync(sendModel.ChatId, sendModel.Message);
+            return Ok();
+        }
+
+        [Authorize(Roles = Roles.User)]
+        [HttpPost("set/readed")]
+        public async Task<IActionResult> SetReaded([FromBody]IEnumerable<int> messegesIds)
+        {
+            await chatService.SetMessegesReadedAsync(messegesIds);
             return Ok();
         }
 
@@ -54,7 +62,7 @@ namespace OLX.API.Controllers
         [HttpDelete("delete")]
         public async Task<IActionResult> RemoveAsync([FromBody] IEnumerable<int> chatId)
         {
-            await chatService.Remove(chatId);
+            await chatService.RemoveAsync(chatId);
             return Ok();
         }
 

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Olx.BLL.DTOs.Chat;
 using Olx.BLL.Entities.ChatEntities;
-using Olx.BLL.Exstensions;
 
 namespace Olx.BLL.Mapper
 {
@@ -9,7 +8,9 @@ namespace Olx.BLL.Mapper
     {
         public ChatProfile()
         {
-            CreateMap<Chat, ChatDto>();
+            CreateMap<Chat, ChatDto>()
+                .ForMember(x => x.SellerUnreaded, opt => opt.MapFrom(x => x.Messages.Where(z => !z.Readed && x.SellerId !=  z.SenderId).Count()))
+                .ForMember(x => x.BuyerUnreaded, opt => opt.MapFrom(x => x.Messages.Where(z => !z.Readed && x.BuyerId != z.SenderId).Count()));
         }
     }
 }

@@ -225,4 +225,7 @@
   <data name="MultipleRefresh" xml:space="preserve">
     <value>Multiple refresh</value>
   </data>
+  <data name="InvalidChatMessegesIds" xml:space="preserve">
+    <value>Invalid chat messeges ids</value>
+  </data>
 </root>
