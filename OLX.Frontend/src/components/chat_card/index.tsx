@@ -21,8 +21,8 @@ const ChatCard = forwardRef<HTMLDivElement, ChatCardProps>(({ chat, className, s
             className={`flex relative cursor-pointer p-[1vh] min-h-[100px] min-w-[300px]  hover:bg-[#9B7A5B]/10 ${selected ? 'bg-[#9B7A5B]/10' : ''} gap-[.5vw] ${className}`}
         >
             { userData.unreaded > 0 &&
-                <div className={`flex absolute items-center  rounded-full text-white bg-red-600 px-[.4vw] py-[.2vw] top-0 animate-pulse`}>
-                    <span className="font-montserrat leading-none text-adaptive-1_3-text">{userData.unreaded}</span>
+                <div className={`flex absolute items-center justify-center px-1 pt-[2px] pb-[1px] aspect-[${userData.unreaded.toString().length}/1] rounded-full text-white bg-red-600  top-0 animate-pulse`}>
+                    <span className="font-montserrat  leading-none text-adaptive-1_3-text">{userData.unreaded}</span>
                 </div>
             }
             <img className="h-[56%] ml-[0.5vw] object-cover aspect-square rounded-full" src={APP_ENV.IMAGES_100_URL + userData.userPhoto} />

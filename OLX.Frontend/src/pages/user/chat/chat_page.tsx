@@ -1,7 +1,8 @@
 import { BackButton } from "../../../components/buttons/back_button"
 import '../../../components/category_tree/style.scss'
-import { useAppSelector } from "../../../redux"
+import { useAppDispatch, useAppSelector } from "../../../redux"
 import {
+    chatAuthApi,
     useCreateChatMutation,
     useGetChatMessagesQuery,
     useGetChatsQuery,
@@ -15,7 +16,7 @@ import { IChat, IChatMessage } from "../../../models/chat"
 import { APP_ENV } from "../../../constants/env"
 import { formatPrice, getUserDescr } from "../../../utilities/common_funct"
 import ChatMessageCard from "../../../components/chat_message_card"
-import { useLocation, useSearchParams } from "react-router-dom"
+import { useSearchParams } from "react-router-dom"
 import { useGetAdvertByIdQuery } from "../../../redux/api/advertApi"
 import { IAdvert } from "../../../models/advert"
 import { Popconfirm } from "antd"
@@ -45,6 +46,7 @@ const createNewChat = (userId: number, advert: IAdvert | undefined): IChat => {
     }
 }
 const ChatPage: React.FC = () => {
+    const dispatch = useAppDispatch()
     const [searchParam] = useSearchParams()
     const [advertId, setAdvertId] = useState<number | undefined>()
     const chatMesssageContainer = useRef<HTMLDivElement | null>(null)
@@ -57,10 +59,10 @@ const ChatPage: React.FC = () => {
     const [selectedChat, setSelectedChat] = useState<IChat>()
     const { data: advert } = useGetAdvertByIdQuery(advertId || 0, { skip: !advertId })
     const user = useAppSelector(state => state.user.user)
-    const { data: chats, refetch: refetchChats } = useGetChatsQuery(advertId, { skip: !user })
+    const { data: chats } = useGetChatsQuery(advertId, { skip: !user })
     const { data: chatMessages } = useGetChatMessagesQuery(selectedChat?.id || 0, { skip: !selectedChat || selectedChat.id === 0 })
 
-    
+
     const messagesData = useMemo(() =>
         chatMessages?.length && chatMessages.length > 0 && selectedChat?.id !== 0
             ? chatMessages.slice()
@@ -85,7 +87,8 @@ const ChatPage: React.FC = () => {
     }, [advert, chats])
 
     useEffect(() => {
-        setAdvertId(Number(searchParam.get('id')) == 0 ? undefined : Number(searchParam.get('id')))
+        const queryAdvertId = Number(searchParam.get('id')) == 0 ? undefined : Number(searchParam.get('id'))
+        setAdvertId(queryAdvertId)
     }, [])
 
     useEffect(() => {
@@ -95,7 +98,15 @@ const ChatPage: React.FC = () => {
                 if (messages && messages.length > 0) {
                     const result = await setMessegesReaded(messages)
                     if (!result.error) {
-                        refetchChats()
+                        dispatch(
+                            chatAuthApi.util.updateQueryData("getChats", advertId, (draft) => {
+                                if (!draft) return;
+                                let chat =  draft.find(x=>x.id === selectedChat?.id)
+                                if(chat){
+                                    chat.buyerUnreaded = 0;
+                                    chat.sellerUnreaded = 0;
+                                }
+                            }))
                     }
                 }
             }
@@ -115,25 +126,24 @@ const ChatPage: React.FC = () => {
     }, [selectedChat])
 
     useEffect(() => {
-        if (chatItems.length > 0) {
+        if (chatItems.length > 0 && (!selectedChat || selectedChat.id == 0)) {
             const selected = chatItems.find(x => x.advert.id === advertId) || (advertId ? chatItems[0] : undefined)
             setSelectedChat(selected)
         }
-    }, [advertId])
+    }, [advertId,chatItems])
 
     const onChatSelect = (chat: IChat) => {
         setSelectedChat(chat)
     }
 
-
     const onMessageSend = async () => {
         const str = message?.trim();
-        if (str && str.length > 0 && !isChatCreating && !isMesssageSending) {
-            if (selectedChat?.id === 0) {
-                await createChat({ advertId: advert?.id || 0, message: str })
+        if (str && str.length > 0 && !isChatCreating && !isMesssageSending && selectedChat ) {
+            if (selectedChat.id === 0 && advertId) {
+                await createChat({ advertId: advertId , message: str })
             }
             else {
-                await sendMessage({ chatId: selectedChat?.id || 0, message: str })
+                await sendMessage({ chatId: selectedChat.id, message: str })
             }
             setMessage('')
         }
