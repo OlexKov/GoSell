@@ -28,9 +28,9 @@ namespace OLX.API.Controllers
 
         [Authorize(Roles = Roles.User)]
         [HttpPost("set/readed")]
-        public async Task<IActionResult> SetReaded([FromBody]IEnumerable<int> messegesIds)
+        public async Task<IActionResult> SetReaded([FromBody] SetReadedRequest request)
         {
-            await chatService.SetMessegesReadedAsync(messegesIds);
+            await chatService.SetMessegesReadedAsync(request.Ids,request.ChatId);
             return Ok();
         }
 

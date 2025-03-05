@@ -11,6 +11,7 @@ using Olx.BLL.Exstensions;
 using Olx.BLL.Helpers;
 using Olx.BLL.Hubs;
 using Olx.BLL.Interfaces;
+using Olx.BLL.Models.Chat;
 using Olx.BLL.Models.SignaR;
 using Olx.BLL.Resources;
 using Olx.BLL.Specifications;
@@ -146,27 +147,26 @@ namespace Olx.BLL.Services
              .SendAsync(HubMethods.ReceiveChatMessage, mapper.Map<ChatMessageDto>(newMessage));
         }
 
-        public async Task SetMessegesReadedAsync(IEnumerable<int> messegesIds)
+        public async Task SetMessegesReadedAsync(IEnumerable<int> messagesIds,int chatId)
         {
-            await userManager.UpdateUserActivityAsync(httpContext);
-            var messeges = await chatMessageRepository.GetListBySpec(new ChatMessageSpecs.GetMesssegesById(messegesIds, true));
-            if (messeges is null || !messeges.Any()) 
+            if (messagesIds.Any()) 
             {
-                throw new HttpException(Errors.InvalidChatMessegesIds, HttpStatusCode.BadRequest);
+                var chat = await chatRepository.GetItemBySpec(new ChatSpecs.GetById(chatId,ChatOpt.NoTracking))
+                    ?? throw new HttpException(Errors.InvalidChattId, HttpStatusCode.BadRequest);
+                var user = await userManager.UpdateUserActivityAsync(httpContext);
+                var messeges = await chatMessageRepository.GetListBySpec(new ChatMessageSpecs.GetMesssegesById(messagesIds, true));
+
+                await chatMessageRepository.GetQuery().Where(x => messagesIds.Contains(x.Id)).ExecuteUpdateAsync(messeges => messeges.SetProperty(x => x.Readed, true));
+                var receiverUserId = chat.SellerId == user.Id ? chat.BuyerId : chat.SellerId;
+                await hubContext.Clients.Users(receiverUserId.ToString())
+                .SendAsync(HubMethods.SetChatMessageReaded,
+                    new SetChatMessageReaded
+                    {
+                        MessegesIds = messeges.Select(x => x.Id),
+                        ChatId = chat.Id,
+                    });
             }
-            foreach (var message in messeges)
-            {
-                message.Readed = true;
-            }
-            await chatMessageRepository.SaveAsync();
-            var firstMessage = messeges.First();
-            await hubContext.Clients.Users(firstMessage.SenderId.ToString())
-            .SendAsync(HubMethods.SetChatMessageReaded,
-                new SetChatMessageReaded
-                {
-                    MessegesIds = messeges.Select(x => x.Id),
-                    ChatId = firstMessage.ChatId,
-                });
+            
 
         }
     }

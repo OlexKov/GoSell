@@ -64,7 +64,7 @@ const ChatPage: React.FC = () => {
 
     const messagesMap = useMemo(() => {
         const messages = new Map<string, IChatMessage[]>()
-        if (chatMessages?.length && selectedChat?.id !== 0) {
+        if (chatMessages?.length) {
 
             chatMessages?.slice()
                 .sort((a: IChatMessage, b: IChatMessage) => a.createdAt.localeCompare(b.createdAt))
@@ -86,7 +86,7 @@ const ChatPage: React.FC = () => {
                 />
             ))
         ])
-    }, [chatMessages, selectedChat])
+    }, [chatMessages])
 
 
     const chatItems = useMemo(() => {
@@ -112,9 +112,19 @@ const ChatPage: React.FC = () => {
         (async () => {
             if (chatMessages && chatMessages.length > 0) {
                 const messages = chatMessages?.filter(x => !x.readed && (x.sender.id != user?.id)).map(x => x.id)
-                if (messages && messages.length > 0) {
-                    const result = await setMessegesReaded(messages)
-                    if (!result.error) {
+                dispatch(
+                    chatAuthApi.util.updateQueryData("getChatMessages", selectedChat?.id || 0, (draft) => {
+                        if (!draft) return;
+                        draft.forEach(x => {
+                            if (messages.includes(x.id)) {
+                                x.readed = true;
+                            }
+                        })
+                    }))
+                
+                if (messages && messages.length > 0 && selectedChat) {
+                    const result = await setMessegesReaded({ ids: messages, chatId: selectedChat.id })
+                    if (!result.error) { 
                         dispatch(
                             chatAuthApi.util.updateQueryData("getChats", advertId, (draft) => {
                                 if (!draft) return;
@@ -131,7 +141,7 @@ const ChatPage: React.FC = () => {
         if (chatMesssageContainer.current) {
             chatMesssageContainer.current.scrollTop = chatMesssageContainer.current.scrollHeight;
         }
-    }, [chatMessages])
+    }, [chatMessages?.length])
 
     useEffect(() => {
         if (selectedChat && selectedMesssageRef.current) {

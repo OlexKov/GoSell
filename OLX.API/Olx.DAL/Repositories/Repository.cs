@@ -95,6 +95,7 @@ namespace Olx.DAL.Repositories
         public async Task<int> CountAsync() => await dbSet.CountAsync();
 
         public Task<IDbContextTransaction> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted) => context.Database.BeginTransactionAsync(isolationLevel);
+
         
     }
 }

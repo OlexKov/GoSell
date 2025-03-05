@@ -61,6 +61,7 @@ const errorMiddleware: Middleware = (api: MiddlewareAPI) => (next) => (action) =
                 break;
 
             default:
+                console.log(error)
                 api.dispatch(setError(error))
         }
     }

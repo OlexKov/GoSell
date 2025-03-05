@@ -41,12 +41,12 @@ export const chatAuthApi = createApi({
             invalidatesTags: (_result, _error, messageSendModel) => [{ type: "ChatMessages", id: messageSendModel.chatId }]
         }),
 
-        setChatMessagesReaded: builder.mutation<void, number[]>({
-            query: (messageIds) => {
+        setChatMessagesReaded: builder.mutation<void, {ids:number[],chatId:number}>({
+            query: (data) => {
                 return {
                     url: `set/readed`,
                     method: 'POST',
-                    body: messageIds
+                    body: data
                 }
             },
         }),
