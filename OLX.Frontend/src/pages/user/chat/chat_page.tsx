@@ -1,52 +1,22 @@
 import { BackButton } from "../../../components/buttons/back_button"
 import '../../../components/category_tree/style.scss'
-import { useAppDispatch, useAppSelector } from "../../../redux"
 import {
-    chatAuthApi,
     useCreateChatMutation,
-    useGetChatMessagesQuery,
-    useGetChatsQuery,
     useRemoveChatMutation,
     useSendChatMessageMutation,
-    useSetChatMessagesReadedMutation
 } from "../../../redux/api/chatAuthApi"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import ChatCard from "../../../components/chat_card"
-import { IChat, IChatMessage } from "../../../models/chat"
+import { IChat } from "../../../models/chat"
 import { APP_ENV } from "../../../constants/env"
-import { formatPrice, getFormatDate, getUserDescr } from "../../../utilities/common_funct"
+import { formatPrice } from "../../../utilities/common_funct"
 import ChatMessageCard from "../../../components/chat_message_card"
 import { useSearchParams } from "react-router-dom"
-import { useGetAdvertByIdQuery } from "../../../redux/api/advertApi"
-import { IAdvert } from "../../../models/advert"
 import { Divider, Popconfirm } from "antd"
+import useGetMessages from "./hooks/useGetMessages"
+import useGetChats from "./hooks/useGetChats"
 
-const createNewChat = (userId: number, advert: IAdvert | undefined): IChat => {
-    return {
-        id: 0,
-        sellerUnreaded: 0,
-        buyerUnreaded: 0,
-        buyer: {
-            id: userId,
-            photo: undefined,
-            description: ''
-        },
-        seller: {
-            id: advert?.user?.id || 0,
-            photo: advert?.user?.photo,
-            description: getUserDescr(advert?.user)
-        },
-        createAt: new Date(Date.now()).toISOString(),
-        advert: {
-            id: advert?.id || 0,
-            image: advert?.images.find(x => x.priority === 0)?.name || '',
-            title: advert?.title || '',
-            price: advert?.price || 0
-        }
-    }
-}
 const ChatPage: React.FC = () => {
-    const dispatch = useAppDispatch()
     const [searchParam] = useSearchParams()
     const [advertId, setAdvertId] = useState<number | undefined>()
     const chatMesssageContainer = useRef<HTMLDivElement | null>(null)
@@ -54,94 +24,21 @@ const ChatPage: React.FC = () => {
     const [createChat, { isLoading: isChatCreating }] = useCreateChatMutation();
     const [sendMessage, { isLoading: isMesssageSending }] = useSendChatMessageMutation();
     const [deleteChat] = useRemoveChatMutation();
-    const [setMessegesReaded] = useSetChatMessagesReadedMutation();
     const [message, setMessage] = useState<string>('');
     const [selectedChat, setSelectedChat] = useState<IChat>()
-    const { data: advert } = useGetAdvertByIdQuery(advertId || 0, { skip: !advertId })
-    const user = useAppSelector(state => state.user.user)
-    const { data: chats, refetch } = useGetChatsQuery(advertId, { skip: !user })
-    const { data: chatMessages } = useGetChatMessagesQuery(selectedChat?.id || 0, { skip: !selectedChat || selectedChat.id === 0 })
-
-    const messagesMap = useMemo(() => {
-        const messages = new Map<string, IChatMessage[]>()
-        if (chatMessages?.length) {
-
-            chatMessages?.slice()
-                .sort((a: IChatMessage, b: IChatMessage) => a.createdAt.localeCompare(b.createdAt))
-                .forEach((message: IChatMessage) => {
-                    const key = getFormatDate(new Date(message.createdAt))
-                    const existingMessages = messages.get(key) || []
-                    messages.set(key, [...existingMessages, message])
-                })
-        }
-        return Array.from(messages.entries()).flatMap(([key, value]) => [
-            <Divider key={key}>
-                <span className="font-montserrat text-adaptive-1_4-text">{key}</span>
-            </Divider>,
-            ...value.map(message => (
-                <ChatMessageCard
-                    message={message}
-                    key={message.id}
-                    clasName="px-[1vh]"
-                />
-            ))
-        ])
-    }, [chatMessages])
-
-
-    const chatItems = useMemo(() => {
-        let items = chats
-            ? !advertId || chats.some(x => x.advert.id === advertId)
-                ? chats
-                : [createNewChat(user?.id || 0, advert), ...chats]
-            : []
-        return items.length > 0
-            ? items.slice().sort((a: IChat, b: IChat) => b.createAt.localeCompare(a.createAt))
-            : []
-    }, [advert, chats])
-
+    const { messagesMap } = useGetMessages(selectedChat?.id, advertId)
+    const {chats} = useGetChats(advertId)
+    
     useEffect(() => {
         const queryAdvertId = Number(searchParam.get('id')) == 0 ? undefined : Number(searchParam.get('id'))
-        if (!queryAdvertId) {
-            refetch()
-        }
         setAdvertId(queryAdvertId)
     }, [])
 
     useEffect(() => {
-        (async () => {
-            if (chatMessages && chatMessages.length > 0) {
-                const messages = chatMessages?.filter(x => !x.readed && (x.sender.id != user?.id)).map(x => x.id)
-                dispatch(
-                    chatAuthApi.util.updateQueryData("getChatMessages", selectedChat?.id || 0, (draft) => {
-                        if (!draft) return;
-                        draft.forEach(x => {
-                            if (messages.includes(x.id)) {
-                                x.readed = true;
-                            }
-                        })
-                    }))
-                
-                if (messages && messages.length > 0 && selectedChat) {
-                    const result = await setMessegesReaded({ ids: messages, chatId: selectedChat.id })
-                    if (!result.error) { 
-                        dispatch(
-                            chatAuthApi.util.updateQueryData("getChats", advertId, (draft) => {
-                                if (!draft) return;
-                                let chat = draft.find(x => x.id === selectedChat?.id)
-                                if (chat) {
-                                    chat.buyerUnreaded = 0;
-                                    chat.sellerUnreaded = 0;
-                                }
-                            }))
-                    }
-                }
-            }
-        })()
         if (chatMesssageContainer.current) {
             chatMesssageContainer.current.scrollTop = chatMesssageContainer.current.scrollHeight;
         }
-    }, [chatMessages?.length])
+    }, [messagesMap])
 
     useEffect(() => {
         if (selectedChat && selectedMesssageRef.current) {
@@ -153,12 +50,12 @@ const ChatPage: React.FC = () => {
     }, [selectedChat])
 
     useEffect(() => {
-        if (chatItems.length > 0 && (!selectedChat || selectedChat.id == 0)) {
-            const selected = chatItems.find(x => x.advert.id === advertId) || (advertId ? chatItems[0] : undefined)
+        if (chats.length > 0 && (!selectedChat || selectedChat.id === 0)) {
+            const selected = chats.find(x => x.advert.id === advertId || x.id === 0) ||  undefined
             setSelectedChat(selected)
         }
-    }, [advertId, chatItems])
-
+    }, [advertId, chats])
+ 
     const onChatSelect = (chat: IChat) => {
         setSelectedChat(chat)
     }
@@ -196,7 +93,7 @@ const ChatPage: React.FC = () => {
                 <div className=" border rounded-lg border-[#9B7A5B]/50 w-[33.4%] flex flex-col">
                     <h2 className="ml-[2vh] mb-[2vh] mt-[1.7vh] text-adaptive-1_9_text font-montserrat font-medium">Вхідні</h2>
                     <div className="my-[1vh] flex flex-col gap-[2.5vh] overflow-auto custom-scrollbar">
-                        {chatItems.map((chat) =>
+                        {chats.map((chat) =>
                             <ChatCard
                                 key={chat.id}
                                 className="h-[15vh] w-full flex-shrink-0"
@@ -229,7 +126,18 @@ const ChatPage: React.FC = () => {
                             </div>
                             <hr className="my-[1.8vh]" />
                             <div ref={chatMesssageContainer} className="flex-col flex gap-[2vh] flex-1 overflow-auto custom-scrollbar  ">
-                                {messagesMap}
+                                {Array.from(messagesMap.entries()).flatMap(([key, value]) => [
+                                    <Divider key={key}>
+                                        <span className="font-montserrat text-adaptive-1_4-text">{key}</span>
+                                    </Divider>,
+                                    ...value.map(message => (
+                                        <ChatMessageCard
+                                            message={message}
+                                            key={message.id}
+                                            clasName="px-[1vh]"
+                                        />
+                                    ))
+                                ])}
                             </div>
                             <div className="flex h-[3.2vh]  mx-[3.5vw] my-[.5vh] gap-[.8vw]">
                                 <svg className="w-auto h-full cursor-pointer transition-all duration-300 ease-in-out hover:scale-[1.1]" xmlns="http://www.w3.org/2000/svg" width="31" height="30" viewBox="0 0 31 30" fill="none">
