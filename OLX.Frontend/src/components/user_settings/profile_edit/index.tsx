@@ -10,7 +10,7 @@ import { useDeleteAccountMutation, useUserEditMutation } from "../../../redux/ap
 import { toast } from "react-toastify";
 import { logOut } from "../../../redux/slices/userSlice";
 import { confirm } from "../../../utilities/confirm_modal";
-import InputMask from 'react-input-mask';
+import MaskedInput from "../../inputs/masked_input";
 
 const UserEdit: React.FC = () => {
     const user = useAppSelector(state => state.user.user)
@@ -59,6 +59,7 @@ const UserEdit: React.FC = () => {
                 layout="vertical"
                 className="flex flex-col w-full mb-[23vh]"
                 onFinish={onFinish}
+                scrollToFirstError
                 initialValues={{
                     imageFile: user?.photo ? ({
                         thumbUrl: APP_ENV.IMAGES_200_URL + user?.photo, url: APP_ENV.IMAGES_1200_URL + user?.photo, originFileObj: new File([new Blob([''])], user?.photo || '', { type: 'image/existing' })
@@ -123,18 +124,13 @@ const UserEdit: React.FC = () => {
                                 },
                             ]}
                         >
-                            <InputMask
+                            <MaskedInput
                                 mask="+38 (999) 999-99-99"
                                 maskChar=""
                                 disabled={false}
-                            >
-                                {( inputProps:any ) =>
-                                    <input {...inputProps}
-                                        placeholder="Номер телефону"
-                                        className="h-[5vh] border-[1px]  border-[#9B7A5B] w-full rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text " />}
-                            </InputMask>
-
-
+                                placeholder="Номер телефону"
+                                className="h-[5vh] border-[1px]  border-[#9B7A5B] w-full rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text "
+                            />
 
                         </Form.Item>
                         <PrimaryButton

@@ -16,7 +16,7 @@ import { toast } from "react-toastify"
 import { useGetAdvertByIdQuery } from "../../../redux/api/advertApi"
 import { APP_ENV } from "../../../constants/env"
 import LocationSelector from "../../../components/location_selector"
-import InputMask from 'react-input-mask';
+import MaskedInput from "../../../components/inputs/masked_input"
 
 
 
@@ -52,7 +52,7 @@ const CreateAdvert: React.FC = () => {
             imageFiles: imageFiles,
             contactPersone: data.contactPersone
         }
-        
+
         const result = id ? await updateAdvert(advertCreationModel) : await createAdvert(advertCreationModel);
         if (!result.error) {
             toast(`Оголошення успішно ${id ? 'оновлено' : 'опубліковане'}`, {
@@ -122,6 +122,19 @@ const CreateAdvert: React.FC = () => {
         }, {} as Record<string, any>)
     }, [advert, filters])
 
+    // const handleSubmit = async () => {
+    //     try {
+    //       await form.validateFields();
+    //       form.submit();
+    //     } catch (errorInfo: any) {
+    //       const errorField = errorInfo.errorFields?.[0]?.name?.[0];
+    //       if (errorField) {
+    //         const fieldNode = document.querySelector(`[name="${errorField}"]`);
+    //         fieldNode?.scrollIntoView({ behavior: "smooth", block: "center" });
+    //       }
+    //     }
+    //   };
+
     return (
         <>
             <div className="flex w-[100%] items-start flex-col  gap-[5vh]  mb-[18vh]">
@@ -134,6 +147,12 @@ const CreateAdvert: React.FC = () => {
                     onFinish={onFinish}
                     layout="vertical"
                     className=" w-full flex flex-col gap-[4.2vh]"
+                    scrollToFirstError={{
+                        behavior: "smooth",
+                        block: "center",
+                        inline: "nearest"
+                    }}
+
                     initialValues={{
                         isContractPrice: false,
                         phoneNumber: !id ? user?.phone : undefined,
@@ -183,6 +202,7 @@ const CreateAdvert: React.FC = () => {
                             ]}
                         >
                             <Input
+                                name="title"
                                 className="h-[5vh] w-[47.3vw] font-montserrat text-adaptive-1_6-text border-[#9B7A5B]"
                                 placeholder="Назва" />
 
@@ -313,17 +333,12 @@ const CreateAdvert: React.FC = () => {
                                 },
                             ]}
                         >
-                            <InputMask
+                            <MaskedInput
                                 mask="+38 (999) 999-99-99"
                                 maskChar=""
                                 disabled={false}
-                                
-                            >
-                                {( inputProps:any ) =>
-                                  <input {...inputProps}
-                                        placeholder="Номер телефону"
-                                        className="h-[5vh] border-[1px]  border-[#9B7A5B] w-full rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text " />}
-                            </InputMask>
+                                placeholder="Номер телефону"
+                                className="h-[5vh] border-[1px]  border-[#9B7A5B] w-full rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text " />
                         </Form.Item>
 
                         <Form.Item
@@ -374,7 +389,9 @@ const CreateAdvert: React.FC = () => {
                         fontColor="white"
                         fontSize="clamp(14px,1.9vh,36px)"
                         bgColor="#9B7A5B"
-                        brColor="#9B7A5B" />
+                        brColor="#9B7A5B"
+                    // onButtonClick={handleSubmit} 
+                    />
 
                 </Form>
             </div>

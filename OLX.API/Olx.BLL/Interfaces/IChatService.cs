@@ -1,6 +1,6 @@
 ﻿using Olx.BLL.DTOs.Chat;
 using Olx.BLL.Entities.ChatEntities;
-using Olx.BLL.Models.Chat;
+
 
 namespace Olx.BLL.Interfaces
 {

@@ -12,8 +12,8 @@ import { useGetAreasQuery, useGetRegionsByAreaQuery, useGetSettlementsByRegionQu
 import { MinusOutlined } from "@ant-design/icons";
 import { IArea, IRegion, ISettlement } from "../../../models/newPost";
 import { getQueryString } from "../../../utilities/common_funct";
-import InputMask from 'react-input-mask';
 import './style.scss'
+import MaskedInput from "../../../components/inputs/masked_input";
 
 const BuyAdvertPage: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams('');
@@ -65,7 +65,7 @@ const BuyAdvertPage: React.FC = () => {
         <div className="w-[100%] gap-[5vh] mx-[8vw] flex flex-col">
             <BackButton className="text-adaptive-1_9_text my-[7.5vh] ml-[1vw] font-medium self-start" title="Назад" />
             <div className="grid grid-cols-[20.5vw,47.5vw] gap-[8vw]">
-                <AdvertCard advert={advert}/>
+                <AdvertCard advert={advert} />
                 <div className="flex flex-col ">
                     <h1 className="font-unbounded text-adaptive-3_35-text mb-[7vh]">Купити з доставкою</h1>
                     <div className="flex flex-col gap-[.6vh]">
@@ -76,6 +76,11 @@ const BuyAdvertPage: React.FC = () => {
                         form={form}
                         layout="vertical"
                         onFinish={onFinish}
+                        scrollToFirstError={{
+                            behavior: "smooth",
+                            block: "center",
+                            inline: "nearest"
+                        }}
                         initialValues={{
                             lastName: searchParams.get('lastName') || user?.lastName,
                             firstName: searchParams.get('firstName') || user?.firstName,
@@ -132,7 +137,7 @@ const BuyAdvertPage: React.FC = () => {
                                 rules={[
                                     {
                                         required: true,
-                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть прізвище</span>
+                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть номер телефону</span>
                                     },
                                     {
                                         min: 19,
@@ -140,15 +145,14 @@ const BuyAdvertPage: React.FC = () => {
                                     },
                                 ]}
                             >
-                                <InputMask
+                                <MaskedInput
+                                    name="phoneNumber"
                                     mask="+38 (999) 999-99-99"
                                     maskChar=""
-                                >
-                                    {({ props }) =>
-                                        <input {...props}
-                                            placeholder="Номер телефону"
-                                            className="h-[5vh] border-[1px]  border-[#9B7A5B] w-full rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text " />}
-                                </InputMask>
+                                    placeholder="Номер телефону"
+                                    className="h-[5vh] border-[1px]  border-[#9B7A5B] w-full rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text " />
+
+
 
                             </Form.Item>
                             <Form.Item

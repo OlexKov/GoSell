@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { forwardRef, useMemo, useRef, useState } from "react";
 import { Upload, Image, UploadProps } from "antd";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
@@ -9,7 +9,7 @@ import { UploadWithDndProps } from "./props";
 import SortableImage from "./sortable_image";
 
 
-const UploadWithDnd: React.FC<UploadWithDndProps> = ({ uploadSize, images = [], onChange = () => { }, className, maxCount = 5, defaultCount = 4, columns = 5, rowHeight = 10 }) => {
+const UploadWithDnd: React.FC<UploadWithDndProps> = forwardRef<HTMLDivElement,UploadWithDndProps>(({ uploadSize, images = [], onChange = () => { },name, className, maxCount = 5, defaultCount = 4, columns = 5, rowHeight = 10 },ref) => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState("");
     const uploadRef = useRef<any>(null);
@@ -85,8 +85,9 @@ const UploadWithDnd: React.FC<UploadWithDndProps> = ({ uploadSize, images = [], 
     }, [images])
 
     return (
-        <>
+        <div ref={ref}>
             <Upload
+                name={name}
                 ref={uploadRef}
                 fileList={images}
                 multiple
@@ -116,8 +117,8 @@ const UploadWithDnd: React.FC<UploadWithDndProps> = ({ uploadSize, images = [], 
                 />
             )}
 
-        </>
+        </div>
     );
-};
+});
 
 export default UploadWithDnd;

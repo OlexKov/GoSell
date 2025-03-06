@@ -7,7 +7,7 @@ import { DatePicker, Form, Input, Radio } from "antd";
 import PrimaryButton from "../../../components/buttons/primary_button";
 import '../../../components/price_filter/style.scss'
 import './styles.scss'
-import InputMask from 'react-input-mask';
+import MaskedInput from "../../../components/inputs/masked_input";
 
 const PaymentPage = () => {
     const { id } = useParams();
@@ -15,10 +15,10 @@ const PaymentPage = () => {
     const { data: advert } = useGetAdvertByIdQuery(Number(id), { skip: !id });
     const [paymentMethod, setPaymentMethod] = useState("bank-card");
     const navigate = useNavigate();
-    
+
     const onFinish = (data: any) => {
-         console.log({...data,...Object.fromEntries(searchParams.entries())});
-         navigate(`/user/advert/paymentsuccess`);
+        console.log({ ...data, ...Object.fromEntries(searchParams.entries()) });
+        navigate(`/user/advert/paymentsuccess`);
     };
 
     return (
@@ -36,6 +36,7 @@ const PaymentPage = () => {
                         layout="vertical"
                         className="payment-form flex flex-col h-full "
                         onFinish={onFinish}
+                        scrollToFirstError={true}
                         initialValues={{
                             payment: "bank-card"
                         }}
@@ -82,17 +83,14 @@ const PaymentPage = () => {
                                     },
                                 ]}
                             >
-                                <InputMask
+                                <MaskedInput
                                     mask="9999 9999 9999 9999"
                                     maskChar=""
-                                    disabled={paymentMethod === "postpaid"}>
-                                    {({ props }) =>
-                                        <input
-                                            {...props}
-                                            disabled={paymentMethod === "postpaid"}
-                                            placeholder="Номер карти"
-                                            className="w-[15.6vw] h-[5vh] border-[1px]  border-[#9B7A5B]  rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text " />}
-                                </InputMask>
+                                    disabled={paymentMethod === "postpaid"}
+                                    placeholder="Номер карти"
+                                    className="w-[15.6vw] h-[5vh] border-[1px]  border-[#9B7A5B]  rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text "
+                                />
+
 
                             </Form.Item>
                             <Form.Item
@@ -126,16 +124,14 @@ const PaymentPage = () => {
                                     },
                                 ]}
                             >
-                                <InputMask
+                                <MaskedInput
                                     mask="999"
                                     maskChar=""
-                                    disabled={paymentMethod === "postpaid"}>
-                                    {({ props }) =>
-                                        <input {...props}
-                                            disabled={paymentMethod === "postpaid"}
-                                            placeholder="CVV"
-                                            className="w-[6.4vw] h-[5vh] border-[1px]  border-[#9B7A5B]  rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text " />}
-                                </InputMask>
+                                    disabled={paymentMethod === "postpaid"}
+                                    placeholder="CVV"
+                                    className="w-[6.4vw] h-[5vh] border-[1px]  border-[#9B7A5B]  rounded-md pl-3 focus:outline-none focus:border-[#9B7A5B] focus:border-[1px] font-montserrat text-adaptive-1_6-text "
+                                />
+
 
                             </Form.Item>
                         </div>
