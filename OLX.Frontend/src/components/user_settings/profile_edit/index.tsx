@@ -57,7 +57,7 @@ const UserEdit: React.FC = () => {
         <>
             <Form
                 layout="vertical"
-                className="flex flex-col w-full mb-[23vh]"
+                className="flex flex-col w-full mb-[23vh] custom-form-item-error"
                 onFinish={onFinish}
                 scrollToFirstError
                 initialValues={{
@@ -120,7 +120,7 @@ const UserEdit: React.FC = () => {
                             rules={[
                                 {
                                     min: 19,
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Невірно введений телефон! (+38 (XXX) XXX-XX-XX)</span>
+                                    message: 'Невірно введений телефон! (+38 (XXX) XXX-XX-XX)'
                                 },
                             ]}
                         >

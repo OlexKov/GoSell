@@ -144,6 +144,14 @@ namespace OLX.API.Controllers
         }
 
         [Authorize(Roles = Roles.Admin)]
+        [HttpPost("password/check")]
+        public async Task<IActionResult> CheckPassword([FromBody] CheckPasswordRequest request)
+        {
+            await accountService.CheckPasswordAsync(request.Password);
+            return Ok();
+        }
+
+        [Authorize(Roles = Roles.Admin)]
         [HttpPut("register/admin")]
         public async Task<IActionResult> AddAdmin([FromForm] UserCreationModel adminModel)
         {
@@ -174,6 +182,8 @@ namespace OLX.API.Controllers
             await accountService.RemoveAccountAsync(id);
             return Ok();
         }
+
+        
 
         //private void SetHttpOnlyCookies(string token)
         //{

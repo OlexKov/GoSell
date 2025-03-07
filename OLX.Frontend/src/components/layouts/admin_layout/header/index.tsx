@@ -49,11 +49,7 @@ export const AdminHeader: React.FC = () => {
  const unreadedMessagesCount = useMemo(() =>adminMessages?.length && adminMessages.filter(x => !x.readed).length || 0, [adminMessages])
     useEffect(() => { refetch() }, [user])
     return (
-        <div className='h-[60px] bg-header sticky top-0 items-center flex-shrink-0 flex justify-between z-50'  >
-            <div className='flex gap-6 items-center'>
-                <Avatar className='ml-3' size={46} src={Images.adminPanelImage} />
-                <span>Адмінпанель</span>
-            </div>
+        <div className='h-[60px] bg-header sticky top-0 items-center flex-shrink-0 flex justify-end z-50'  >
             <div className='flex gap-7 h-full'>
                 <div className='flex gap-5 flex-shrink-0 items-center'>
                     <Badge count={unreadedMessagesCount} size='small' className={unreadedMessagesCount > 0 ? "animate-pulse" : ''}>

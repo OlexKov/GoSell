@@ -80,7 +80,7 @@ export interface IUserEditResponse {
 }
 
 export interface IUserEditModel {
-    id:number
+    id: number
     email: string
     firstName?: string
     imageFile?: File
@@ -88,7 +88,13 @@ export interface IUserEditModel {
     phoneNumber?: string
     settlementRef?: string
     website?: string
+    oldPassword?: string
+    password?: string
+    passwordConfirmation?: string
+    recapthcaToken?: string
+    action?: string
 }
+
 
 
 

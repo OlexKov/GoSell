@@ -92,3 +92,10 @@ body {
   }
 }
 
+.custom-form-item-error{
+  .ant-form-item-has-error 
+  .ant-form-item-explain-error {
+     font-family: 'Montserrat', sans-serif !important;
+     font-size: clamp(11px, 1.5vh, 36px) !important;
+  }
+}

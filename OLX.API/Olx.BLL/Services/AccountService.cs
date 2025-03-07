@@ -23,6 +23,7 @@ using Olx.BLL.Specifications;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Reflection.Metadata.Ecma335;
 
 
 namespace Olx.BLL.Services
@@ -63,6 +64,7 @@ namespace Olx.BLL.Services
 
         private async Task CreateUserAsync(OlxUser user,string? password = null, bool isAdmin = false)
         {
+            user.EmailConfirmed = user.EmailConfirmed || isAdmin;
             var result = password is not null
                 ? await userManager.CreateAsync(user, password)
                 : await userManager.CreateAsync(user);
@@ -71,6 +73,10 @@ namespace Olx.BLL.Services
                 throw new HttpException(Errors.UserCreateError, HttpStatusCode.InternalServerError);
             }
             await userManager.AddToRoleAsync(user, isAdmin ? Roles.Admin : Roles.User);
+            if (!isAdmin && !await userManager.IsEmailConfirmedAsync(user))
+            {
+                await SendEmailConfirmationMessageAsync(user);
+            }
         }
 
         private async Task SendEmailConfirmationMessageAsync(OlxUser user)
@@ -341,12 +347,9 @@ namespace Olx.BLL.Services
             {
                 user.Photo = await imageService.SaveImageAsync(userModel.ImageFile);
             }
+
             await CreateUserAsync(user, userModel.Password, isAdmin);
-            if (!await userManager.IsEmailConfirmedAsync(user))
-            {
-                await SendEmailConfirmationMessageAsync(user);
-            }
-        }
+         }
 
         public async Task RemoveAccountAsync(int id)
         {
@@ -488,6 +491,16 @@ namespace Olx.BLL.Services
             var favoriteAdvertsIds = user.FavoriteAdverts.Select(a => a.Id);
             var adverts = await mapper.ProjectTo<AdvertDto>(advertRepository.GetQuery().Where(x => favoriteAdvertsIds.Contains(x.Id) && !x.Blocked && !x.Completed)).ToArrayAsync();
             return adverts;
+        }
+
+        public async Task CheckPasswordAsync(string password)
+        {
+            var user = await GetCurrentUser();
+            if (await userManager.CheckPasswordAsync(user, password))
+            {
+                return;
+            }
+            throw new HttpException(Errors.InvalidPassword, HttpStatusCode.BadRequest);
         }
     }
 }

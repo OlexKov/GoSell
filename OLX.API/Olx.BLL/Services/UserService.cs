@@ -61,7 +61,7 @@ namespace Olx.BLL.Services
         {
             var adminsIds = await _getAdminsIds();
             var query = mapper.ProjectTo<OlxUserDto>(userRepo.GetQuery()
-                .Where(x => adminsIds.Any(z => z == x.Id == userPageRequest.IsAdmin) && ((x.LockoutEnd != null && x.LockoutEnd > DateTime.Now) == userPageRequest.IsLocked))
+                .Where(x => adminsIds.Contains(x.Id) == userPageRequest.IsAdmin && ((x.LockoutEnd != null && x.LockoutEnd > DateTime.Now) == userPageRequest.IsLocked))
                 .AsNoTracking());
             var paginationBuilder = new PaginationBuilder<OlxUserDto>(query);
             var userFilter = mapper.Map<OlxUserFilter>(userPageRequest);

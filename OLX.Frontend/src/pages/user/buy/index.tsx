@@ -76,6 +76,7 @@ const BuyAdvertPage: React.FC = () => {
                         form={form}
                         layout="vertical"
                         onFinish={onFinish}
+                        className="custom-form-item-error"
                         scrollToFirstError={{
                             behavior: "smooth",
                             block: "center",
@@ -105,7 +106,7 @@ const BuyAdvertPage: React.FC = () => {
                                 rules={[
                                     {
                                         required: true,
-                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть прізвище</span>
+                                        message: 'Введіть прізвище'
                                     },
                                 ]}
                             >
@@ -121,7 +122,7 @@ const BuyAdvertPage: React.FC = () => {
                                 rules={[
                                     {
                                         required: true,
-                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть ім'я</span>
+                                        message: "Введіть ім'я"
                                     },
                                 ]}
                             >
@@ -137,11 +138,11 @@ const BuyAdvertPage: React.FC = () => {
                                 rules={[
                                     {
                                         required: true,
-                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть номер телефону</span>
+                                        message: 'Введіть номер телефону'
                                     },
                                     {
                                         min: 19,
-                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Невірно введений телефон! (+38 (XXX) XXX-XX-XX)</span>
+                                        message: 'Невірно введений телефон! (+38 (XXX) XXX-XX-XX)'
                                     },
                                 ]}
                             >
@@ -162,11 +163,11 @@ const BuyAdvertPage: React.FC = () => {
                                 rules={[
                                     {
                                         required: true,
-                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть електронну пошту</span>
+                                        message: 'Введіть електронну пошту'
                                     },
                                     {
                                         type: 'email',
-                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Неправильний формат електронної пошти</span>
+                                        message: 'Неправильний формат електронної пошти'
                                     },
 
                                 ]}
@@ -211,7 +212,7 @@ const BuyAdvertPage: React.FC = () => {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть індекс</span>
+                                                    message: 'Введіть індекс'
                                                 },
                                             ]}
                                         >
@@ -228,7 +229,7 @@ const BuyAdvertPage: React.FC = () => {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть область</span>
+                                                    message: 'Оберіть область'
                                                 },
                                             ]}
                                         >
@@ -249,7 +250,7 @@ const BuyAdvertPage: React.FC = () => {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть район</span>
+                                                    message: 'Оберіть район'
                                                 },
                                             ]}
                                         >
@@ -270,7 +271,7 @@ const BuyAdvertPage: React.FC = () => {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть населений пункт</span>
+                                                    message: 'Оберіть населений пункт'
                                                 },
                                             ]}
                                         >
@@ -290,7 +291,7 @@ const BuyAdvertPage: React.FC = () => {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть назву вулиці</span>
+                                                    message: 'Введіть назву вулиці'
                                                 },
                                             ]}
                                         >
@@ -308,7 +309,7 @@ const BuyAdvertPage: React.FC = () => {
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть номер будинку</span>
+                                                        message: 'Введіть номер будинку'
                                                     },
                                                 ]}
                                             >
@@ -339,7 +340,7 @@ const BuyAdvertPage: React.FC = () => {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть населений пункт</span>
+                                                    message: 'Оберіть населений пункт'
                                                 }
                                             ]}
                                         >
@@ -358,7 +359,7 @@ const BuyAdvertPage: React.FC = () => {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть відділення</span>
+                                                    message: 'Оберіть відділення'
                                                 }
                                             ]}
                                         >

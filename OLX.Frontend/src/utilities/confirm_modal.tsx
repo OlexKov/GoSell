@@ -8,6 +8,7 @@ interface IConfirmData{
     onOk?:()=>void,
     okText?:string ,
     cancelText?:string 
+    onCancel?:()=>void
 }
 
 export const confirm = ( confirmData:IConfirmData ) =>{

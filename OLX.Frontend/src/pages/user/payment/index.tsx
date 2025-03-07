@@ -34,7 +34,7 @@ const PaymentPage = () => {
                     <span className="font-montserrat text-adaptive-1_7_text">Оберіть зручний спосіб оплати</span>
                     <Form
                         layout="vertical"
-                        className="payment-form flex flex-col h-full "
+                        className="payment-form flex flex-col h-full custom-form-item-error"
                         onFinish={onFinish}
                         scrollToFirstError={true}
                         initialValues={{
@@ -58,7 +58,7 @@ const PaymentPage = () => {
                             rules={[
                                 {
                                     required: paymentMethod === "bank-card",
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Заповніть поле</span>
+                                    message: 'Заповніть поле'
                                 },
                             ]}
                         >
@@ -75,11 +75,11 @@ const PaymentPage = () => {
                                 rules={[
                                     {
                                         required: paymentMethod === "bank-card",
-                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть номер карти</span>
+                                        message: 'Введіть номер карти'
                                     },
                                     {
                                         min: 19,
-                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Не вірний номер картки</span>,
+                                        message: 'Не вірний номер картки'
                                     },
                                 ]}
                             >
@@ -98,7 +98,7 @@ const PaymentPage = () => {
                                 rules={[
                                     {
                                         required: paymentMethod === "bank-card",
-                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть дату</span>
+                                        message: 'Введіть дату'
                                     },
                                 ]}
                             >
@@ -116,11 +116,11 @@ const PaymentPage = () => {
                                 rules={[
                                     {
                                         required: paymentMethod === "bank-card",
-                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть CVV</span>
+                                        message: 'Введіть CVV'
                                     },
                                     {
                                         min: 3,
-                                        message: <span className="font-montserrat text-adaptive-input-form-error-text">3 символи</span>,
+                                        message: '3 символи'
                                     },
                                 ]}
                             >

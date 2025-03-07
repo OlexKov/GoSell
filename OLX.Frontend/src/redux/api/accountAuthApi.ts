@@ -49,6 +49,49 @@ export const accountApiAuth = createApi({
             },
         }),
 
+        adminEdit: builder.mutation<IUserEditResponse, IUserEditModel>({
+            query: (editModel) => ({
+                url: "edit/admin",
+                method: 'POST',
+                body: getFormData(editModel)
+            }),
+            async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+                try {
+                    const result = await queryFulfilled;
+                    if (result.data && result.data.accessToken) {
+                        dispatch(updateAccessToken({ token: result.data.accessToken}))
+                        dispatch(userAuthApi.util.invalidateTags(['Admins']))
+                    }
+                } catch (error) {
+                    console.error('Edit admin failed:', error);
+                }
+            },
+        }),
+
+        createAdmin: builder.mutation<void, IUserEditModel>({
+            query: (editModel) => ({
+                url: "register/admin",
+                method: 'PUT',
+                body: getFormData(editModel)
+            }),
+            async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+                try {
+                     await queryFulfilled;
+                     dispatch(userAuthApi.util.invalidateTags(['Admins']))
+                } catch (error) {
+                    console.error('Create admin failed:', error);
+                }
+            },
+        }),
+
+        checkPassword: builder.mutation<void, string>({
+            query: (password) => ({
+                url: "password/check",
+                method: 'POST',
+                body: ({password:password})
+            }),
+        }),
+
         deleteAccount: builder.mutation<void, number>({
             query: (userId) => ({
                 url: `delete?id=${userId}`,
@@ -107,5 +150,8 @@ export const {
     useAddToFavoritesRangeMutation,
     useRemoveFromFavoritesMutation ,
     useUserEditMutation,
-    useDeleteAccountMutation
+    useDeleteAccountMutation,
+    useAdminEditMutation,
+    useCreateAdminMutation,
+    useCheckPasswordMutation
 } = accountApiAuth

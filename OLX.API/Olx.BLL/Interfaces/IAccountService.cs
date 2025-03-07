@@ -23,5 +23,6 @@ namespace Olx.BLL.Interfaces
         Task AddToFavoritesRangeAsync(IEnumerable<int> advertIds);
         Task RemoveFromFavoritesAsync(int advertId);
         Task<IEnumerable<AdvertDto>> GetFavoritesAsync();
+        Task CheckPasswordAsync(string password);
     }
 }

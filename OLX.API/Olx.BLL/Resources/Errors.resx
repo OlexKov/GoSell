@@ -228,4 +228,7 @@
   <data name="InvalidChatMessegesIds" xml:space="preserve">
     <value>Invalid chat messeges ids</value>
   </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Не вірно введений пароль</value>
+  </data>
 </root>

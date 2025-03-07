@@ -146,7 +146,7 @@ const CreateAdvert: React.FC = () => {
                     name="advertForm"
                     onFinish={onFinish}
                     layout="vertical"
-                    className=" w-full flex flex-col gap-[4.2vh]"
+                    className=" w-full flex flex-col gap-[4.2vh] custom-form-item-error"
                     scrollToFirstError={{
                         behavior: "smooth",
                         block: "center",
@@ -174,7 +174,7 @@ const CreateAdvert: React.FC = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть як мінімум одине фото</span>
+                                    message: 'Оберіть як мінімум одине фото'
                                 },
                             ]}
                         >
@@ -197,7 +197,7 @@ const CreateAdvert: React.FC = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть назву оголошення</span>
+                                    message: 'Введіть назву оголошення'
                                 },
                             ]}
                         >
@@ -218,15 +218,15 @@ const CreateAdvert: React.FC = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть опис</span>
+                                    message: 'Введіть опис'
                                 },
                                 {
                                     min: 40,
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть щонайменше 40 символів</span>
+                                    message: 'Введіть щонайменше 40 символів'
                                 },
                                 {
                                     max: 600,
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Максимум 600 символів</span>
+                                    message: 'Максимум 600 символів'
                                 },
                             ]}
                         >
@@ -246,7 +246,7 @@ const CreateAdvert: React.FC = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть категорію</span>
+                                    message: 'Оберіть категорію'
                                 },
                             ]}
                         >
@@ -274,7 +274,7 @@ const CreateAdvert: React.FC = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть ціну</span>
+                                    message: 'Введіть ціну'
                                 },
                             ]}
                         >
@@ -308,7 +308,7 @@ const CreateAdvert: React.FC = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть контактну персону</span>
+                                    message: 'Введіть контактну персону'
                                 },
                             ]}
                         >
@@ -325,11 +325,11 @@ const CreateAdvert: React.FC = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть номер телефону</span>
+                                    message: 'Введіть номер телефону'
                                 },
                                 {
                                     min: 19,
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Невірно введений телефон! (+38 (XXX) XXX-XX-XX)</span>
+                                    message: 'Невірно введений телефон! (+38 (XXX) XXX-XX-XX)'
                                 },
                             ]}
                         >
@@ -348,11 +348,11 @@ const CreateAdvert: React.FC = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Введіть електронну пошту</span>
+                                    message: 'Введіть електронну пошту'
                                 },
                                 {
                                     type: 'email',
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Неправильний формат електронної пошти</span>
+                                    message: 'Неправильний формат електронної пошти'
                                 },
 
                             ]}
@@ -370,7 +370,7 @@ const CreateAdvert: React.FC = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: <span className="font-montserrat text-adaptive-input-form-error-text">Оберіть місцезнаходження</span>
+                                    message: 'Оберіть місцезнаходження'
                                 },
                             ]}
                         >

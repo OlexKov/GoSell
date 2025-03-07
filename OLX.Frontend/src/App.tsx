@@ -95,7 +95,7 @@ function App() {
             <AdminLayout />
           </Suspense>}>
           <Route index element={<UsersPage />} />
-
+          <Route path='settings' element={<ReCaptcha><AdminCreate /></ReCaptcha>} />
           <Route path="adverts">
             <Route index element={<AdminAdvertTable />} />
             <Route path='approve' element={<AdminAdvertTable />} />
@@ -113,7 +113,7 @@ function App() {
 
           <Route path="admins">
             <Route index element={<UsersPage />} />
-            <Route path='new' element={<AdminCreate />} />
+            <Route path='new' element={<ReCaptcha><AdminCreate /></ReCaptcha>} />
           </Route>
 
           <Route path="error" element={<ErrorPage />} />
