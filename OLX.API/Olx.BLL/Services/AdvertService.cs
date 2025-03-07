@@ -19,6 +19,7 @@ using Olx.BLL.Entities.NewPost;
 using Microsoft.EntityFrameworkCore;
 using Olx.BLL.DTOs.AdvertDtos;
 using Olx.BLL.Models.AdminMessage;
+using Olx.BLL.Helpers;
 
 
 namespace Olx.BLL.Services
@@ -75,11 +76,22 @@ namespace Olx.BLL.Services
 
         public async Task DeleteAsync(int id)
         {
-            await userManager.UpdateUserActivityAsync(httpContext);
+           var user =  await userManager.UpdateUserActivityAsync(httpContext);
             var advert = await advertRepository.GetItemBySpec( new AdvertSpecs.GetById(id))
                 ?? throw new HttpException(Errors.InvalidAdvertId,HttpStatusCode.BadRequest);
             advertRepository.Delete(advert);
             await advertRepository.SaveAsync();
+            if (await userManager.IsInRoleAsync(user, Roles.Admin)) 
+            {
+                await adminMessageService.AdminCreate(
+                    new AdminMessageCreationModel
+                    {
+                        MessageLogo = advert.Images.FirstOrDefault(x => x.Priority == 0)?.Name,
+                        Content = "За порушення правил та не відповідності що до політикі сайту",
+                        Subject = $"Адміністратор видалив ваше оголошення \"{advert.Title}\"",
+                        UserId = advert.UserId
+                    });
+            }
         }
 
         public async Task<IEnumerable<AdvertDto>> GetRangeAsync(IEnumerable<int> ids) =>

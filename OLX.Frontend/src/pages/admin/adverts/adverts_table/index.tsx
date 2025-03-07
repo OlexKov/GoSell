@@ -202,22 +202,20 @@ const AdminAdvertTable: React.FC = () => {
                             <Info />
                         </IconButton>
                     </Tooltip>
-
-                    <Tooltip title="Підтвердити оголошення">
-                        <Popconfirm
-                            title="Підтвердження оголошення"
-                            description={`Ви впевненні що бажаєте підтвердити оголошення "${advert.title}"?`}
-                            onConfirm={() => { approve(advert) }}
-                            okText="Підтвердити"
-                            cancelText="Відмінити"
-                        >
-                            <IconButton color="success" size="small">
-                                <CheckOutlined />
-                            </IconButton>
-                        </Popconfirm>
-
-                    </Tooltip>
-
+                    {location.pathname === '/admin/adverts/approve' &&
+                        <Tooltip title="Підтвердити оголошення">
+                            <Popconfirm
+                                title="Підтвердження оголошення"
+                                description={`Ви впевненні що бажаєте підтвердити оголошення "${advert.title}"?`}
+                                onConfirm={() => { approve(advert) }}
+                                okText="Підтвердити"
+                                cancelText="Відмінити"
+                            >
+                                <IconButton color="success" size="small">
+                                    <CheckOutlined />
+                                </IconButton>
+                            </Popconfirm>
+                        </Tooltip>}
 
                     <Tooltip title="Блокувати оголошення">
                         <Popconfirm
@@ -232,7 +230,7 @@ const AdminAdvertTable: React.FC = () => {
                             </IconButton>
                         </Popconfirm>
                     </Tooltip>
-                    
+
                     <Tooltip title="Видалити оголошення">
                         <Popconfirm
                             title="Видалення оголошення"
