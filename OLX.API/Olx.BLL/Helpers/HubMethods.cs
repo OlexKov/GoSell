@@ -10,5 +10,8 @@ namespace Olx.BLL.Helpers
         public const string ReceiveUserMessage = "ReceiveMessageFromUser";
         public const string SetReaded = "SetMessageReaded";
         public const string SetChatMessageReaded = "SetChatMessageReaded";
+        public const string AdminDeleteAdvert = "AdminDeleteAdvert";
+        public const string AdminLockAdvert = "AdminLockAdvert";
     }
 }
+

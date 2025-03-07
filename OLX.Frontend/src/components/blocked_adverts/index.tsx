@@ -25,7 +25,7 @@ const LockedAdverts: React.FC<{adverts:IAdvert[]}> = ({adverts}) => {
                 </div>
                 :
                 <div className="w-[100%] py-[6vh] px-[8vw] h-[300px] flex-col justify-start items-center inline-flex">
-                    <p className="font-semibold font-montserrat text-adaptive-card-price-text mb-[16px]">Заблоковані оголошення відображаються тут після юлокування адміном</p>
+                    <p className="font-semibold font-montserrat text-adaptive-card-price-text mb-[16px]">Заблоковані оголошення відображаються тут після блокування адміном</p>
                     <p className="font-normal font-montserrat text-adaptive-card-price-text mb-[32px]">Ці оголошення можна завантажити знову після додтримання вимог адміністрації</p>
                 </div>
             }

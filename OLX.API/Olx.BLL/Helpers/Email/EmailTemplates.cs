@@ -5,6 +5,20 @@ namespace Olx.BLL.Helpers.Email
     internal static class EmailTemplates
     {
         private static string _path = Path.Combine(Directory.GetCurrentDirectory(), "Helpers/EmailTemplates");
+
+
+        public static string GetAdvertRemovedTemplate(string reason)
+        {
+            var html = File.ReadAllText(Path.Combine(_path, "AdvertRemoved.html"));
+            html = html.Replace("[reason]", reason);
+            return html;
+        }
+        public static string GetAdvertLockedTemplate( string reason)
+        {
+            var html = File.ReadAllText(Path.Combine(_path, "AdvertLocked.html"));
+            html = html.Replace("[reason]", reason);
+            return html;
+        }
         public static string GetEmailConfirmationTemplate(string url,string token, int id)
         {
             var html = File.ReadAllText(Path.Combine(_path,"EmailConfirmation.html"));

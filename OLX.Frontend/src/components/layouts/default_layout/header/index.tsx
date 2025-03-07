@@ -17,6 +17,7 @@ import PrimaryButton from "../../../buttons/primary_button";
 import '../../../category_tree/style.scss'
 import AdminMessageCard from "../../../admin_message_card";
 import { useGetChatsQuery } from "../../../../redux/api/chatAuthApi";
+import { IAdminMesssage } from "../../../../models/adminMesssage";
 
 
 export const Header: React.FC<HeaderProps> = ({ className }) => {
@@ -71,7 +72,9 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
             <div className="flex flex-col gap-[1vh] items-center p-[0.5vh] max-h-[70vh] w-[25vw] overflow-y-auto custom-scrollbar">
                 {userUnreadedMessages && userUnreadedMessages.length > 0
                     ? <div className="flex flex-col w-full">
-                        {userUnreadedMessages.map((x, index) =>
+                        {userUnreadedMessages.slice()
+                        .sort((a:IAdminMesssage,b:IAdminMesssage)=> b.created.localeCompare(a.created))
+                        .map((x, index) =>
                             <AdminMessageCard
                                 key={index}
                                 adminMessage={x}

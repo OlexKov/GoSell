@@ -20,6 +20,12 @@ using Microsoft.EntityFrameworkCore;
 using Olx.BLL.DTOs.AdvertDtos;
 using Olx.BLL.Models.AdminMessage;
 using Olx.BLL.Helpers;
+using NETCore.MailKit.Core;
+using Olx.BLL.Helpers.Email;
+using Olx.BLL.Models.User;
+using Microsoft.AspNetCore.SignalR.Protocol;
+using Microsoft.AspNetCore.SignalR;
+using Olx.BLL.Hubs;
 
 
 namespace Olx.BLL.Services
@@ -34,7 +40,9 @@ namespace Olx.BLL.Services
         IImageService imageService,
         IHttpContextAccessor httpContext,
         IAdminMessageService adminMessageService,
+        IEmailService emailService,
         IMapper mapper,
+        IHubContext<MessageHub> hubContext,
         IValidator<AdvertCreationModel> advertCreationModelValidator) : IAdvertService
     {
        
@@ -77,20 +85,25 @@ namespace Olx.BLL.Services
         public async Task DeleteAsync(int id)
         {
            var user =  await userManager.UpdateUserActivityAsync(httpContext);
-            var advert = await advertRepository.GetItemBySpec( new AdvertSpecs.GetById(id))
+            var advert = await advertRepository.GetItemBySpec( new AdvertSpecs.GetById(id,AdvertOpt.User))
                 ?? throw new HttpException(Errors.InvalidAdvertId,HttpStatusCode.BadRequest);
             advertRepository.Delete(advert);
             await advertRepository.SaveAsync();
             if (await userManager.IsInRoleAsync(user, Roles.Admin)) 
             {
-                await adminMessageService.AdminCreate(
-                    new AdminMessageCreationModel
-                    {
-                        MessageLogo = advert.Images.FirstOrDefault(x => x.Priority == 0)?.Name,
-                        Content = "За порушення правил та не відповідності що до політикі сайту",
-                        Subject = $"Адміністратор видалив ваше оголошення \"{advert.Title}\"",
-                        UserId = advert.UserId
-                    });
+                var message = new AdminMessageCreationModel
+                {
+                    MessageLogo = advert.Images.FirstOrDefault(x => x.Priority == 0)?.Name,
+                    Content = "За порушення правил та не відповідності що до політикі сайту.",
+                    Subject = $"Адміністратор видалив ваше оголошення \"{advert.Title}\".",
+                    UserId = advert.UserId
+                };
+                await adminMessageService.AdminCreate(message);
+                var accountBlockedTemplate = EmailTemplates.GetAdvertRemovedTemplate($"{message.Subject} {message.Content}");
+                await emailService.SendAsync(advert.User.Email, "Вашe оголошення видалено", accountBlockedTemplate, true);
+                await hubContext.Clients.Users(advert.UserId.ToString())
+                  .SendAsync(HubMethods.AdminDeleteAdvert);
+                return;
             }
         }
 
@@ -221,19 +234,24 @@ namespace Olx.BLL.Services
         public async Task SetLockedStatusAsync(AdvertLockRequest lockRequest)
         {
            var user = await userManager.UpdateUserActivityAsync(httpContext);
-            var advert = await advertRepository.GetItemBySpec(new AdvertSpecs.GetById(lockRequest.Id))
+            var advert = await advertRepository.GetItemBySpec(new AdvertSpecs.GetById(lockRequest.Id,AdvertOpt.User))
                  ?? throw new HttpException(Errors.InvalidAdvertId, HttpStatusCode.BadRequest);
             advert.Blocked = lockRequest.Status;
             if (lockRequest.Status) 
             {
-                await adminMessageService.AdminCreate(
-                    new AdminMessageCreationModel
-                    {
-                        MessageLogo = advert.Images.FirstOrDefault(x => x.Priority == 0)?.Name,
-                        Content = lockRequest.LockReason ?? "За не відповідність що до політикі сайту",
-                        Subject = $"Адміністратор заблокував ваше оголошення \"{advert.Title}\"",
-                        UserId = advert.UserId
-                    });
+                var message = new AdminMessageCreationModel
+                {
+                    MessageLogo = advert.Images.FirstOrDefault(x => x.Priority == 0)?.Name,
+                    Content = lockRequest.LockReason ?? "За не відповідність що до політикі сайту",
+                    Subject = $"Адміністратор заблокував ваше оголошення \"{advert.Title}\"",
+                    UserId = advert.UserId
+                };
+                await adminMessageService.AdminCreate(message);
+               
+                var accountBlockedTemplate = EmailTemplates.GetAdvertLockedTemplate($"{message.Subject} {message.Content}");
+                await emailService.SendAsync(advert.User.Email, "Вашe оголошення заблоковано", accountBlockedTemplate, true);
+                await hubContext.Clients.Users(advert.UserId.ToString())
+                 .SendAsync(HubMethods.AdminLockAdvert);
             }
             await advertRepository.SaveAsync();
         }

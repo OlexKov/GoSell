@@ -6,6 +6,7 @@ import { useSignalR } from '../signalRContext';
 import { chatAuthApi } from '../../../../redux/api/chatAuthApi';
 import { IChatMessage } from '../../../../models/chat';
 import { ISetMessageReadedData } from '../../../../models/signalR';
+import { advertAuthApi } from '../../../../redux/api/advertAuthApi';
 
 
 const SignalRListener: React.FC = () => {
@@ -30,9 +31,13 @@ const SignalRListener: React.FC = () => {
                             }))
                     });
 
-                    // signalRConnection?.connection?.on('SetMessageReaded', () => {
-                    //     dispatch(adminMessageAuthApi.util.invalidateTags(['Messeges', 'UnreadedMessages']))
-                    // });
+                    signalRConnection?.connection?.on('AdminDeleteAdvert', () => {
+                        dispatch(advertAuthApi.util.invalidateTags(['UserAdverts']))
+                    });
+
+                    signalRConnection?.connection?.on('AdminLockAdvert', () => {
+                        dispatch(advertAuthApi.util.invalidateTags(['UserAdverts']))
+                    });
 
                     signalRConnection?.connection?.on('SetChatMessageReaded', (data: ISetMessageReadedData) => {
                         dispatch(

@@ -11,7 +11,7 @@ import { APP_ENV } from "../../../../constants/env";
 import { useGetAllCategoriesQuery } from "../../../../redux/api/categoryApi";
 import { formatPrice, getAdvertPageRequest, getDateTime, getQueryString } from "../../../../utilities/common_funct";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { Key, useEffect, useMemo, useRef, useState } from "react";
+import { Key, useEffect, useMemo, useState } from "react";
 import { useGetAdvertPageQuery } from "../../../../redux/api/advertApi";
 import { IconButton } from "@mui/material";
 import { ColumnType, TableProps } from "antd/es/table";
