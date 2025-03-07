@@ -8,6 +8,7 @@ using NETCore.MailKit.Core;
 using Newtonsoft.Json;
 using Olx.BLL.DTOs.AdvertDtos;
 using Olx.BLL.Entities;
+using Olx.BLL.Entities.AdminMessages;
 using Olx.BLL.Entities.NewPost;
 using Olx.BLL.Exceptions;
 using Olx.BLL.Exstensions;
@@ -353,14 +354,11 @@ namespace Olx.BLL.Services
 
         public async Task RemoveAccountAsync(int id)
         {
-           
+            var currentUser = await GetCurrentUser();
             var user = await userManager.FindByIdAsync(id.ToString()) 
                 ?? throw new HttpException(Errors.InvalidUserEmail, HttpStatusCode.BadRequest);
-            if (id != (await GetCurrentUser()).Id) 
-            {
-                 await userManager.UpdateUserActivityAsync(httpContext);
-            }
-            if (await userManager.IsInRoleAsync(user, Roles.Admin))
+           
+            if (currentUser.Id != id)
             {
                 var adminsCount =  await userManager.GetUsersInRoleAsync(Roles.Admin);
                 if (adminsCount.Count <= 1)
@@ -375,6 +373,12 @@ namespace Olx.BLL.Services
                 if (user.Photo is not null)
                 {
                     imageService.DeleteImageIfExists(user.Photo);
+                }
+                if (currentUser.Id != id) 
+                {
+                    await userManager.UpdateUserActivityAsync(httpContext);
+                    var accountBlockedTemplate = EmailTemplates.GetAccountRemovedTemplate("Ваш акаунт було видалено адміністратором сайту");
+                    await emailService.SendAsync(user.Email, "Ваш акаунт видалено", accountBlockedTemplate, true);
                 }
             }
             else throw new HttpException(Errors.UserRemoveError, HttpStatusCode.InternalServerError);
