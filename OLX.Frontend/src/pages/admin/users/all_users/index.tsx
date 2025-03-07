@@ -1,6 +1,6 @@
 import { PageHeader } from "../../../../components/page_header";
 import { UserOutlined } from '@ant-design/icons';
-import { Modal } from "antd";
+import { Modal, Popconfirm } from "antd";
 import { IOlxUser, IOlxUserPageRequest } from "../../../../models/user";
 import PageHeaderButton from "../../../../components/buttons/page_header_button";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import IconButton from "@mui/material/IconButton/IconButton";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
 import { getUserDescr } from "../../../../utilities/common_funct";
-import { useLockUnlockUsersMutation } from "../../../../redux/api/accountAuthApi";
+import { useDeleteAccountMutation, useLockUnlockUsersMutation } from "../../../../redux/api/accountAuthApi";
 import AdminLock from "../../../../components/modals/admin_user_lock";
 import UserTable from "../../../../components/user_table/intedx";
 import {
@@ -23,12 +23,14 @@ import {
     LockOutlined,
     LockOpen
 } from "@mui/icons-material";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { useGetUserPageQuery } from "../../../../redux/api/userAuthApi";
+import { useAppSelector } from "../../../../redux";
+import useAdminPasswordCheck from "../../../../hooks/checkAdminPassword";
 
 const updatedPageRequest = (searchParams: URLSearchParams) => ({
     isAdmin: location.pathname === '/admin/admins',
-    isLocked:location.pathname === '/admin/adverts/blocked',
+    isLocked: location.pathname === '/admin/adverts/blocked',
     size: Number(searchParams.get("size")) || paginatorConfig.pagination.defaultPageSize,
     page: Number(searchParams.get("page")) || paginatorConfig.pagination.defaultCurrent,
     sortKey: searchParams.get("sortKey") || '',
@@ -43,6 +45,8 @@ const updatedPageRequest = (searchParams: URLSearchParams) => ({
 
 
 const UsersPage: React.FC = () => {
+    const location = useLocation()
+    const currentUser = useAppSelector(state => state.user.user)
     const [searchParams] = useSearchParams('');
     const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
     const selectedUser = useRef<number | undefined>();
@@ -54,10 +58,12 @@ const UsersPage: React.FC = () => {
     const [lockUsers] = useLockUnlockUsersMutation();
     const [pageRequest, setPageRequest] = useState<IOlxUserPageRequest>(updatedPageRequest(searchParams));
     const { data, isLoading, refetch } = useGetUserPageQuery(pageRequest)
-    
+    const [removeUser] = useDeleteAccountMutation()
+     const {passwordCheck} = useAdminPasswordCheck()
+
     useEffect(() => {
         setPageRequest(updatedPageRequest(searchParams));
-    }, [location.search,location.pathname]);
+    }, [location.search, location.pathname]);
 
     const actions = useCallback((_value: any, user: IOlxUser) =>
         <div className='flex justify-around'>
@@ -69,23 +75,46 @@ const UsersPage: React.FC = () => {
                         </IconButton>
                     </Tooltip>
 
-                    <Tooltip title={location.pathname !== '/admin/adverts/blocked' ? "Блокувати" : "Розблокувати"}>
-                        <IconButton onClick={() => location.pathname !== '/admin/adverts/blocked' ? lockUser(user.id) : unLockUser(user.id)} color="warning" size="small">
+                    <Tooltip title={location.pathname !== '/admin/adverts/blocked' 
+                        ? "Блокувати" 
+                        : "Розблокувати"}>
+                        <IconButton onClick={() => location.pathname !== '/admin/adverts/blocked' 
+                            ? lockUser(user.id) 
+                            : unLockUser(user.id)} color="warning" size="small">
                             {location.pathname !== '/admin/adverts/blocked' ? <LockOutlined /> : <LockOpen />}
                         </IconButton>
                     </Tooltip>
                 </>
             }
-            {(location.pathname !== '/admin/admins' || (data?.items.length && data?.items.length > 1)) &&
-                <Tooltip title="Видалити">
-                    <IconButton color="error" size="small">
-                        <DeleteForever />
-                    </IconButton>
-                </Tooltip>
+            {((currentUser?.id != user.id) && (data?.items.length && data?.items.length > 1)) &&
+
+                <Popconfirm
+                    title="Видалення акаунту"
+                    description={`Ви впевненні що бажаєте видалити акаунт "${getUserDescr(user)}"?`}
+                    onConfirm={() => onUserRemove(user.id)}
+                    okText="Видалити"
+                    cancelText="Відмінити"
+                >
+                    <Tooltip title="Видалити">
+                        <IconButton color="error" size="small">
+                            <DeleteForever />
+                        </IconButton>
+                    </Tooltip>
+                </Popconfirm>
             }
-        </div>, [location.pathname])
+        </div >, [location.pathname, currentUser?.id])
 
-
+    const onUserRemove = async (id: number) => {
+        if(location.pathname === '/admin' || await passwordCheck()){
+            const result = await removeUser(id);
+            if (!result.error) {
+                toast(`Користувач успішно видалений`, {
+                    type: 'info',
+                    style: { width: 'fit-content' }
+                })
+            }
+        }
+    }
     const getUserName = (userId: number) => getUserDescr(data?.items.find(x => x.id === userId) || null)
 
     const sendMessage = async (userId: number) => {

@@ -365,7 +365,7 @@ namespace Olx.BLL.Services
                 var adminsCount =  await userManager.GetUsersInRoleAsync(Roles.Admin);
                 if (adminsCount.Count <= 1)
                 {
-                    throw new HttpException(Errors.ActionBlocked, HttpStatusCode.Locked);
+                    throw new HttpException(Errors.LastAdminDeleteBlock, HttpStatusCode.Locked);
                 }
             }
                      
@@ -453,7 +453,7 @@ namespace Olx.BLL.Services
             var existingFavoriteIds = user.FavoriteAdverts.Select(a => a.Id).ToHashSet();
             var newAdvertIds = advertIds.Where(id => !existingFavoriteIds.Contains(id)).ToList();
 
-            if (!newAdvertIds.Any())
+            if (newAdvertIds.Count == 0)
             {
                 return;
             }

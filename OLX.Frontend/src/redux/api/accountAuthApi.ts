@@ -100,10 +100,10 @@ export const accountApiAuth = createApi({
             async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
                 try {
                     await queryFulfilled;
-                    dispatch(userAuthApi.util.invalidateTags(['User','LockedUsers','User','Users']))
+                    dispatch(userAuthApi.util.invalidateTags(['User','LockedUsers','User','Users','Admins']))
                     
                 } catch (error) {
-                    console.error('Edit user failed:', error);
+                    console.error('Delete account failed:', error);
                 }
             },
         }),

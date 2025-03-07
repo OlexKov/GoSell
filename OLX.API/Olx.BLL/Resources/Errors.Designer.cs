@@ -349,6 +349,15 @@ namespace Olx.BLL.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Відмова у видаленні акаунту..
+        /// </summary>
+        internal static string LastAdminDeleteBlock {
+            get {
+                return ResourceManager.GetString("LastAdminDeleteBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Multiple refresh.
         /// </summary>
         internal static string MultipleRefresh {

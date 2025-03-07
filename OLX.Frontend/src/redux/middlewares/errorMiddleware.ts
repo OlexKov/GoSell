@@ -31,6 +31,9 @@ const errorMiddleware: Middleware = (api: MiddlewareAPI) => (next) => (action) =
                         : "На невизначений термін"
                     showToast(`${error.data?.Message} ${lockMessage}`, 'info', { width: 'fit-content' })
                 }
+                else{
+                    showToast(`${error.data?.message}`, 'info', { width: 'fit-content' })
+                }
                 break;
             case 401:
                 console.log('401')

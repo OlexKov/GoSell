@@ -231,4 +231,7 @@
   <data name="InvalidPassword" xml:space="preserve">
     <value>Не вірно введений пароль</value>
   </data>
+  <data name="LastAdminDeleteBlock" xml:space="preserve">
+    <value>Відмова у видаленні акаунту.</value>
+  </data>
 </root>

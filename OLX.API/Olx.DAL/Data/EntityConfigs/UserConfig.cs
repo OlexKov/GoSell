@@ -11,7 +11,8 @@ namespace Olx.DAL.Data.EntityConfigs
             builder.HasKey(x => x.Id);
             builder.HasMany(x => x.Adverts)
                 .WithOne(x => x.User)
-                .HasForeignKey(x => x.UserId);
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(x => x.FavoriteAdverts)
                 .WithMany(x => x.FavoritedByUsers)
                 .UsingEntity(x => x.ToTable("tbl_UserFavorites"));
@@ -27,7 +28,8 @@ namespace Olx.DAL.Data.EntityConfigs
                 .HasForeignKey(x => x.SenderId);
             builder.HasMany(x => x.AdminMessages)
                 .WithOne(x => x.User)
-                .HasForeignKey(x => x.UserId);
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(x => x.Settlement)
                 .WithMany(x => x.Users)
                 .HasForeignKey(x => x.SettlementRef);
