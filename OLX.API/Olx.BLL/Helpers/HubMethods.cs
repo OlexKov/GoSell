@@ -12,6 +12,7 @@ namespace Olx.BLL.Helpers
         public const string SetChatMessageReaded = "SetChatMessageReaded";
         public const string AdminDeleteAdvert = "AdminDeleteAdvert";
         public const string AdminLockAdvert = "AdminLockAdvert";
+        public const string AdminRemoveAccount = "AdminRemoveAccount";
     }
 }
 

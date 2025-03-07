@@ -2,18 +2,19 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NETCore.MailKit.Core;
 using Newtonsoft.Json;
 using Olx.BLL.DTOs.AdvertDtos;
 using Olx.BLL.Entities;
-using Olx.BLL.Entities.AdminMessages;
 using Olx.BLL.Entities.NewPost;
 using Olx.BLL.Exceptions;
 using Olx.BLL.Exstensions;
 using Olx.BLL.Helpers;
 using Olx.BLL.Helpers.Email;
+using Olx.BLL.Hubs;
 using Olx.BLL.Interfaces;
 using Olx.BLL.Models;
 using Olx.BLL.Models.AdminMessage;
@@ -24,7 +25,7 @@ using Olx.BLL.Specifications;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Reflection.Metadata.Ecma335;
+
 
 
 namespace Olx.BLL.Services
@@ -40,6 +41,7 @@ namespace Olx.BLL.Services
         IEmailService emailService,
         IConfiguration configuration,
         IMapper mapper,
+        IHubContext<MessageHub> hubContext,
         IImageService imageService,
         IAdminMessageService adminMessageService,
         IValidator<ResetPasswordModel> resetPasswordModelValidator,
@@ -354,11 +356,10 @@ namespace Olx.BLL.Services
 
         public async Task RemoveAccountAsync(int id)
         {
-            var currentUser = await GetCurrentUser();
-            var user = await userManager.FindByIdAsync(id.ToString()) 
+             var user = await userManager.FindByIdAsync(id.ToString()) 
                 ?? throw new HttpException(Errors.InvalidUserEmail, HttpStatusCode.BadRequest);
-           
-            if (currentUser.Id != id)
+                    
+            if (await userManager.IsInRoleAsync(user, Roles.Admin))
             {
                 var adminsCount =  await userManager.GetUsersInRoleAsync(Roles.Admin);
                 if (adminsCount.Count <= 1)
@@ -366,7 +367,8 @@ namespace Olx.BLL.Services
                     throw new HttpException(Errors.LastAdminDeleteBlock, HttpStatusCode.Locked);
                 }
             }
-                     
+            var currentUser = await GetCurrentUser();
+
             var result = await userManager.DeleteAsync(user);
             if (result.Succeeded)
             {
@@ -374,11 +376,14 @@ namespace Olx.BLL.Services
                 {
                     imageService.DeleteImageIfExists(user.Photo);
                 }
-                if (currentUser.Id != id) 
+              
+                if (currentUser.Id != id && await userManager.IsInRoleAsync(currentUser, Roles.Admin)) 
                 {
                     await userManager.UpdateUserActivityAsync(httpContext);
                     var accountBlockedTemplate = EmailTemplates.GetAccountRemovedTemplate("Ваш акаунт було видалено адміністратором сайту");
                     await emailService.SendAsync(user.Email, "Ваш акаунт видалено", accountBlockedTemplate, true);
+                    await hubContext.Clients.Users(user.Id.ToString())
+                         .SendAsync(HubMethods.AdminRemoveAccount);
                 }
             }
             else throw new HttpException(Errors.UserRemoveError, HttpStatusCode.InternalServerError);

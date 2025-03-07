@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { getAuth } from '../../../../redux/slices/userSlice';
+import { getAuth, logOut } from '../../../../redux/slices/userSlice';
 import { useAppDispatch, useAppSelector } from '../../../../redux';
 import { adminMessageAuthApi } from '../../../../redux/api/adminMessageApi';
 import { useSignalR } from '../signalRContext';
@@ -37,6 +37,11 @@ const SignalRListener: React.FC = () => {
 
                     signalRConnection?.connection?.on('AdminLockAdvert', () => {
                         dispatch(advertAuthApi.util.invalidateTags(['UserAdverts']))
+                    });
+
+                    signalRConnection?.connection?.on('AdminRemoveAccount', () => {
+                        console.log('AdminRemoveAccount')
+                        dispatch(logOut())
                     });
 
                     signalRConnection?.connection?.on('SetChatMessageReaded', (data: ISetMessageReadedData) => {

@@ -22,8 +22,6 @@ using Olx.BLL.Models.AdminMessage;
 using Olx.BLL.Helpers;
 using NETCore.MailKit.Core;
 using Olx.BLL.Helpers.Email;
-using Olx.BLL.Models.User;
-using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.AspNetCore.SignalR;
 using Olx.BLL.Hubs;
 
