@@ -9,7 +9,7 @@ export const adminMessageAuthApi = createApi({
     tagTypes: ['Messeges', 'AdminMessages', 'UnreadedMessages'],
     endpoints: (builder) => ({
 
-        createAdminMessage: builder.mutation<IAdminMesssage, IAdminMesssageCreationModel>({
+        createAdminMessage: builder.mutation<void, IAdminMesssageCreationModel>({
             query: (messageCreationModel) => {
                 return {
                     url: 'create/admin',
@@ -21,7 +21,7 @@ export const adminMessageAuthApi = createApi({
             invalidatesTags: ['AdminMessages']
         }),
 
-        createUserMessage: builder.mutation<IAdminMesssage, IAdminMesssageCreationModel>({
+        createUserMessage: builder.mutation<void, IAdminMesssageCreationModel>({
             query: (messageCreationModel) => {
                 return {
                     url: 'create/user',
@@ -106,11 +106,10 @@ export const adminMessageAuthApi = createApi({
                 return {
                     url: `readed/set/${id}`,
                     method: 'POST',
-
-                    // timeout: 10000,
                 }
             },
             invalidatesTags: ['Messeges', 'UnreadedMessages']
+           
         }),
 
         setUserMessageReadedRange: builder.mutation<void, number[]>({
@@ -119,8 +118,6 @@ export const adminMessageAuthApi = createApi({
                     url: `readed/set`,
                     method: 'POST',
                     body: ids
-
-                    // timeout: 10000,
                 }
             },
             invalidatesTags: ['Messeges', 'UnreadedMessages']

@@ -11,12 +11,13 @@ import { APP_ENV } from "../../../../constants/env";
 import { useGetAllCategoriesQuery } from "../../../../redux/api/categoryApi";
 import { formatPrice, getAdvertPageRequest, getDateTime, getQueryString } from "../../../../utilities/common_funct";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { Key, useEffect, useMemo } from "react";
+import { Key, useEffect, useMemo, useRef, useState } from "react";
 import { useGetAdvertPageQuery } from "../../../../redux/api/advertApi";
 import { IconButton } from "@mui/material";
 import { ColumnType, TableProps } from "antd/es/table";
-import { useApproveAdvertMutation, useBlockAdvertMutation, useDeleteAdvertMutation } from "../../../../redux/api/advertAuthApi";
+import { useApproveAdvertMutation, useDeleteAdvertMutation } from "../../../../redux/api/advertAuthApi";
 import { toast } from "react-toastify";
+import AdvertLockModal from "../../../../components/modals/advert_lock";
 
 
 const updatedPageRequest = (searchParams: URLSearchParams): IAdvertSearchPageData => ({
@@ -24,7 +25,7 @@ const updatedPageRequest = (searchParams: URLSearchParams): IAdvertSearchPageDat
     priceTo: Number(searchParams.get("priceTo")),
     approved: location.pathname === '/admin/adverts',
     blocked: false,
-    completed:false,
+    completed: false,
     size: Number(searchParams.get("size")) || paginatorConfig.pagination.defaultPageSize,
     page: Number(searchParams.get("page")) || paginatorConfig.pagination.defaultCurrent,
     sortKey: searchParams.get("sortKey") || '',
@@ -41,15 +42,15 @@ const updatedPageRequest = (searchParams: URLSearchParams): IAdvertSearchPageDat
 
 
 const AdminAdvertTable: React.FC = () => {
+    const [advertToLock, setAdvertToLock] = useState<IAdvert>();
     const navigate = useNavigate()
-    const location  = useLocation()
+    const location = useLocation()
     const { data: categories } = useGetAllCategoriesQuery()
     const [searchParams, setSearchParams] = useSearchParams('');
     const pageRequest = useMemo(() => updatedPageRequest(searchParams), [location]);
     const getPageRequest = useMemo(() => getAdvertPageRequest(pageRequest, categories || []), [pageRequest, categories])
     const [approveAdvert] = useApproveAdvertMutation();
     const [deleteAdvert] = useDeleteAdvertMutation();
-    const [lockAdvert] = useBlockAdvertMutation();
     const { data: adverts, isLoading, refetch } = useGetAdvertPageQuery(getPageRequest);
     useEffect(() => {
         refetch()
@@ -201,35 +202,37 @@ const AdminAdvertTable: React.FC = () => {
                             <Info />
                         </IconButton>
                     </Tooltip>
-                    {location.pathname === '/admin/adverts'
-                        ? <Tooltip title="Блокувати оголошення">
-                            <Popconfirm
-                                title="Блокування оголошення"
-                                description={`Ви впевненні що бажаєте заблокувати оголошення "${advert.title}"?`}
-                                onConfirm={() => { advertLock(advert) }}
-                                okText="Заблокувати"
-                                cancelText="Відмінити"
-                            >
-                                <IconButton color="success" size="small">
-                                    <LockOutlined />
-                                </IconButton>
-                            </Popconfirm>
-                        </Tooltip>
-                        : <Tooltip title="Підтвердити оголошення">
-                            <Popconfirm
-                                title="Підтвердження оголошення"
-                                description={`Ви впевненні що бажаєте підтвердити оголошення "${advert.title}"?`}
-                                onConfirm={() => { approve(advert) }}
-                                okText="Підтвердити"
-                                cancelText="Відмінити"
-                            >
-                                <IconButton color="success" size="small">
-                                    <CheckOutlined />
-                                </IconButton>
-                            </Popconfirm>
 
-                        </Tooltip>}
+                    <Tooltip title="Підтвердити оголошення">
+                        <Popconfirm
+                            title="Підтвердження оголошення"
+                            description={`Ви впевненні що бажаєте підтвердити оголошення "${advert.title}"?`}
+                            onConfirm={() => { approve(advert) }}
+                            okText="Підтвердити"
+                            cancelText="Відмінити"
+                        >
+                            <IconButton color="success" size="small">
+                                <CheckOutlined />
+                            </IconButton>
+                        </Popconfirm>
 
+                    </Tooltip>
+
+
+                    <Tooltip title="Блокувати оголошення">
+                        <Popconfirm
+                            title="Блокування оголошення"
+                            description={`Ви впевненні що бажаєте заблокувати оголошення "${advert.title}"?`}
+                            onConfirm={() => { setAdvertToLock(advert) }}
+                            okText="Заблокувати"
+                            cancelText="Відмінити"
+                        >
+                            <IconButton color="success" size="small">
+                                <LockOutlined />
+                            </IconButton>
+                        </Popconfirm>
+                    </Tooltip>
+                    
                     <Tooltip title="Видалити оголошення">
                         <Popconfirm
                             title="Видалення оголошення"
@@ -263,11 +266,8 @@ const AdminAdvertTable: React.FC = () => {
         }
     }
 
-    const advertLock = async (advert: IAdvert) => {
-        const result = await lockAdvert({ advertId: advert.id, status: true });
-        if (!result.error) {
-            toast(`Оголошення ${advert.title} успішно заблоковано`, { type: 'info' })
-        }
+    const advertLockCancel = () => {
+        setAdvertToLock(undefined);
     }
 
 
@@ -287,6 +287,10 @@ const AdminAdvertTable: React.FC = () => {
 
     return (
         <div className="m-6 flex-grow  text-center overflow-hidden">
+            <AdvertLockModal
+                advert={advertToLock}
+                onCancel={advertLockCancel}
+            />
             <PageHeader
                 title={`${location.pathname === '/admin/adverts' ? "Діючі" : "Непідтверджені"} оголошення`}
                 icon={<ProfileOutlined className="text-2xl" />}
@@ -294,7 +298,7 @@ const AdminAdvertTable: React.FC = () => {
                     <PageHeaderButton
                         key='clear_filter'
                         onButtonClick={() => {
-                            setSearchParams(getQueryString( ({
+                            setSearchParams(getQueryString(({
                                 ...pageRequest,
                                 emailSearch: '',
                                 phoneSearch: '',

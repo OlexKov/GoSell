@@ -49,7 +49,7 @@ namespace Olx.BLL.Services
             return adminIds;
         }
 
-        public async Task<AdminMessageDto> UserCreate(AdminMessageCreationModel messageCreationModel)
+        public async Task UserCreate(AdminMessageCreationModel messageCreationModel)
         {
             validator.ValidateAndThrow(messageCreationModel);
             var currentUser = await userManager.UpdateUserActivityAsync(httpContext,false);
@@ -57,10 +57,8 @@ namespace Olx.BLL.Services
             adminMessage.User = currentUser;
             currentUser.AdminMessages.Add(adminMessage);
             await userManager.UpdateAsync(currentUser);
-            var messageDto = mapper.Map<AdminMessageDto>(adminMessage);
             await hubContext.Clients.Group("Admins")
                .SendAsync(HubMethods.ReceiveUserMessage);
-            return messageDto;
         }
 
         public async Task Delete(int id)
@@ -110,21 +108,21 @@ namespace Olx.BLL.Services
             await adminMessageRepo.SaveAsync();
         }
 
-        public async Task<AdminMessageDto> AdminCreate(AdminMessageCreationModel messageCreationModel)
+        public async Task AdminCreate(AdminMessageCreationModel messageCreationModel)
         {
             await userManager.UpdateUserActivityAsync(httpContext, false);
             validator.ValidateAndThrow(messageCreationModel);
             var adminMessage = mapper.Map<AdminMessage>(messageCreationModel);
-            if (messageCreationModel.UserId is not null)
+            if (adminMessage.UserId != null)
             {
                 var user = userManager.Users.Include(x => x.AdminMessages).FirstOrDefault(x => x.Id == messageCreationModel.UserId)
                     ?? throw new HttpException(Errors.InvalidUserId, HttpStatusCode.BadRequest);
                 user.AdminMessages.Add(adminMessage);
                 await userManager.UpdateAsync(user);
-                var messageDto = mapper.Map<AdminMessageDto>(adminMessage);
-                await hubContext.Clients.Users(messageDto.UserId.ToString())
-                 .SendAsync(HubMethods.ReceiveAdminMessage);
-                return messageDto;
+                string userId = adminMessage.UserId.Value.ToString();
+                await hubContext.Clients.Users(userId)
+                   .SendAsync(HubMethods.ReceiveAdminMessage);
+                return;
             }
             else 
             {
@@ -154,7 +152,7 @@ namespace Olx.BLL.Services
                     await hubContext.Clients.Users(usersIds.Select(x => x.ToString()))
                      .SendAsync(HubMethods.ReceiveAdminMessage);
 
-                    return mapper.Map<AdminMessageDto>(adminMessage);
+                    return;
                 }
             }
             throw new HttpException(Errors.InvalidUserId, HttpStatusCode.BadRequest);
@@ -169,8 +167,8 @@ namespace Olx.BLL.Services
                 ?? throw new HttpException(Errors.InvalidAdminMessageId, HttpStatusCode.BadRequest);
             adminMessage.Readed = true;
             await adminMessageRepo.SaveAsync();
-            await hubContext.Clients.Users(user.Id.ToString())
-                .SendAsync(HubMethods.SetReaded, adminMessage.Id);
+            //await hubContext.Clients.Users(user.Id.ToString())
+            //    .SendAsync(HubMethods.SetReaded, adminMessage.Id);
         }
 
         public async Task SetReaded(IEnumerable<int> ids)

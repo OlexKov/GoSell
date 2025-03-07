@@ -29,7 +29,7 @@ const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
                                 id={advert?.id || 0}
                                 isEdit={true}
                                 isComplete={true}
-                                className="w-[7%] absolute right-0"/>
+                                className="w-[7%] absolute right-0" />
                         : <></>
                     }
                 </div>
@@ -40,8 +40,8 @@ const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
             </div>
             <div className=" flex flex-col gap-[6vh]">
                 {
-                    !advert?.completed
-                        ? buttons && 
+                    !advert?.completed && !advert?.blocked
+                        ? buttons &&
                         <div className="flex flex-col gap-[2.4vh]">
                             <PrimaryButton
                                 title={"Купити зараз"}
@@ -51,7 +51,7 @@ const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
                                 isLoading={false}
                                 className="h-[4.6vh] w-[22vw] "
                                 onButtonClick={() => navigate(`/user/advert/buy/${advert?.id}`)}
-                                disabled={user?.id == advert?.userId}/>
+                                disabled={user?.id == advert?.userId} />
                             <PrimaryButton
                                 title={"Написати продавцю"}
                                 isLoading={false}
@@ -65,7 +65,7 @@ const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
                         </div>
 
                         : <div className="h-[6vh] content-center rounded-sm bg-slate-100 text-center text-slate-400 font-unbounded text-adaptive-card-price-text">
-                            Завершено
+                            {advert?.completed ? ' Завершено' : 'Заблоковано'}
                         </div>
                 }
 

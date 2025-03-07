@@ -8,9 +8,10 @@ import { useNavigate } from "react-router-dom";
 import ActiveAdverts from "../../../components/active_adverts";
 import CompletedAdverts from "../../../components/completed_adverts";
 import { useState } from "react";
-import { useDeleteCompletedUserAdvertsMutation, useGetCompletedUserAdvertsQuery, useGetUserAdvertsQuery } from "../../../redux/api/advertAuthApi";
+import { useDeleteCompletedUserAdvertsMutation, useGetCompletedUserAdvertsQuery, useGetLockedUserAdvertsQuery, useGetUserAdvertsQuery } from "../../../redux/api/advertAuthApi";
 import { toast } from "react-toastify";
 import { confirm } from "../../../utilities/confirm_modal";
+import LockedAdverts from "../../../components/blocked_adverts";
 
 
 
@@ -19,6 +20,7 @@ const UserProfile: React.FC = () => {
     const { data: userData } = useGetUserQuery(user?.id || 0)
     const [activeKey, setActiveKey] = useState<string>("1")
     const { data: completedAdverts } = useGetCompletedUserAdvertsQuery(undefined, { skip: activeKey !== '3' })
+    const { data: lockedAdverts } = useGetLockedUserAdvertsQuery(undefined, { skip: activeKey !== '4' })
     const { data: adverts } = useGetUserAdvertsQuery(undefined, { skip: activeKey !== '1' })
     const [removeCompleted] = useDeleteCompletedUserAdvertsMutation()
     const navigate = useNavigate()
@@ -37,6 +39,11 @@ const UserProfile: React.FC = () => {
             key: '3',
             label: <h5 className="ml-[.51vw] font-montserrat text-adaptive-card-price-text" >Неактивні оголошення</h5>,
             children: <CompletedAdverts adverts={completedAdverts || []} />,
+        },
+        {
+            key: '4',
+            label: <h5 className="ml-[.51vw] font-montserrat text-adaptive-card-price-text" >Заблоковані оголошення</h5>,
+            children: <LockedAdverts adverts={lockedAdverts || []} />,
         },
     ];
 

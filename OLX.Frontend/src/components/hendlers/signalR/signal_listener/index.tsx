@@ -30,9 +30,9 @@ const SignalRListener: React.FC = () => {
                             }))
                     });
 
-                    signalRConnection?.connection?.on('SetMessageReaded', () => {
-                        dispatch(chatAuthApi.util.invalidateTags(['ChatMessages']))
-                    });
+                    // signalRConnection?.connection?.on('SetMessageReaded', () => {
+                    //     dispatch(adminMessageAuthApi.util.invalidateTags(['Messeges', 'UnreadedMessages']))
+                    // });
 
                     signalRConnection?.connection?.on('SetChatMessageReaded', (data: ISetMessageReadedData) => {
                         dispatch(

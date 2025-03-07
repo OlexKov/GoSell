@@ -324,7 +324,7 @@ namespace Olx.BLL.Services
             throw new HttpException(Errors.InvalidUserId, HttpStatusCode.BadRequest);
         }
 
-    public async Task AddUserAsync(UserCreationModel userModel, bool isAdmin = false)
+        public async Task AddUserAsync(UserCreationModel userModel, bool isAdmin = false)
         {
             if (isAdmin)
             {
@@ -496,11 +496,10 @@ namespace Olx.BLL.Services
         public async Task CheckPasswordAsync(string password)
         {
             var user = await GetCurrentUser();
-            if (await userManager.CheckPasswordAsync(user, password))
+            if (!await userManager.CheckPasswordAsync(user, password))
             {
-                return;
+                throw new HttpException(Errors.InvalidPassword, HttpStatusCode.BadRequest);
             }
-            throw new HttpException(Errors.InvalidPassword, HttpStatusCode.BadRequest);
         }
     }
 }

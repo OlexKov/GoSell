@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { createBaseQueryWithAuth } from "./baseQuery";
-import { IAdvert, IAdvertCreationModel } from "../../models/advert";
+import { IAdvert, IAdvertCreationModel, ISetLockedRequest } from "../../models/advert";
 import { advertApi } from "./advertApi";
 import { getFormData } from "../../utilities/common_funct";
 
@@ -60,11 +60,11 @@ export const advertAuthApi = createApi({
             invalidatesTags:["UserAdvert","UserAdverts"]
         }),
 
-        blockAdvert: builder.mutation<void, { advertId: number; status: boolean }>({
-            query: ({ advertId, status }) => ({
+        blockAdvert: builder.mutation<void, ISetLockedRequest>({
+            query: (request) => ({
                 url: `block`,
                 method: "POST",
-                params: { advertId, status },
+                body: request,
             }),
             async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
                 try {
@@ -107,6 +107,14 @@ export const advertAuthApi = createApi({
             providesTags: ["UserAdverts"],
         }),
 
+        getLockedUserAdverts: builder.query<IAdvert[], void>({
+            query: () => ({
+                url: `get/user/locked`,
+                method: "GET",
+            }),
+            providesTags: ["UserAdverts"],
+        }),
+
         completeUserAdvert: builder.mutation<void, number>({
             query: (advertId) => ({
                 url: `complete/${advertId}`,
@@ -122,6 +130,8 @@ export const advertAuthApi = createApi({
             },
             invalidatesTags:["UserAdverts"]
         }),
+
+        
 
         deleteCompletedUserAdverts: builder.mutation<number, void>({
             query: () => ({
@@ -160,5 +170,6 @@ export const {
     useGetAdvertsByUserIdQuery,
     useGetCompletedUserAdvertsQuery,
     useDeleteCompletedUserAdvertsMutation,
-    useCompleteUserAdvertMutation
+    useCompleteUserAdvertMutation,
+    useGetLockedUserAdvertsQuery
 } = advertAuthApi;

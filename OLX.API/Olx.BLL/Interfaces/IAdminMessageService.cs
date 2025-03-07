@@ -12,8 +12,8 @@ namespace Olx.BLL.Interfaces
         Task<PageResponse<AdminMessageDto>> GetPageAsync(AdminMessagePageRequest pageRequest);
         Task<IEnumerable<AdminMessageDto>> GetDeleted();
         Task<AdminMessageDto> GetById(int id);
-        Task<AdminMessageDto> UserCreate(AdminMessageCreationModel messageCreationModel);
-        Task<AdminMessageDto> AdminCreate(AdminMessageCreationModel messageCreationModel);
+        Task UserCreate(AdminMessageCreationModel messageCreationModel);
+        Task AdminCreate(AdminMessageCreationModel messageCreationModel);
         Task SoftDelete(int id);
         Task SoftDeleteRange(IEnumerable<int> ids);
         Task Delete(int id);

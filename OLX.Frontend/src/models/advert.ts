@@ -16,6 +16,7 @@ export interface IAdvert {
     categoryId: number,
     settlementName: string,
     settlementRef: string,
+    blocked:boolean,
     completed:boolean,
     regionRef: string,
     areaRef: string,
@@ -72,4 +73,10 @@ export interface IAdvertImage {
     name: string,
     advertId: number,
     priority: number
+}
+
+export interface ISetLockedRequest{
+    id:number
+    lockReason?:string
+    status:boolean
 }

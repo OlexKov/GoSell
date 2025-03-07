@@ -20,15 +20,15 @@ namespace OLX.API.Controllers
 
         [Authorize(Roles = Roles.User)]
         [HttpGet("get/user")]
-        public async Task<IActionResult> GetUserAdverts() => Ok(await advertService.GetUserAdverts());
+        public async Task<IActionResult> GetUserAdverts() => Ok(await advertService.GetUserAdvertsAsync());
 
         [Authorize(Roles = Roles.User)]
         [HttpGet("get/user/locked")]
-        public async Task<IActionResult> GetLockedUserAdverts() => Ok(await advertService.GetUserAdverts(locked:true));
+        public async Task<IActionResult> GetLockedUserAdverts() => Ok(await advertService.GetUserAdvertsAsync(locked:true));
 
         [Authorize(Roles = Roles.User)]
         [HttpGet("get/user/completed")]
-        public async Task<IActionResult> GetCompletedUserAdverts() => Ok(await advertService.GetUserAdverts(completed:true));
+        public async Task<IActionResult> GetCompletedUserAdverts() => Ok(await advertService.GetUserAdvertsAsync(completed:true));
 
         [Authorize(Roles = Roles.Admin)]
         [HttpGet("get/user/{id:int}")]
@@ -46,9 +46,9 @@ namespace OLX.API.Controllers
 
         [Authorize(Roles = Roles.Admin)]
         [HttpPost("block")]
-        public async Task<IActionResult> SetBlockedStatus([FromQuery] int advertId, bool status)
+        public async Task<IActionResult> SetLockedStatus([FromBody] AdvertLockRequest lockRequest)
         {
-            await advertService.SetBlockedStatusAsync(advertId, status);
+            await advertService.SetLockedStatusAsync(lockRequest);
             return Ok();
         }
 

@@ -18,6 +18,7 @@ using Olx.BLL.Exstensions;
 using Olx.BLL.Entities.NewPost;
 using Microsoft.EntityFrameworkCore;
 using Olx.BLL.DTOs.AdvertDtos;
+using Olx.BLL.Models.AdminMessage;
 
 
 namespace Olx.BLL.Services
@@ -31,6 +32,7 @@ namespace Olx.BLL.Services
         IFilterValueService filterValueService,
         IImageService imageService,
         IHttpContextAccessor httpContext,
+        IAdminMessageService adminMessageService,
         IMapper mapper,
         IValidator<AdvertCreationModel> advertCreationModelValidator) : IAdvertService
     {
@@ -86,7 +88,7 @@ namespace Olx.BLL.Services
         public async Task<IEnumerable<AdvertDto>> GetAllAsync() =>
             await mapper.ProjectTo<AdvertDto>(advertRepository.GetQuery().Where(x => !x.Blocked && !x.Completed)).ToArrayAsync();
       
-        public async Task<IEnumerable<AdvertDto>> GetUserAdverts(bool locked = false,bool completed = false)
+        public async Task<IEnumerable<AdvertDto>> GetUserAdvertsAsync(bool locked = false,bool completed = false)
         {
             var curentUser = await userManager.UpdateUserActivityAsync(httpContext);
             return await mapper.ProjectTo<AdvertDto>(advertRepository.GetQuery().Where(x => x.UserId == curentUser.Id && x.Blocked == locked && x.Completed == completed)).ToArrayAsync();
@@ -185,6 +187,7 @@ namespace Olx.BLL.Services
             }
             advert.Approved = false;
             advert.Completed = false;
+            advert.Blocked = false;
             await Task.WhenAll(tasks);
             await advertRepository.SaveAsync();
             return mapper.Map<AdvertDto>(advert);
@@ -203,12 +206,23 @@ namespace Olx.BLL.Services
             else throw new HttpException(Errors.AdvertIsBlocked, HttpStatusCode.BadRequest);
         }
 
-        public async Task SetBlockedStatusAsync(int id, bool status)
+        public async Task SetLockedStatusAsync(AdvertLockRequest lockRequest)
         {
-            await userManager.UpdateUserActivityAsync(httpContext);
-            var advert = await advertRepository.GetItemBySpec(new AdvertSpecs.GetById(id))
+           var user = await userManager.UpdateUserActivityAsync(httpContext);
+            var advert = await advertRepository.GetItemBySpec(new AdvertSpecs.GetById(lockRequest.Id))
                  ?? throw new HttpException(Errors.InvalidAdvertId, HttpStatusCode.BadRequest);
-            advert.Blocked = status;
+            advert.Blocked = lockRequest.Status;
+            if (lockRequest.Status) 
+            {
+                await adminMessageService.AdminCreate(
+                    new AdminMessageCreationModel
+                    {
+                        MessageLogo = advert.Images.FirstOrDefault(x => x.Priority == 0)?.Name,
+                        Content = lockRequest.LockReason ?? "За не відповідність що до політикі сайту",
+                        Subject = $"Адміністратор заблокував ваше оголошення \"{advert.Title}\"",
+                        UserId = advert.UserId
+                    });
+            }
             await advertRepository.SaveAsync();
         }
 

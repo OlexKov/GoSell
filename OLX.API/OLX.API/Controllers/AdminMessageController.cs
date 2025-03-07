@@ -54,13 +54,21 @@ namespace OLX.API.Controllers
 
         [Authorize(Roles = Roles.Admin)]
         [HttpPut("create/admin")]
-        public async Task<IActionResult> AdminCreate([FromBody] AdminMessageCreationModel messageCreationModel) =>
-            Ok(await adminMessageService.AdminCreate(messageCreationModel));
+        public async Task<IActionResult> AdminCreate([FromBody] AdminMessageCreationModel messageCreationModel) 
+        {
+            await adminMessageService.AdminCreate(messageCreationModel);
+            return Ok();
+        }
+
 
         [Authorize(Roles = Roles.User)]
         [HttpPut("create/user")]
-        public async Task<IActionResult> UserCreate([FromBody] AdminMessageCreationModel messageCreationModel) =>
-            Ok(await adminMessageService.UserCreate(messageCreationModel));
+        public async Task<IActionResult> UserCreate([FromBody] AdminMessageCreationModel messageCreationModel) 
+        {
+            await adminMessageService.UserCreate(messageCreationModel);
+            return Ok();
+        }
+            
 
         [Authorize(Roles = Roles.Admin)]
         [HttpDelete("delete/{id:int}")]

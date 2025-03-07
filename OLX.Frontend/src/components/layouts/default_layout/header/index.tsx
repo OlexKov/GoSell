@@ -60,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
     ];
 
     const unreaded = useMemo(() =>
-        chats?.map(x => user?.id == x.buyer.id ? x.buyerUnreaded : x.sellerUnreaded)
+        chats?.length && chats?.map(x => user?.id == x.buyer.id ? x.buyerUnreaded : x.sellerUnreaded)
             .reduce((acc, num) => acc + num, 0),
         [chats]);
 

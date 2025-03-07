@@ -382,7 +382,7 @@ const CreateAdvert: React.FC = () => {
                     </div>
 
                     <PrimaryButton
-                        title={id ? advert?.completed ? 'Завантажити повторно' : 'Зберегти' : 'Завантажити'}
+                        title={id ? advert?.completed || advert?.blocked ? 'Завантажити повторно' : 'Зберегти' : 'Завантажити'}
                         htmlType="submit"
                         isLoading={isAdvertCreation || isAdvertEdition}
                         className="w-[15vw]  ml-[8vw] h-[4.6vh] mt-[3vh]"
