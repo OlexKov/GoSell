@@ -1,9 +1,8 @@
 
 import { DownOutlined, LogoutOutlined, MailOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import './style.scss'
-import { Avatar, Badge, Dropdown, MenuProps } from 'antd'
+import { Badge, Dropdown, MenuProps } from 'antd'
 import { Link } from 'react-router-dom';
-import { Images } from '../../../../constants/images';
 import { useSelector } from 'react-redux';
 import { getUserDescr } from '../../../../utilities/common_funct';
 import UserAvatar from '../../../user_avatar';
@@ -21,7 +20,7 @@ export const AdminHeader: React.FC = () => {
     const signalRConnection = useSignalR();
     const user = useSelector(getUser)
     const refreshToken = useAppSelector(getRefreshToken)
-    const { data:adminMessages, refetch } = useGetAdminMessagesQuery();
+    const { data: adminMessages, refetch } = useGetAdminMessagesQuery();
     const items: MenuProps['items'] = [
         {
             icon: <UserOutlined />,
@@ -41,12 +40,12 @@ export const AdminHeader: React.FC = () => {
             label: 'Вийти',
             key: '3',
             onClick: async () => {
-                try{ await signalRConnection?.connection?.invoke("Disconnect");}
-                finally{ await logout(refreshToken || '').unwrap();}
+                try { await signalRConnection?.connection?.invoke("Disconnect"); }
+                finally { await logout(refreshToken || '').unwrap(); }
             }
         },
     ];
- const unreadedMessagesCount = useMemo(() =>adminMessages?.length && adminMessages.filter(x => !x.readed).length || 0, [adminMessages])
+    const unreadedMessagesCount = useMemo(() => adminMessages?.length && adminMessages.filter(x => !x.readed).length || 0, [adminMessages])
     useEffect(() => { refetch() }, [user])
     return (
         <div className='h-[60px] bg-header sticky top-0 items-center flex-shrink-0 flex justify-end z-50'  >

@@ -30,8 +30,7 @@ export const SideBar: React.FC = () => {
         </div>
         {!collapsed &&
           <>
-            <h3 className="font-bold text-xl py-4 pl-[30px]">Основне меню</h3>
-            <Divider type="horizontal" variant="solid" className="border-red-400 m-0 p-0 mb-7" />
+              <Divider type="horizontal" variant="solid" className="border-red-400 m-0 p-0 mb-7" />
           </>}
       </div>
       <AdminSideBarMenu collapsed={collapsed} />

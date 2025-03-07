@@ -86,7 +86,7 @@ const UsersPage: React.FC = () => {
                     </Tooltip>
                 </>
             }
-            {((currentUser?.id != user.id) && (data?.items.length && data?.items.length > 1)) &&
+            {((currentUser?.id != user.id)) &&
 
                 <Popconfirm
                     title="Видалення акаунту"
