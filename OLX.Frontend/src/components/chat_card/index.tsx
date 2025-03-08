@@ -31,14 +31,14 @@ const ChatCard = forwardRef<HTMLDivElement, ChatCardProps>(({ chat, className, s
                 </div>
             }
             <img className="h-[56%] ml-[0.5vw] object-cover aspect-square rounded-full" src={APP_ENV.IMAGES_100_URL + userData.userPhoto} />
-            <div className="flex flex-col h-full justify-between w-full">
+            <div className="flex flex-col h-full justify-between w-full overflow-hidden ">
                 <div className="flex  justify-between ">
                     <span className="font-montserrat text-adaptive-1_7_text font-medium">{userData.userName}</span>
                     <span className="font-montserrat text-adaptive-1_3-text mr-[1.5vw]">{getFormatDateTime(new Date(chat.createAt))}</span>
                 </div>
-                <div className="flex flex-col gap-[.5vh]">
-                    <span className="font-montserrat text-adaptive-1_7_text">{chat.advert.title}</span>
-                    <img className="w-[17.5%] object-cover aspect-square rounded-md " src={APP_ENV.IMAGES_100_URL + chat.advert.image} />
+                <div className="flex flex-col gap-[.5vh] ">
+                    <p className="font-montserrat text-adaptive-1_7_text  text-nowrap overflow-hidden text-ellipsis ">{chat.advert.title}</p>
+                    <img className="w-[17.5%] object-contain aspect-square rounded-md " src={APP_ENV.IMAGES_100_URL + chat.advert.image} />
                 </div>
 
             </div>

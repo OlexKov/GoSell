@@ -87,7 +87,7 @@ const ChatPage: React.FC = () => {
     }
 
     return (
-        <div className="w-[100%] gap-[5vh] mx-[8vw] flex flex-col">
+        <div className="w-[84vw] gap-[5vh] mx-auto overflow-hidden flex flex-col">
             <BackButton className="text-adaptive-1_9_text mt-[7.5vh] ml-[1vw] font-medium self-start" title="Назад" />
             <div className="flex gap-[1.25vw] ml-[1.3vw] w-[71.2vw] h-[58vh] mb-[8vh] mt-[3vh]">
                 <div className=" border rounded-lg border-[#9B7A5B]/50 w-[33.4%] flex flex-col">
@@ -104,14 +104,14 @@ const ChatPage: React.FC = () => {
                     </div>
                 </div>
 
-                <div className=" border rounded-lg p-[1vh]  border-[#9B7A5B]/50 flex-1 flex justify-between flex-col gap-[1vh]">
+                <div className=" border rounded-lg p-[1vh] overflow-hidden border-[#9B7A5B]/50 flex-1 flex justify-between flex-col gap-[1vh]">
                     {selectedChat
                         ? <>
-                            <div className="flex gap-[.5vw]">
-                                <img className="w-[8.5vh] object-cover aspect-square rounded-md " src={APP_ENV.IMAGES_100_URL + selectedChat?.advert.image} />
-                                <div className="flex justify-between w-full">
-                                    <div className="flex flex-col gap-[.7vh]">
-                                        <span className="text-adaptive-1_7_text font-unbounded font-medium">{selectedChat.advert.title}</span>
+                            <div className="flex gap-[.5vw] ">
+                                <img className="w-[8.5vh] object-contain aspect-square rounded-md " src={APP_ENV.IMAGES_100_URL + selectedChat?.advert.image} />
+                                <div className="flex justify-between  overflow-hidden">
+                                    <div className="flex flex-col gap-[.7vh] flex-1 overflow-hidden">
+                                        <p className="text-adaptive-1_7_text font-unbounded font-medium text-nowrap overflow-hidden text-ellipsis">{selectedChat.advert.title}</p>
                                         <span className="text-adaptive-1_7_text font-medium font-montserrat ">{formatPrice(selectedChat?.advert.price || 0)} грн</span>
                                     </div>
                                     <Popconfirm
