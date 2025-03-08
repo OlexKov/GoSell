@@ -110,7 +110,7 @@ const ChatPage: React.FC = () => {
                             <div className="flex gap-[.5vw] ">
                                 <img className="w-[8.5vh] object-contain aspect-square rounded-md " src={APP_ENV.IMAGES_100_URL + selectedChat?.advert.image} />
                                 <div className="flex justify-between  overflow-hidden">
-                                    <div className="flex flex-col gap-[.7vh] flex-1 overflow-hidden">
+                                    <div className="flex flex-col gap-[.7vh] flex-1 overflow-hidden mr-[1vw]">
                                         <p className="text-adaptive-1_7_text font-unbounded font-medium text-nowrap overflow-hidden text-ellipsis">{selectedChat.advert.title}</p>
                                         <span className="text-adaptive-1_7_text font-medium font-montserrat ">{formatPrice(selectedChat?.advert.price || 0)} грн</span>
                                     </div>

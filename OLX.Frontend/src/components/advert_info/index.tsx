@@ -12,12 +12,12 @@ const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
     const user = useAppSelector(state => state.user.user)
     const navigate = useNavigate();
     return (
-        <div className=" flex flex-1 flex-col justify-between gap-[8vh]">
-            <div className=" flex flex-col gap-[8vh]">
-                <div className="flex  justify-between relative">
-                    <div className="flex  flex-col gap-[3vh]">
+        <div className=" flex flex-1 flex-col justify-between gap-[8vh] overflow-hidden">
+            <div className=" flex flex-col gap-[8vh] ">
+                <div className="flex  justify-between relative ">
+                    <div className="flex  flex-col gap-[3vh] overflow-hidden">
                         <span className="font-unbounded text-adaptive-advert-page-price-text font-medium">{formatPrice(advert?.price || 0)} грн.</span>
-                        <span className="font-unbounded text-adaptive-card-price-text font-medium">{advert?.title}</span>
+                        <p className="font-unbounded text-adaptive-card-price-text font-medium overflow-hidden text-ellipsis">{advert?.title}</p>
                     </div>
                     {buttons
                         ? !advert?.completed && user?.id != advert?.userId
