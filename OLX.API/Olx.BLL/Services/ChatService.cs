@@ -61,7 +61,7 @@ namespace Olx.BLL.Services
             return chat;
         }
 
-        public async Task<IEnumerable<ChatMessageDto>> GetChatMessagesAsync(int chatId)
+        public async Task<IEnumerable<ChatMessageDto>> GetChatMessagesAsync(int chatId) //=> await mapper.ProjectTo<ChatMessageDto>(chatMessageRepository.GetQuery().Where(x => x.ChatId == chatId)).ToArrayAsync();
         {
             var chat = await chatRepository.GetItemBySpec(new ChatSpecs.GetById(chatId, ChatOpt.NoTracking | ChatOpt.Messages_Sender))
                 ?? throw new HttpException(Errors.InvalidChatId, HttpStatusCode.BadRequest);

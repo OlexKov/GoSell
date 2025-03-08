@@ -63,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
     const unreaded = useMemo(() =>
         chats?.length && chats?.map(x => user?.id == x.buyer.id ? x.buyerUnreaded : x.sellerUnreaded)
             .reduce((acc, num) => acc + num, 0),
-        [chats]);
+        [chats,user?.id]);
 
     const unreadedMessagesCount = useMemo(() => userUnreadedMessages?.length && userUnreadedMessages.filter(x => !x.readed).length || 0, [userUnreadedMessages])
     useEffect(() => { refetch() }, [user])
