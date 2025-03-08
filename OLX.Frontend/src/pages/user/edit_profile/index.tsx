@@ -3,6 +3,7 @@ import './style.scss'
 import { BackButton } from "../../../components/buttons/back_button";
 import UserEdit from "../../../components/user_settings/profile_edit";
 import PrivacySettings from "../../../components/privacy_settings";
+import PaymentHistory from "../../../components/payment_history";
 
 const UserProfileEdit: React.FC = () => {
 
@@ -16,9 +17,7 @@ const UserProfileEdit: React.FC = () => {
             key: "2",
             label: "Історія платежів",
             children:
-                <div className="w-full h-[500px] bg-slate-400">
-                    Історія платежів
-                </div>
+                <PaymentHistory />
         },
         {
             key: "3",
@@ -28,7 +27,7 @@ const UserProfileEdit: React.FC = () => {
         },
     ];
     return (
-        <div className="w-[100%] gap-[5vh] mx-[8vw]   flex flex-col">
+        <div className="w-[100%] gap-[5vh] mx-[8vw] flex flex-col">
             <BackButton className="text-adaptive-1_9_text my-[7.5vh] font-medium self-start" title="Назад" />
             <h1 className="font-unbounded text-adaptive-3_35-text mt-[1.8vh]">Мої налаштування</h1>
             <Tabs

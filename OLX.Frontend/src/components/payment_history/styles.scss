@@ -1,0 +1,14 @@
+
+
+ .custom-table{
+    .ant-pagination-item-active {
+        border-color: #000 !important; /* Чорний бордер */
+      }
+      
+      .ant-pagination-item-active a {
+        color: #000 !important; /* Чорний текст */
+      }
+ }
+ .table-header {
+    font-weight: normal !important;
+  }
