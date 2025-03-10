@@ -18,12 +18,12 @@ namespace Olx.BLL.Models.NewPost
 
              
 
-        public NewPostRequestModel(string apiKey,string modelName,string calledMethod,int page = 1,int limit = 0,string areaRef = "",string regionRef = "")
+        public NewPostRequestModel(string apiKey,string modelName,string calledMethod,int page = 1,int limit = 0,string areaRef = "",string regionRef = "", string settlementRef = "")
         {
             ApiKey = apiKey;
             ModelName = modelName;
             CalledMethod = calledMethod;
-            MethodProperties = new NewPostMethodProperties() { Limit = limit,Page = page,AreaRef = areaRef, RegionRef = regionRef};
+            MethodProperties = new NewPostMethodProperties() { Limit = limit,Page = page,AreaRef = areaRef, RegionRef = regionRef, SettlementRef = settlementRef };
         }
     }
 }

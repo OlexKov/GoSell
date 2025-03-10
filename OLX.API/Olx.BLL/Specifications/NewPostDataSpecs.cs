@@ -22,14 +22,6 @@ namespace Olx.BLL.Specifications
             }
         }
 
-        public class GetWarehouses : Specification<Warehous>
-        {
-            public GetWarehouses(bool tracking = false)
-            {
-                Query.AsTracking(tracking);
-            }
-        }
-
         public class GetSettlements : Specification<Settlement>
         {
             public GetSettlements(bool tracking = false)
@@ -47,14 +39,7 @@ namespace Olx.BLL.Specifications
             }
         }
 
-        public class GetWarehousesBySettlement : Specification<Warehous>
-        {
-            public GetWarehousesBySettlement(string settlementRef)
-            {
-                Query.AsNoTracking()
-                    .Where(x => x.SettlementRef == settlementRef);
-            }
-        }
+       
         public class GetSettlementsByRegion : Specification<Settlement>
         {
             public GetSettlementsByRegion(string regionRef)

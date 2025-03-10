@@ -14,7 +14,6 @@ namespace Olx.BLL.Mapper
                 .ForMember(x => x.Regions, opt => opt.MapFrom(z => z.Regions.Select(y => y.Ref)));
             CreateMap<Settlement, SettlementDto>()
                 .ForMember(x => x.Area, opt => opt.MapFrom(x => x.SettlementRegion != null ? x.SettlementRegion.AreaRef : null));
-            CreateMap<Warehous, WarehousDto>();
             CreateMap<Region, RegionDto>();
         }
     }

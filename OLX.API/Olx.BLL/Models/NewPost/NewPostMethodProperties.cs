@@ -19,5 +19,7 @@ namespace Olx.BLL.Models.NewPost
         public string AreaRef { get; init; } = string.Empty;
 
         public string RegionRef { get; init; } = string.Empty;
+
+        public string SettlementRef { get; init; } = string.Empty;
     }
 }

@@ -35,19 +35,10 @@ namespace Olx.BLL.Services
             var advert = await advertRepository.GetItemBySpec( new AdvertSpecs.GetById(advertId))
                 ?? throw new HttpException(Errors.InvalidAdvertId,HttpStatusCode.BadRequest);
             var chat = await chatRepository.GetItemBySpec(new ChatSpecs.FindExisting(advertId, user.Id))
-                ?? new Chat()
-                {
-                    Advert = advert,
-                    Buyer = user,
-                    SellerId = advert.UserId
-                };
+                ?? new Chat() { Advert = advert, Buyer = user, SellerId = advert.UserId };
             if (message is not null)
             {
-                chat.Messages.Add(new()
-                {
-                    Content = message,
-                    Sender = user
-                });
+                chat.Messages.Add(new() { Content = message, Sender = user });
             }
             chat.IsDeletedForSeller = false;
             chat.IsDeletedForBuyer = false;
@@ -62,12 +53,7 @@ namespace Olx.BLL.Services
         }
 
         public async Task<IEnumerable<ChatMessageDto>> GetChatMessagesAsync(int chatId) => await mapper.ProjectTo<ChatMessageDto>(chatMessageRepository.GetQuery().Where(x => x.ChatId == chatId)).ToArrayAsync();
-        //{
-        //    var chat = await chatRepository.GetItemBySpec(new ChatSpecs.GetById(chatId, ChatOpt.NoTracking | ChatOpt.Messages_Sender))
-        //        ?? throw new HttpException(Errors.InvalidChatId, HttpStatusCode.BadRequest);
-        //    return mapper.Map<IEnumerable<ChatMessageDto>>(chat.Messages);
-        //}
-
+       
         public async Task<IEnumerable<ChatDto>> GetUserChatsAsync(int? advertId)
         {
             var user =  await userManager.UpdateUserActivityAsync(httpContext);
@@ -166,8 +152,6 @@ namespace Olx.BLL.Services
                         ChatId = chat.Id,
                     });
             }
-            
-
         }
     }
 }

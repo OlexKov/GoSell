@@ -6,7 +6,6 @@ namespace Olx.BLL.Interfaces
     public interface INewPostService : IDisposable
     {
         Task<IEnumerable<Area>> GetAreasDataAsync() ;
-        Task<IEnumerable<Warehous>> GetWarehousesDataAsync(IEnumerable<string> areaRefs);
         Task<IEnumerable<Settlement>> GetSettlementsDataAsync(IEnumerable<Region> regions);
         Task<IEnumerable<Region>> GetRegionsDataAsync(IEnumerable<string> areaRefs);
         Task<IEnumerable<AreaDto>> GetAreasAsync();
