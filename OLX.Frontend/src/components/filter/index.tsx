@@ -27,7 +27,7 @@ const Filter: React.FC<FilterProps> = ({ filter, onChange, onReset }) => {
             initialValue={initFilter}
         >
             <Checkbox.Group
-                className="flex flex-col gap-[.3vh]"
+                className="flex flex-col flex-nowrap gap-[.3vh] max-h-[40vh] overflow-auto custom-scrollbar"
                 onChange={onChange}>
                 {...checkBoxes}
                 <Button
