@@ -4,7 +4,7 @@ import { PageHeader } from '../../../components/page_header';
 import { Popconfirm, Table, TableProps, Tooltip } from 'antd';
 import { IBackupFileInfo } from '../../../models/backup';
 import { formatBytes, getDateTime } from '../../../utilities/common_funct';
-import { useAddBackupFileMutation, useCreateBackupFileMutation, useDeleteBackupFileMutation, useGetBackupInfoQuery, useLazyGetBackupFileQuery } from '../../../redux/api/backupAuthApi';
+import { useAddBackupFileMutation, useCreateBackupFileMutation, useDeleteBackupFileMutation, useGetBackupInfoQuery, useLazyGetBackupFileQuery, useRestoreDatabaseMutation } from '../../../redux/api/backupAuthApi';
 import { IconButton } from '@mui/material';
 import PageHeaderButton from '../../../components/buttons/page_header_button';
 import { CachedOutlined } from '@mui/icons-material';
@@ -41,7 +41,8 @@ const BackupDataPage: React.FC = () => {
     const [getBackupFile] = useLazyGetBackupFileQuery();
     const [deleteBackupFile] = useDeleteBackupFileMutation();
     const [createBackupFile] = useCreateBackupFileMutation();
-    const [addBackupFile] = useAddBackupFileMutation()
+    const [addBackupFile] = useAddBackupFileMutation();
+    const [restoreDatabase] = useRestoreDatabaseMutation();
 
     const columns: TableProps<IBackupFileInfo>['columns'] = [
         {
@@ -156,8 +157,11 @@ const BackupDataPage: React.FC = () => {
         })
     }
 
-    const onBackupRestore = (backupName: string) => {
-
+    const onBackupRestore = async(backupName: string) => {
+        const result = await restoreDatabase(backupName);
+        if (!result.error) {
+            toast(`База даних успішно оновлена !!!`, { type: 'info' })
+        }
     }
 
     const onFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {

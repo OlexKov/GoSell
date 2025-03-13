@@ -34,6 +34,13 @@ export const backupAuthApi = createApi({
             invalidatesTags: ["BackupFiles"]
         }),
 
+        restoreDatabase: builder.mutation<void, string>({
+            query: (backupName) => ({
+                url: `restore?backupName=${backupName}`,
+                method: "POST",
+            })
+        }),
+
 
         getBackupInfo: builder.query<IBackupFileInfo[], void>({
             query: () => ({
@@ -60,5 +67,6 @@ export const {
     useLazyGetBackupFileQuery,
     useDeleteBackupFileMutation,
     useCreateBackupFileMutation,
-    useAddBackupFileMutation
+    useAddBackupFileMutation,
+    useRestoreDatabaseMutation
 } = backupAuthApi;
