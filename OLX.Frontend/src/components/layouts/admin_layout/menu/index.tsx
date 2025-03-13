@@ -1,7 +1,9 @@
 import { Menu } from "antd";
 import {
+    ContainerOutlined,
     FileDoneOutlined,
     FilterOutlined,
+    HddOutlined,
     LockOutlined,
     ProfileOutlined,
     RobotOutlined,
@@ -100,6 +102,19 @@ const items: MenuItem[] = [
                 key: "/admin/admins/new",
                 icon: <UserAddOutlined style={{ fontSize: 16 }} />,
                 label: <span className='text-sm font-medium'>Додати</span>,
+            }
+        ]
+    }
+    ,
+    {
+        key: "backup_main",
+        icon: <HddOutlined style={{ fontSize: 20 }} />,
+        label: <span className='text-base font-medium'>База даних</span>,
+        children: [
+            {
+                key: "/admin/backup",
+                icon: <ContainerOutlined  style={{ fontSize: 16 }} />,
+                label: <span className='text-sm font-medium'>Копії та відновлення</span>,
             }
         ]
     }

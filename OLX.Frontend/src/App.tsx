@@ -5,6 +5,8 @@ import DefaultLayout from './components/layouts/default_layout/index';
 import ProtectedRoutes from './components/protected_routes';
 import GlobalFallback from './components/global_fallback';
 
+
+const BackupDataPage = React.lazy(() => import( './pages/admin/backup'));
 const SuccessPayment = React.lazy(() => import('./pages/user/success_payment'));
 const ChatPage = React.lazy(() => import('./pages/user/chat/chat_page'));
 const PaymentPage = React.lazy(() => import('./pages/user/payment'));
@@ -96,6 +98,7 @@ function App() {
           </Suspense>}>
           <Route index element={<UsersPage />} />
           <Route path='settings' element={<ReCaptcha><AdminCreate /></ReCaptcha>} />
+          <Route path='backup' element={<BackupDataPage />} />
           <Route path="adverts">
             <Route index element={<AdminAdvertTable />} />
             <Route path='approve' element={<AdminAdvertTable />} />

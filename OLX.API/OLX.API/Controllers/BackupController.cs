@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Olx.BLL.Helpers;
 using Olx.BLL.Interfaces;
 using Olx.BLL.Models;
 
@@ -7,6 +9,7 @@ namespace OLX.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = Roles.Admin)]
     public class BackupController(IBackupDataService backupDataService) : ControllerBase
     {
         [HttpGet("info")]
@@ -20,7 +23,11 @@ namespace OLX.API.Controllers
         }
 
         [HttpPost("backup")]
-        public async Task<IActionResult> CreateBackup() => Ok(await backupDataService.BackupDatabase());
+        public async Task<IActionResult> CreateBackup()
+        {
+            await backupDataService.BackupDatabase();
+            return Ok();
+        } 
 
         [HttpPost("restore")]
         public async Task<IActionResult> RestoreDataBase([FromQuery] string backupName) 
