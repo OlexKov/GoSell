@@ -16,6 +16,7 @@ import { advertApi } from "./api/advertApi";
 import { advertAuthApi } from "./api/advertAuthApi";
 import { newPostApi } from "./api/newPostApi";
 import { chatAuthApi } from "./api/chatAuthApi";
+import { backupAuthApi } from "./api/backupAuthApi";
 
 
 export const store = configureStore({
@@ -34,6 +35,7 @@ export const store = configureStore({
         [advertAuthApi.reducerPath]: advertAuthApi.reducer,
         [newPostApi.reducerPath]: newPostApi.reducer,
         [chatAuthApi.reducerPath]: chatAuthApi.reducer,
+        [backupAuthApi.reducerPath]: backupAuthApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(
@@ -49,6 +51,7 @@ export const store = configureStore({
             advertAuthApi.middleware,
             newPostApi.middleware,
             chatAuthApi.middleware,
+            backupAuthApi.middleware,
             errorMiddleware)
 })
 setupListeners(store.dispatch);

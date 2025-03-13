@@ -24,6 +24,7 @@
     "antd-img-crop": "^4.24.0",
     "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.13",
+    "jszip": "^3.10.1",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

@@ -79,7 +79,7 @@ const UserEdit: React.FC = () => {
                 </Form.Item>
                 <hr className="mt-[9vh]" />
                 <div className="flex flex-col gap-[3vh] my-[6vh]">
-                    <div className="flex gap-[2vw] ml-[1vw]">
+                    <div className="flex gap-[2vw] ml-[1vw] w-full">
                         <Form.Item
                             name="lastName"
                             label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Прізвище</div>}
@@ -112,10 +112,10 @@ const UserEdit: React.FC = () => {
                             placeholder="Електронна пошта" />
 
                     </Form.Item>
-                    <div className="flex gap-[3vw] items-center ml-[1vw]">
+                    <div className="flex gap-[3vw] items-center ml-[1vw] w-full">
                         <Form.Item
                             name="phoneNumber"
-                            className="w-[75%]"
+                            className="w-full"
                             label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Номер телефону</div>}
                             rules={[
                                 {
@@ -133,18 +133,18 @@ const UserEdit: React.FC = () => {
                             />
 
                         </Form.Item>
-                        <PrimaryButton
+                        {/* <PrimaryButton
                             title={'Підтвердити номер'}
                             isLoading={false}
                             className="w-[25%] h-[5vh] mt-[1vh]"
                             fontColor="white"
                             fontSize="clamp(14px,1.9vh,36px)"
                             bgColor="#9B7A5B"
-                            brColor="#9B7A5B" />
+                            brColor="#9B7A5B" /> */}
                     </div>
                     <Form.Item
                         name="settlementRef"
-                        className="ml-[1vw]"
+                        className="ml-[1vw] w-full"
                         label={<div className="font-unbounded font-medium text-adaptive-1_7_text mb-[0.5vh]">Місто/Населений пункт</div>}
                     >
                         <LocationSelector
