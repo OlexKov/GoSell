@@ -16,6 +16,7 @@ namespace OLX.API.Extensions
     {
         public static async Task SeedDataAsync(this WebApplication app)
         {
+
            
             //Roles seeder
             using var scope = app.Services.CreateScope();
@@ -29,6 +30,7 @@ namespace OLX.API.Extensions
                        await roleManager.CreateAsync(new IdentityRole<int>{ Name = role });
                 }
             }
+
 
             //NewPost seeder
             using (var newPostService = scope.ServiceProvider.GetRequiredService<INewPostService>())
@@ -205,6 +207,9 @@ namespace OLX.API.Extensions
                 else Console.WriteLine("File \"Adverts.json\" not found");
             }
         }
+
+       
+       
 
         private async static Task<IEnumerable<Category>> GetCategories(
             IEnumerable<SeederCategoryModel> models,

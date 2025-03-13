@@ -10,10 +10,12 @@ namespace Olx.DAL.Data.EntityConfigs
         {
             builder.HasMany(x => x.Messages)
                 .WithOne(x => x.Chat)
-                .HasForeignKey(x=>x.ChatId);
+                .HasForeignKey(x=>x.ChatId)
+                .OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(x => x.Advert)
                .WithMany(x => x.Chats)
-               .HasForeignKey(x => x.AdvertId);
+               .HasForeignKey(x => x.AdvertId)
+               .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

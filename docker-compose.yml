@@ -33,6 +33,7 @@ services:
     depends_on:
       - postgresServerDb
     volumes:
+     - /volumes/olx-asp/backup:/app/backup 
      - /volumes/olx-asp/images:/app/uploading  # Use the volume name appvol here
     deploy:
       restart_policy:

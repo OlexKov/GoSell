@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Olx.DAL.Data;
@@ -11,9 +12,11 @@ using Olx.DAL.Data;
 namespace Olx.DAL.Migrations
 {
     [DbContext(typeof(OlxDbContext))]
-    partial class OlxDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250313082549_Add_cascade_delete_for_UserFavorites")]
+    partial class Add_cascade_delete_for_UserFavorites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace Olx.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("AdvertFilterValue", b =>
+                {
+                    b.Property<int>("AdvertsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FilterValuesId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("AdvertsId", "FilterValuesId");
+
+                    b.HasIndex("FilterValuesId");
+
+                    b.ToTable("tbl_AdvertFilterValues", (string)null);
+                });
 
             modelBuilder.Entity("CategoryFilter", b =>
                 {
@@ -687,21 +705,6 @@ namespace Olx.DAL.Migrations
                     b.ToTable("tbl_RefreshTokens");
                 });
 
-            modelBuilder.Entity("tbl_AdvertFilterValue", b =>
-                {
-                    b.Property<int>("AdvertId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("FilterValueId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("AdvertId", "FilterValueId");
-
-                    b.HasIndex("FilterValueId");
-
-                    b.ToTable("tbl_AdvertFilterValue");
-                });
-
             modelBuilder.Entity("tbl_UserFavorites", b =>
                 {
                     b.Property<int>("AdvertId")
@@ -715,6 +718,21 @@ namespace Olx.DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("tbl_UserFavorites");
+                });
+
+            modelBuilder.Entity("AdvertFilterValue", b =>
+                {
+                    b.HasOne("Olx.BLL.Entities.Advert", null)
+                        .WithMany()
+                        .HasForeignKey("AdvertsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Olx.BLL.Entities.FilterEntities.FilterValue", null)
+                        .WithMany()
+                        .HasForeignKey("FilterValuesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CategoryFilter", b =>
@@ -944,21 +962,6 @@ namespace Olx.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("OlxUser");
-                });
-
-            modelBuilder.Entity("tbl_AdvertFilterValue", b =>
-                {
-                    b.HasOne("Olx.BLL.Entities.Advert", null)
-                        .WithMany()
-                        .HasForeignKey("AdvertId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Olx.BLL.Entities.FilterEntities.FilterValue", null)
-                        .WithMany()
-                        .HasForeignKey("FilterValueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("tbl_UserFavorites", b =>
