@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Olx.BLL.Interfaces;
+using Olx.BLL.Models;
 
 
 namespace OLX.API.Controllers
@@ -29,9 +30,9 @@ namespace OLX.API.Controllers
         }
 
         [HttpPut("add")]
-        public async Task<IActionResult> AddBackupFile(IFormFile backupFile)
+        public async Task<IActionResult> AddBackupFile([FromForm] AddBackupRequestModel backupRequest)
         {
-            await backupDataService.AddBackupFile(backupFile);
+            await backupDataService.AddBackupFile(backupRequest.BackupFile);
             return Ok();
         }
 
