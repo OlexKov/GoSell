@@ -33,6 +33,7 @@ namespace Olx.BLL.Exstensions
             services.AddScoped<IAdminMessageService, AdminMessageService>();
             services.AddScoped<IAdvertImageService, AdvertImageService>();
             services.AddScoped<INewPostService, NewPostService>();
+            services.AddScoped<IBackupDataService, BackupDataService>();
             services.AddHostedService<TokenCleanupService>();
             services.AddHostedService<ImageCeanupService>();
             services.AddHostedService<AdminMesssageCleanupService>();
