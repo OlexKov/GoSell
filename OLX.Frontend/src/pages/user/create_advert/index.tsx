@@ -225,14 +225,14 @@ const CreateAdvert: React.FC = () => {
                                     message: 'Введіть щонайменше 40 символів'
                                 },
                                 {
-                                    max: 600,
+                                    max: 4000,
                                     message: 'Максимум 600 символів'
                                 },
                             ]}
                         >
                             <TextArea
                                 showCount
-                                maxLength={600}
+                                maxLength={4000}
                                 placeholder="Опис"
                                 className="h-[21vh] w-[47.3vw] font-montserrat text-adaptive-1_7_text resize-none border-[#9B7A5B]" />
 

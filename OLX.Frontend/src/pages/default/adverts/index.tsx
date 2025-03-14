@@ -24,8 +24,8 @@ const updatedPageRequest = (searchParams: URLSearchParams): IAdvertSearchPageDat
     completed: false,
     size: Number(searchParams.get("size")) || advertPageSize,
     page: Number(searchParams.get("page")) || 1,
-    sortKey: searchParams.get("sortKey") || '',
-    isDescending: searchParams.get("isDescending") === "true",
+    sortKey: searchParams.get("sortKey") || 'date',
+    isDescending: searchParams.has("isDescending") ? searchParams.get("isDescending") === "true" : true,
     categoryId: searchParams.has("categoryId") ? Number(searchParams.get("categoryId")) : undefined,
     filters: searchParams.has("filters") ? (JSON.parse(searchParams.get("filters") || '') as number[][]) : [],
     isContractPrice: searchParams.has("isContractPrice") ? searchParams.get("isContractPrice") === "true" : undefined,
@@ -94,7 +94,7 @@ const AdvertsPage: React.FC = () => {
     return (
         <div className="w-[100%] gap-[8vh]  flex flex-col my-[7.5vh] ">
             <div className="mx-[8vw] gap-[8vh] h-full items-start flex  flex-col">
-                <CategoryNavigation  categoryId={pageRequest.categoryId} />
+                <CategoryNavigation categoryId={pageRequest.categoryId} />
 
                 <div className="w-[100%] h-full flex gap-[1vw] " >
                     <div className="w-[17%] mt-[16vh] flex flex-col gap-[3vh] advert-collapse">

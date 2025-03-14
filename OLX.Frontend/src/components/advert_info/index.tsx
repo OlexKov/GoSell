@@ -6,13 +6,14 @@ import UserRating from "../user_rating"
 import { IAdvertInfoProps } from "./props"
 import { useAppSelector } from "../../redux"
 import AdvertButtonMenu from "../buttons/button_menu"
+import '../category_tree/style.scss'
 
 
 const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
     const user = useAppSelector(state => state.user.user)
     const navigate = useNavigate();
     return (
-        <div className=" flex flex-1 flex-col justify-between gap-[8vh] overflow-hidden">
+        <div className=" flex flex-1 flex-col justify-between gap-[8vh] ">
             <div className=" flex flex-col gap-[8vh] ">
                 <div className="flex  justify-between relative ">
                     <div className="flex  flex-col gap-[3vh] overflow-hidden">
@@ -33,9 +34,12 @@ const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
                         : <></>
                     }
                 </div>
-                <div className="flex flex-col w-[28vw] gap-[1vh]">
+                <div className="flex flex-col flex-1  w-[28vw] gap-[1vh]">
                     <span className="font-unbounded text-adaptive-card-price-text font-medium">Опис</span>
-                    <span className="font-montserrat text-adaptive-card-price-text ">{advert?.description}</span>
+                    <div className="w-full max-h-[23vh]  overflow-y-auto custom-scrollbar">
+                       <p className="font-montserrat text-adaptive-card-price-text text-balance">{advert?.description}</p>
+                    </div>
+                    
                 </div>
             </div>
             <div className=" flex flex-col gap-[6vh]">
