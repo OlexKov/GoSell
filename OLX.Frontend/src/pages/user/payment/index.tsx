@@ -8,17 +8,25 @@ import PrimaryButton from "../../../components/buttons/primary_button";
 import '../../../components/price_filter/style.scss'
 import './styles.scss'
 import MaskedInput from "../../../components/inputs/masked_input";
+import { useCompleteUserAdvertMutation } from "../../../redux/api/advertAuthApi";
 
 const PaymentPage = () => {
     const { id } = useParams();
     const [searchParams] = useSearchParams('');
     const { data: advert } = useGetAdvertByIdQuery(Number(id), { skip: !id });
     const [paymentMethod, setPaymentMethod] = useState("bank-card");
+    const [setAdvertComplete] = useCompleteUserAdvertMutation();
     const navigate = useNavigate();
 
-    const onFinish = (data: any) => {
+    const onFinish = async (data: any) => {
         console.log({ ...data, ...Object.fromEntries(searchParams.entries()) });
-        navigate(`/user/advert/paymentsuccess`);
+        const advertId = Number(id);
+        if(advertId && advertId !== 0){
+            const result = await setAdvertComplete(advertId)
+            if(!result.error){
+                navigate(`/user/advert/paymentsuccess`);
+            }
+        }
     };
 
     return (
