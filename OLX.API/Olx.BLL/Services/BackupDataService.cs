@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Olx.BLL.Exceptions;
 using Olx.BLL.Interfaces;
@@ -166,12 +167,14 @@ namespace Olx.BLL.Services
              await RestoreDatabaseAsync(backupName);
         }
 
-        public async Task<byte[]> GetBackupFile(string fileName)
+        public  FileStream GetBackupFileStream(string fileName)
         {
             var filePath = Path.Combine(_backupDir, $"{fileName}.back");
             if (File.Exists(filePath))
             {
-              return await File.ReadAllBytesAsync(filePath);
+                var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read) 
+                    ?? throw new HttpException("Error open backup file", HttpStatusCode.InternalServerError);
+                return stream;
             }
             else
             {

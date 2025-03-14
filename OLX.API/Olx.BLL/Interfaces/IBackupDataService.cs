@@ -9,7 +9,7 @@ namespace Olx.BLL.Interfaces
         Task<string> BackupDatabase();
         Task RestoreDatabase(string backupName);
         IEnumerable<BackupFileInfo> GetBackupFileInfos();
-        Task<byte[]> GetBackupFile(string fileName);
+        FileStream GetBackupFileStream(string fileName);
         Task AddBackupFile(IFormFile file);
         void RemoveBackupFile(string fileName);
     }

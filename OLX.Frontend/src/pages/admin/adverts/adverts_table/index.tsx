@@ -270,9 +270,10 @@ const AdminAdvertTable: React.FC = () => {
 
 
     const onFiltersChange = (filterValues: AdminFilterResultModel) => {
+        console.log(filterValues)
         setSearchParams(getQueryString({
             ...pageRequest,
-            categoryId: filterValues.categoryId,
+            categoryId: filterValues.categoryId === 0 ? undefined : filterValues.categoryId,
             filters: filterValues.filters,
             priceTo: filterValues.priceTo,
             priceFrom: filterValues.priceFrom

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Olx.BLL.Helpers.Options;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http.Features;
 
 
 namespace OLX.API.Extensions
@@ -149,6 +150,22 @@ namespace OLX.API.Extensions
                 .AddSupportedUICultures(supportedCultures);
 
             app.UseRequestLocalization(localizationOptions);
+
+        }
+
+        public static void SetMaxRequestBodySize(this WebApplication app)
+        {
+            app.UseWhen(context =>
+             context.Request.Path.StartsWithSegments("/api/Backup/upload") ||
+             context.Request.Path.StartsWithSegments("/api/Backup/add"),
+             appBuilder =>
+             {
+                 appBuilder.Use((context, next) =>
+                 {
+                     context.Features.Get<IHttpMaxRequestBodySizeFeature>().MaxRequestBodySize = 200 * 1024 * 1024;
+                     return next();
+                 });
+             });
 
         }
     }

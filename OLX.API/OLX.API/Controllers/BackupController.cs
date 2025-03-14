@@ -16,10 +16,10 @@ namespace OLX.API.Controllers
         public IActionResult GetBackupInfos() => Ok( backupDataService.GetBackupFileInfos());
 
         [HttpGet("get")]
-        public async Task<IActionResult> GetBackupFile([FromQuery]  string backupName) 
+        public IActionResult GetBackupFile([FromQuery]  string backupName) 
         {
-            var file = await backupDataService.GetBackupFile(backupName);
-            return File(file, "application/octet-stream", $"{backupName}.back");
+            var fileStream = backupDataService.GetBackupFileStream(backupName);
+            return File(fileStream, "application/octet-stream", $"{backupName}.back");
         }
 
         [HttpPost("backup")]

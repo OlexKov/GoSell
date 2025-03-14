@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.Features;
 using Olx.BLL.Exstensions;
 using Olx.BLL.Hubs;
 using Olx.DAL.Exstension;
@@ -33,6 +34,7 @@ app.UseSwaggerUI();
 //    HttpOnly = HttpOnlyPolicy.Always,
 //    Secure = CookieSecurePolicy.Always,
 //});
+app.SetMaxRequestBodySize();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapHub<MessageHub>("/hub");

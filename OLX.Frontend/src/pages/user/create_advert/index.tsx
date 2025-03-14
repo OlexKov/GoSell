@@ -58,7 +58,7 @@ const CreateAdvert: React.FC = () => {
             toast(`Оголошення успішно ${id ? 'оновлено' : 'опубліковане'}`, {
                 type: "success"
             })
-            navigate('/user')
+            navigate(-1)
         }
     }
 
