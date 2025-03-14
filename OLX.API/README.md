@@ -1,4 +1,73 @@
 # olx-asp
+GoSell API  
+
+Project Description  
+This project is the backend part of GoSell API, implemented using a multi-tier architecture divided into API, business logic (BLL), and data access (DAL) layers.  
+
+Project Structure  
+
+OLX.API (Presentation Layer)  
+This is the API layer responsible for handling HTTP requests.  
+- Controllers – Controllers for processing requests.  
+- Extensions – Extensions for application configuration.  
+- Helpers – Utility classes.  
+- Middlewares – Middleware for request handling.  
+- Models – Request and response models.  
+- Uploading – File uploading.  
+- Appsettings.json – Configuration file.  
+
+OLX.BLL (Business Logic Layer)  
+This layer contains the core business logic of the application.  
+- DTOs – Data Transfer Objects.  
+- Entities – Database entities.  
+- Exceptions – Exception handling.  
+- Extensions – Extensions for business logic configuration.  
+- Helpers – Utility classes.  
+- Hubs – SignalR hubs.  
+- Interfaces – Service interfaces.  
+- Mapper – Object mapping.  
+- Models – Business models.  
+- Pagination – Pagination support.  
+- Resources – Localization resources.  
+- Services – Service implementations.  
+- Specifications – Query filtering and specification patterns.  
+
+OLX.DAL (Data Access Layer)  
+This layer is responsible for database interactions.  
+- Data – Database context (Entity Framework Core).  
+- Migrations – Database migrations.  
+- Repositories – Repository layer for database operations.  
+
+Technologies Used  
+
+- .NET 6/7 – Core framework.  
+- ASP.NET Core Web API – API development.  
+- Entity Framework Core – ORM for database management.  
+- MediatR – CQRS pattern.  
+- AutoMapper – Object mapping.  
+- FluentValidation – Model validation.  
+- Swagger (NSwag) – API documentation.  
+- SignalR – Real-time WebSocket communication.  
+- Serilog – Logging.  
+- Docker – Containerization.  
+- PostgreSQL / SQL Server – Database solutions.  
+
+Setup Instructions 
+1. Clone the repository:  
+   git clone https://github.com/OlexKov/OLX_Dyplom
+2. Navigate to the project folder and install dependencies.  
+3. Configure the database connection in `appsettings.json`.  
+4. Start the application:  
+   npm run dev
+   
+API Documentation  
+To view the API documentation, open `/swagger` after starting the application.  
+
+Authors
+Kovalchuk Oleksandr  
+Gumeniuk Diana 
+Kravchuk Mykhailo  
+Prymak Andriy  
 
 Create docker hub repository - publish
 ```
