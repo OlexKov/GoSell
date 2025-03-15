@@ -196,6 +196,7 @@ namespace Olx.BLL.Services
 
         public IEnumerable<BackupFileInfo> GetBackupFileInfos()
         {
+            Directory.CreateDirectory(_backupDir);
             var files = Directory.GetFiles(_backupDir);
             return files.Select(f => new BackupFileInfo() 
             {
