@@ -189,9 +189,9 @@ const UserTable: React.FC<UserTableProps> = ({ selected, isLoading, onRowSelecti
             dataIndex: 'email',
             key: 'email',
             ellipsis: true,
-            width: 280,
+            width: 320,
             render: (value: string, user: IOlxUser) =>
-                <div className="flex gap-5">
+                <div className="flex justify-between ">
                     <span >{value}</span>
                     {user.emailConfirmed && <CheckOutlined className=" text-green-700" />}
                 </div>,
