@@ -189,7 +189,7 @@ const UserTable: React.FC<UserTableProps> = ({ selected, isLoading, onRowSelecti
             dataIndex: 'email',
             key: 'email',
             ellipsis: true,
-            width: 250,
+            width: 280,
             render: (value: string, user: IOlxUser) =>
                 <div className="flex gap-5">
                     <span >{value}</span>
