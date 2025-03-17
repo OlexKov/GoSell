@@ -1,5 +1,5 @@
 
-import { CloudServerOutlined, DeleteOutlined, DeliveredProcedureOutlined, DownloadOutlined, HddOutlined, UploadOutlined } from '@ant-design/icons';
+import { CloudServerOutlined, DeleteOutlined, DeliveredProcedureOutlined, DownloadOutlined, HddOutlined, LoadingOutlined, UploadOutlined } from '@ant-design/icons';
 import { PageHeader } from '../../../components/page_header';
 import { Popconfirm, Table, TableProps, Tooltip } from 'antd';
 import { IBackupFileInfo } from '../../../models/backup';
@@ -38,10 +38,10 @@ const checkBackupFile = async (file?: File): Promise<boolean> => {
 const BackupDataPage: React.FC = () => {
     const upload = useRef<HTMLInputElement>(null);
     const { data: backupInfo, refetch } = useGetBackupInfoQuery();
-    const [getBackupFile] = useLazyGetBackupFileQuery();
+    const [getBackupFile, { isLoading: isFileLoading }] = useLazyGetBackupFileQuery();
     const [deleteBackupFile] = useDeleteBackupFileMutation();
-    const [createBackupFile] = useCreateBackupFileMutation();
-    const [addBackupFile] = useAddBackupFileMutation();
+    const [createBackupFile, { isLoading: isFileCreating }] = useCreateBackupFileMutation();
+    const [addBackupFile, { isLoading: isFileUploading }] = useAddBackupFileMutation();
     const [restoreDatabase] = useRestoreDatabaseMutation();
 
     const columns: TableProps<IBackupFileInfo>['columns'] = [
@@ -89,9 +89,10 @@ const BackupDataPage: React.FC = () => {
                             onConfirm={() => onBackupDownload(fileInfo.name)}
                             okText="Завантажити"
                             cancelText="Відмінити"
+                            disabled = {isFileLoading}
                         >
                             <IconButton color="success" >
-                                <DownloadOutlined />
+                                {!isFileLoading ? <DownloadOutlined /> : <LoadingOutlined />}
                             </IconButton>
                         </Popconfirm>
                     </Tooltip>
@@ -139,6 +140,7 @@ const BackupDataPage: React.FC = () => {
 
     const onBackupUpload = () => {
         if (upload.current) {
+            upload.current.value = "";
             upload.current.click();
         }
     }
@@ -157,7 +159,7 @@ const BackupDataPage: React.FC = () => {
         })
     }
 
-    const onBackupRestore = async(backupName: string) => {
+    const onBackupRestore = async (backupName: string) => {
         const result = await restoreDatabase(backupName);
         if (!result.error) {
             toast(`База даних успішно оновлена !!!`, { type: 'info' })
@@ -198,12 +200,12 @@ const BackupDataPage: React.FC = () => {
                         tooltipColor="gray" />
                     ,
                     <PageHeaderButton
-                        key='clear_filter'
-                        onButtonClick={() => onBackupUpload()}
+                        key='upload'
+                        onButtonClick={() =>!isFileUploading && onBackupUpload()}
                         className="w-[35px] h-[35px] bg-green-500"
-                        buttonIcon={<UploadOutlined className="text-lg" />}
+                        buttonIcon={isFileUploading?<LoadingOutlined  className="text-lg"/>:<UploadOutlined className="text-lg" />}
                         tooltipMessage="Завантажити резервну копію"
-                        tooltipColor="gray" />,
+                        tooltipColor="gray"/>,
                     <PageHeaderButton
                         key='reload'
                         onButtonClick={() => { refetch() }}
@@ -218,7 +220,8 @@ const BackupDataPage: React.FC = () => {
                     columns={columns}
                     pagination={false}
                     rowKey={(value) => value.name}
-                    dataSource={backupInfo} />
+                    dataSource={backupInfo}
+                    loading={isFileCreating || isFileUploading} />
             </div>
         </div>)
 };

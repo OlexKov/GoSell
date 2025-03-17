@@ -19,7 +19,7 @@ namespace OLX.API.Controllers
         public IActionResult GetBackupFile([FromQuery]  string backupName) 
         {
             var fileStream = backupDataService.GetBackupFileStream(backupName);
-            return File(fileStream, "application/octet-stream", $"{backupName}.back");
+            return File(fileStream, "application/octet-stream", $"{backupName}.back",true);
         }
 
         [HttpPost("backup")]
