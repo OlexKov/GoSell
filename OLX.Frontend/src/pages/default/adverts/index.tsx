@@ -82,6 +82,8 @@ const AdvertsPage: React.FC = () => {
         dispatch(scrollTop())
     }
 
+
+
     const onSort = (data: AdvertSortData) => {
         setSearchParams(getQueryString({
             ...pageRequest,
@@ -98,16 +100,14 @@ const AdvertsPage: React.FC = () => {
 
                 <div className="w-[100%] h-full flex gap-[1vw] " >
                     <div className="w-[17%] mt-[16vh] flex flex-col gap-[3vh] advert-collapse">
-                        <Collapsed
-                            title="Категорія"
-                            className="text-adaptive-card-price-text  text-[#3A211C] font-unbounded">
-                            <CategoryTree
-                                categories={categories}
-                                className="font-montserrat overflow-x-auto overflow-y-auto text-nowrap  mt-[2vh] h-[45vh] text-adaptive-input-form-text"//text-wrap
-                                categoryId={pageRequest.categoryId}
-                                onSelect={onCategoryChange}
-                            />
-                        </Collapsed>
+                        <CategoryTree
+                            popupClassName="font-montserrat mt-[2vh] text-adaptive-input-form-text"
+                            placeholder={<span className="text-adaptive-card-price-text  text-[#3A211C] font-unbounded">Категорія</span>}
+                            categories={categories}
+                            onSelect={onCategoryChange}
+                            categoryId={pageRequest.categoryId}
+                            className="w-full custom-cascader"
+                            displayRender={() => <span className="text-adaptive-card-price-text  text-[#3A211C] font-unbounded">Категорія</span>} />
 
                         <Collapsed
                             title="Фільтр"

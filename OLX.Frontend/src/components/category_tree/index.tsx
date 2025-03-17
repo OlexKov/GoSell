@@ -1,31 +1,42 @@
-import { Tree } from "antd"
-import { Key, useEffect, useMemo, useState } from "react"
-import { buildTree, getAllParentsIds } from "../../utilities/common_funct"
+import { Cascader } from "antd"
+import { useMemo, useState } from "react"
+import { buildCascaderTree, getAllParentsIds } from "../../utilities/common_funct"
 import { CategoryTreeProps } from "./props"
 import './style.scss'
+import { ExpandMore } from "@mui/icons-material";
 
-const CategoryTree: React.FC<CategoryTreeProps> = ({ categoryId, categories, onSelect, className }) => {
+const CategoryTree: React.FC<CategoryTreeProps> = ({ categoryId, categories, onSelect, className ,popupClassName,displayRender, placeholder}) => {
+    const [open, setOpen] = useState<boolean>(false)
+    const categoryTree = useMemo(() => buildCascaderTree(categories || []), [categories])
+    const allParentsIds = useMemo(() => getAllParentsIds(categories || [], categoryId).sort((a: number, b: number) => a - b), [categories, categoryId])
+    const onCategoryChange = (ids: number[]) => {
+        onSelect && onSelect(ids[ids.length - 1])
+    }
 
-    const [expandedCategories, setExpandedCategories] = useState<Key[]>([])
-    const categoryTree = useMemo(() => buildTree(categories || []), [categories])
-    const allParentsIds = useMemo(() => getAllParentsIds(categories || [], categoryId) as Key[], [categories, categoryId])
-    useEffect(() => {
-        if (categoryId) {
-            setExpandedCategories(allParentsIds);
-        }
-    }, [categoryId]);
     return (
-        <Tree
-            onExpand={(keys) => setExpandedCategories(keys)}
-            expandedKeys={expandedCategories}
-            selectedKeys={[categoryId as Key]}
-            onSelect={(element) => {
-                if (element[0] && onSelect) {
-                    onSelect(element[0] as number)
-                }
-            }}
-            treeData={categoryTree}
-            className={`custom-scrollbar custom-tree ${className}`} />
+        <Cascader
+            onDropdownVisibleChange={setOpen }
+            allowClear={false}
+            options={categoryTree}
+            popupClassName={popupClassName}
+            value={allParentsIds}
+            onChange={onCategoryChange}
+            className={className}
+            changeOnSelect
+            placeholder={placeholder}
+            expandTrigger="hover"
+            variant="borderless"
+            displayRender={displayRender}
+            suffixIcon={
+                <ExpandMore
+                    style={{
+                        fontSize: 25,
+                        transform: open ? "rotate(-90deg)" : "rotate(0deg)",
+                        transition: "transform 0.3s",
+                        color: 'black'
+                    }}
+                />}
+        />
     )
 }
 

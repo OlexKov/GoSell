@@ -5,4 +5,7 @@ export interface CategoryTreeProps {
     categories?: ICategory[]
     onSelect?: (id: number) => void
     className?: string
+    popupClassName?: string
+    displayRender?: () => JSX.Element
+    placeholder?: JSX.Element | string
 }

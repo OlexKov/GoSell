@@ -66,6 +66,25 @@ export const getFormData = (data: any): FormData => {
   return formData;
 }
 
+interface ICategoryCascaderElementNode{
+  label: string,
+    value: number,
+    children: ICategoryCascaderElementNode[]
+}
+
+export const buildCascaderTree = (categories: ICategory[], parentId?: number): ICategoryCascaderElementNode[] => {
+  return categories
+    .filter(x => x.parentId == parentId)
+    .map(x => {
+      const children = buildCascaderTree(categories, x.id);
+      return {
+        label: x.name,
+        value: x.id,
+        children: children
+      };
+    });
+};
+
 export const buildTree = (categories: ICategory[], parentId?: number, disabled?: number[], disableParent?: boolean ): ICategoryTreeElementModel[] => {
   return categories
     .filter(x => x.parentId == parentId)

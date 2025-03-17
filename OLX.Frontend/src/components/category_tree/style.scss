@@ -1,4 +1,5 @@
  .custom-scrollbar {
+
      /* При наведенні змінюється колір */
      &::-webkit-scrollbar-thumb:hover {
          background: #b69779;
@@ -24,29 +25,32 @@
      }
  }
 
- .custom-tree {
-     .ant-tree-treenode {
-         padding-left: 0 !important;
-         margin-bottom: 3px !important;
+ .custom-cascader {
+     .ant-select-selector {
+         padding: 0 !important;
+     }
 
-         &::before {
-             width: 0px !important;
+     .ant-select-arrow {
+         inset-inline-end: 0
+     }
+ }
+
+ .ant-cascader-menus {
+     .ant-cascader-menu {
+         height: auto;
+         max-height: 50vh;
+         overflow: auto;
+         @extend .custom-scrollbar; // Застосовуємо стиль custom-scrollbar всередині .custom-cascader
+
+         .ant-cascader-menu-item-active {
+             background-color: #b69779;
+             color: white
          }
-     }
 
-     .ant-tree-indent-unit {
-         width: 10px !important;
-     }
-
-     .ant-tree-node-content-wrapper:hover {
-         background-color: transparent !important;
-     }
-
-     .ant-tree-switcher {
-         width: 10px !important;
-
-         &::before {
-             background-color: transparent !important;
+         .ant-cascader-menu-item-active .anticon-right {
+             color: black !important;
+             font-weight: 500;
          }
+
      }
  }
