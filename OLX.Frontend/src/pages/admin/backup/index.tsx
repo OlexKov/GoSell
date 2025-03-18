@@ -1,7 +1,7 @@
 
 import { CloudServerOutlined, DeleteOutlined, DeliveredProcedureOutlined, DownloadOutlined, HddOutlined, LoadingOutlined, UploadOutlined } from '@ant-design/icons';
 import { PageHeader } from '../../../components/page_header';
-import { Popconfirm, Table, TableProps, Tooltip } from 'antd';
+import { Popconfirm, Table, TableColumnsType, Tooltip } from 'antd';
 import { IBackupFileInfo } from '../../../models/backup';
 import { formatBytes, getDateTime } from '../../../utilities/common_funct';
 import { useAddBackupFileMutation, useCreateBackupFileMutation, useDeleteBackupFileMutation, useGetBackupInfoQuery, useLazyGetBackupFileQuery, useRestoreDatabaseMutation } from '../../../redux/api/backupAuthApi';
@@ -44,23 +44,26 @@ const BackupDataPage: React.FC = () => {
     const [addBackupFile, { isLoading: isFileUploading }] = useAddBackupFileMutation();
     const [restoreDatabase] = useRestoreDatabaseMutation();
 
-    const columns: TableProps<IBackupFileInfo>['columns'] = [
+    const columns: TableColumnsType<IBackupFileInfo> = [
         {
             title: <span className='text-lg '>Назва резервної копії</span>,
             dataIndex: 'name',
             key: 'name',
-            render: (value) => <span className='text-base font-normal'>{value}</span>
+            render: (value) => <span className='text-base font-normal'>{value}</span>,
+            sorter:  (a:IBackupFileInfo, b:IBackupFileInfo) => a.name.localeCompare(b.name)
         },
         {
             title: <span className='text-lg'>Дата створення</span>,
             dataIndex: 'dateCreationDate',
             key: 'dateCreationDate',
+            sorter:  (a:IBackupFileInfo, b:IBackupFileInfo) => a.dateCreationDate.localeCompare(b.dateCreationDate),
             render: (value) => <span className='text-base'>{getDateTime(value)}</span>
         },
         {
             title: <span className='text-lg'>Розмір</span>,
             dataIndex: 'size',
             key: 'size',
+            sorter:  (a:IBackupFileInfo, b:IBackupFileInfo) => a.size - b.size,
             render: (value) => <span className='text-base'>{formatBytes(value)}</span>
         },
         {
@@ -89,7 +92,7 @@ const BackupDataPage: React.FC = () => {
                             onConfirm={() => onBackupDownload(fileInfo.name)}
                             okText="Завантажити"
                             cancelText="Відмінити"
-                            disabled = {isFileLoading}
+                            disabled={isFileLoading}
                         >
                             <IconButton color="success" >
                                 {!isFileLoading ? <DownloadOutlined /> : <LoadingOutlined />}
@@ -201,11 +204,11 @@ const BackupDataPage: React.FC = () => {
                     ,
                     <PageHeaderButton
                         key='upload'
-                        onButtonClick={() =>!isFileUploading && onBackupUpload()}
+                        onButtonClick={() => !isFileUploading && onBackupUpload()}
                         className="w-[35px] h-[35px] bg-green-500"
-                        buttonIcon={isFileUploading?<LoadingOutlined  className="text-lg"/>:<UploadOutlined className="text-lg" />}
+                        buttonIcon={isFileUploading ? <LoadingOutlined className="text-lg" /> : <UploadOutlined className="text-lg" />}
                         tooltipMessage="Завантажити резервну копію"
-                        tooltipColor="gray"/>,
+                        tooltipColor="gray" />,
                     <PageHeaderButton
                         key='reload'
                         onButtonClick={() => { refetch() }}
