@@ -41,7 +41,7 @@ const updatedPageRequest = (searchParams: URLSearchParams) => ({
     firstNameSearch: searchParams.get("firstNameSearch") || '',
     lastNameSearch: searchParams.get("lastNameSearch") || '',
     webSiteSearch: searchParams.get("webSiteSearch") || '',
-    settlementRefSearch: searchParams.get("settlementRefSearch") || '',
+    settlementSearch: searchParams.get("settlementSearch") || '',
 });
 
 
@@ -236,7 +236,7 @@ const UsersPage: React.FC = () => {
                     firstNameSearch: '',
                     lastNameSearch: '',
                     webSiteSearch: '',
-                    settlementRefSearch: ''
+                    settlementSearch: ''
                 }))
             }}
             className="w-[35px] h-[35px] bg-red-900"
@@ -249,7 +249,7 @@ const UsersPage: React.FC = () => {
                 pageRequest.firstNameSearch === '' &&
                 pageRequest.lastNameSearch === '' &&
                 pageRequest.webSiteSearch === '' &&
-                pageRequest.settlementRefSearch === ''} />,
+                pageRequest.settlementSearch === ''} />,
         <PageHeaderButton
             key='clear_select'
             onButtonClick={() => setSelectedUsers([])}

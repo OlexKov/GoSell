@@ -53,7 +53,7 @@ export interface IOlxUserPageRequest extends PageRequest {
     firstNameSearch?: string
     lastNameSearch?: string
     webSiteSearch?: string
-    settlementRefSearch?: string
+    settlementSearch?: string
 }
 
 export interface PageResponse<T> {

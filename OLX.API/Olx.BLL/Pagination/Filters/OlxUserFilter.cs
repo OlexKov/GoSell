@@ -10,7 +10,7 @@ namespace Olx.BLL.Pagination.Filters
         public string? FirstNameSearch { get; init; }
         public string? LastNameSearch { get; init; }
         public string? WebSiteSearch { get; init; }
-        public string? SettlementRefSearch { get; init; }
+        public string? SettlementSearch { get; init; }
 
         public IQueryable<OlxUserDto> FilterQuery(IQueryable<OlxUserDto> query)
         {
@@ -34,9 +34,9 @@ namespace Olx.BLL.Pagination.Filters
             {
                 query = query.Where(x => x.WebSite != null && x.WebSite.ToLower().Contains(WebSiteSearch.ToLower()));
             }
-            if (!String.IsNullOrWhiteSpace(SettlementRefSearch))
+            if (!String.IsNullOrWhiteSpace(SettlementSearch))
             {
-                query = query.Where(x => x.SettlementRef != null && x.SettlementRef == SettlementRefSearch);
+                query = query.Where(x => x.SettlementDescrption != null && x.SettlementDescrption.ToLower().Contains(SettlementSearch.ToLower()));
             }
             return query;
         }

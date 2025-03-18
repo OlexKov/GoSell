@@ -24,6 +24,8 @@ const UserTable: React.FC<UserTableProps> = ({ selected, isLoading, onRowSelecti
         }
     ]
 
+
+    
     useEffect(() => {
         setSearch(pageRequest)
     }, [pageRequest])
@@ -210,7 +212,7 @@ const UserTable: React.FC<UserTableProps> = ({ selected, isLoading, onRowSelecti
             width: 150,
             render: (value: string) => <span >{value ? value : "- - - - - - "}</span>,
             sorter: true,
-            ...getColumnSearchProps('settlementRefSearch')
+            ...getColumnSearchProps('settlementSearch')
         },
 
         {

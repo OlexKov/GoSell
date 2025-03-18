@@ -11,6 +11,6 @@ namespace Olx.BLL.Models.User
         public string? FirstNameSearch { get; init; }
         public string? LastNameSearch { get; init; }
         public string? WebSiteSearch { get; init; }
-        public string? SettlementRefSearch { get; init; }
+        public string? SettlementSearch { get; init; }
     }
 }
