@@ -3,7 +3,7 @@ import { PageHeader } from "../../../../components/page_header";
 import { ClearOutlined, FilterOutlined } from '@ant-design/icons';
 import { paginatorConfig } from "../../../../utilities/pagintion_settings";
 import { IFilter, IFilterPageRequest, IFilterValue } from "../../../../models/filter";
-import { Key, useEffect, useState } from "react";
+import { Key, useDeferredValue, useEffect, useState } from "react";
 import { useGetFilterPageQuery } from "../../../../redux/api/filterApi";
 import { ColumnType, TableProps } from "antd/es/table";
 import { IconButton } from "@mui/material";
@@ -34,8 +34,10 @@ const AdminFilterTable: React.FC = () => {
         selectedFilter: undefined
     })
     const [delFilter] = useDeleteFilterMutation();
+    const [searchName,setSearchName] = useState<string>('')
     const [pageRequest, setPageRequest] = useState<IFilterPageRequest>(getPageRequest(searchParams))
     const { data, isLoading, refetch } = useGetFilterPageQuery(pageRequest)
+    const deferredSearchName = useDeferredValue(searchName);
     
     useEffect(() => {
         setPageRequest(getPageRequest(searchParams))
@@ -45,6 +47,9 @@ const AdminFilterTable: React.FC = () => {
         dispatch(scrollTop())
     },[data])
 
+    useEffect(() => {
+        setSearchParams(getQueryString({ ...pageRequest, page: 1, searchName }));
+    }, [deferredSearchName]);
 
     const getColumnSearchProps = (): ColumnType<IFilter> => ({
         filterDropdown: ({ close }) => (
@@ -52,9 +57,9 @@ const AdminFilterTable: React.FC = () => {
                 <Input
                     size="small"
                     placeholder={`Пошук`}
-                    value={searchParams.get('searchName') || undefined}
+                    value={searchName}
                     onChange={(e) => {
-                        setSearchParams(getQueryString({ ...pageRequest, page: 1, searchName: e.target.value }))
+                        setSearchName(e.target.value)
                     }}
                 />
                 <Tooltip title="Очистити" color="gray">

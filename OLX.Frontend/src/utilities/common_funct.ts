@@ -44,7 +44,7 @@ export const getDateTime = (dateStr: string): string => {
 
 export const getTime = (dateStr: string): string => {
   const date = new Date(dateStr);
-  return date.toLocaleTimeString().slice(0,-3)
+  return date.toLocaleTimeString().slice(0, -3)
 }
 
 export const getFormData = (data: any): FormData => {
@@ -66,10 +66,10 @@ export const getFormData = (data: any): FormData => {
   return formData;
 }
 
-interface ICategoryCascaderElementNode{
+interface ICategoryCascaderElementNode {
   label: string,
-    value: number,
-    children: ICategoryCascaderElementNode[]
+  value: number,
+  children: ICategoryCascaderElementNode[]
 }
 
 export const buildCascaderTree = (categories: ICategory[], parentId?: number): ICategoryCascaderElementNode[] => {
@@ -85,7 +85,7 @@ export const buildCascaderTree = (categories: ICategory[], parentId?: number): I
     });
 };
 
-export const buildTree = (categories: ICategory[], parentId?: number, disabled?: number[], disableParent?: boolean ): ICategoryTreeElementModel[] => {
+export const buildTree = (categories: ICategory[], parentId?: number, disabled?: number[], disableParent?: boolean): ICategoryTreeElementModel[] => {
   return categories
     .filter(x => x.parentId == parentId)
     .map(x => {
@@ -149,6 +149,9 @@ export const getAllParentsIds = (categories: ICategory[], parentId?: number): nu
 export const getQueryString = (filter: any): string => {
   var result = '';
   Object.keys(filter).forEach((key) => {
+    if (typeof (filter[key]) === "string") {
+      filter[key] = (filter[key] as string).trim()
+    }
     if (filter[key] !== null && filter[key] !== undefined && filter[key].length !== 0) {
       var value = typeof (filter[key]) === "object"
         ? JSON.stringify(filter[key])
@@ -174,7 +177,7 @@ export const formattedDate = (date: Date) => date.toLocaleDateString('uk-UA', {
 
 export const getFormatDateTime = (date?: Date): string => {
   const today: Date = new Date();
-  if(!date){
+  if (!date) {
     date = today
   }
   const yesterday = new Date(today);
@@ -195,12 +198,12 @@ export const getFormatDateTime = (date?: Date): string => {
 
 export const getFormatDate = (date?: Date): string => {
   const today: Date = new Date();
-  if(!date){
+  if (!date) {
     date = today
   }
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
-  
+
   if (today.toDateString() === date.toDateString()) {
     return `согодні`
   }
@@ -222,7 +225,7 @@ export const getAdvertPageRequest = (pageData: IAdvertSearchPageData, categories
   return result;
 }
 
-export const formatBytes = (bytes:number) => {
+export const formatBytes = (bytes: number) => {
   if (bytes < 1024) return bytes + " B";
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
   return (bytes / (1024 * 1024)).toFixed(2) + " MB";

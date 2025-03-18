@@ -9,7 +9,6 @@ import { Key, useEffect, useState } from "react";
 import { UserTableProps } from "./props";
 import { ClearOutlined } from '@ant-design/icons';
 import { useSearchParams } from "react-router-dom";
-import { scrollTop } from "../../redux/slices/appSlice";
 
 const UserTable: React.FC<UserTableProps> = ({ selected, isLoading, onRowSelection, selectedUsers, pageRequest, pageResponse, actions }) => {
     const [_, setSearchParams] = useSearchParams('');

@@ -4,7 +4,7 @@ import { SearchOutlined } from "@mui/icons-material";
 import { ClearOutlined, ProfileOutlined } from '@ant-design/icons';
 import { ICategory, ICategoryPageRequest } from "../../../../models/category";
 import { paginatorConfig } from "../../../../utilities/pagintion_settings";
-import { Key, useEffect, useState } from "react";
+import { Key, useDeferredValue, useEffect, useState } from "react";
 import { useGetCategoryPageQuery } from "../../../../redux/api/categoryApi";
 import { IconButton } from "@mui/material";
 import { AddCircleOutline, CachedOutlined, DeleteForever, EditCalendar, SearchOff } from "@mui/icons-material";
@@ -37,6 +37,7 @@ const AdminCategoryTable: React.FC = () => {
     const { data, isLoading, refetch } = useGetCategoryPageQuery(pageRequest)
     const [deleteCategoryTree] = useDeleteCategoryTreeMutation()
     const [deleteCategory] = useDeleteCategoryMutation()
+    const deferredSearch = useDeferredValue(search);
     const [drawerData, setDrawerData] = useState<DrawerDataModel>({
         isDrawerOpen: false,
         selectedCategory: undefined
@@ -48,7 +49,7 @@ const AdminCategoryTable: React.FC = () => {
 
     useEffect(() => {
         setSearchParams(getQueryString({ ...search, page: paginatorConfig.pagination.defaultCurrent }))
-    }, [search])
+    }, [deferredSearch])
 
     useEffect(() => {
         dispatch(scrollTop())
