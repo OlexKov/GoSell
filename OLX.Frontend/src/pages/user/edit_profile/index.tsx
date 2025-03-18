@@ -35,7 +35,6 @@ const UserProfileEdit: React.FC = () => {
                 defaultActiveKey="1"
                 tabPosition="left"
                 tabBarStyle={{ width: '42%' }}
-                animated={true}
                 tabBarGutter={0}
                 items={items}
             />
