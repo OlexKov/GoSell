@@ -18,6 +18,8 @@ import { ColumnType, TableProps } from "antd/es/table";
 import { useApproveAdvertMutation, useDeleteAdvertMutation } from "../../../../redux/api/advertAuthApi";
 import { toast } from "react-toastify";
 import AdvertLockModal from "../../../../components/modals/advert_lock";
+import { useAppDispatch } from "../../../../redux";
+import { scrollTop } from "../../../../redux/slices/appSlice";
 
 
 const updatedPageRequest = (searchParams: URLSearchParams): IAdvertSearchPageData => ({
@@ -42,6 +44,7 @@ const updatedPageRequest = (searchParams: URLSearchParams): IAdvertSearchPageDat
 
 
 const AdminAdvertTable: React.FC = () => {
+    const dispatch  = useAppDispatch();
     const [advertToLock, setAdvertToLock] = useState<IAdvert>();
     const navigate = useNavigate()
     const location = useLocation()
@@ -283,6 +286,7 @@ const AdminAdvertTable: React.FC = () => {
     }
 
     const onPaginationChange = (currentPage: number, pageSize: number) => {
+        dispatch(scrollTop())
         setSearchParams(getQueryString({ ...pageRequest, page: currentPage, size: pageSize }))
     }
 

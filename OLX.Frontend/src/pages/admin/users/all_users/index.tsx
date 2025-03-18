@@ -3,7 +3,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { Modal, Popconfirm } from "antd";
 import { IOlxUser, IOlxUserPageRequest } from "../../../../models/user";
 import PageHeaderButton from "../../../../components/buttons/page_header_button";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { paginatorConfig } from "../../../../utilities/pagintion_settings";
 import AdminMessage from "../../../../components/modals/admin_message";
 import { useCreateAdminMessageMutation } from "../../../../redux/api/adminMessageApi";
@@ -25,8 +25,9 @@ import {
 } from "@mui/icons-material";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { useGetUserPageQuery } from "../../../../redux/api/userAuthApi";
-import { useAppSelector } from "../../../../redux";
+import { useAppDispatch, useAppSelector } from "../../../../redux";
 import useAdminPasswordCheck from "../../../../hooks/checkAdminPassword";
+import { scrollTop } from "../../../../redux/slices/appSlice";
 
 const updatedPageRequest = (searchParams: URLSearchParams) => ({
     isAdmin: location.pathname === '/admin/admins',
@@ -46,6 +47,7 @@ const updatedPageRequest = (searchParams: URLSearchParams) => ({
 
 const UsersPage: React.FC = () => {
     const location = useLocation()
+    const dispatch = useAppDispatch()
     const currentUser = useAppSelector(state => state.user.user)
     const [searchParams] = useSearchParams('');
     const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
@@ -55,7 +57,7 @@ const UsersPage: React.FC = () => {
     const [isAdminMessageOpen, setAminMessageOpen] = useState<boolean>(false);
     const [isAdminLockOpen, setAminLockOpen] = useState<boolean>(false);
     const adminModalTitle = useRef<string>('')
-    const [lockUsers,{isLoading:isUsersLocking}] = useLockUnlockUsersMutation();
+    const [lockUsers, { isLoading: isUsersLocking }] = useLockUnlockUsersMutation();
     const [pageRequest, setPageRequest] = useState<IOlxUserPageRequest>(updatedPageRequest(searchParams));
     const { data, isLoading, refetch } = useGetUserPageQuery(pageRequest)
     const [removeUser] = useDeleteAccountMutation()
@@ -64,6 +66,10 @@ const UsersPage: React.FC = () => {
     useEffect(() => {
         setPageRequest(updatedPageRequest(searchParams));
     }, [location.search, location.pathname]);
+
+    useEffect(() => {
+        dispatch(scrollTop())
+    }, [data])
 
     const actions = (_value: any, user: IOlxUser) =>
         <div className='flex justify-around'>
@@ -78,11 +84,11 @@ const UsersPage: React.FC = () => {
                     <Tooltip title={location.pathname !== '/admin/adverts/blocked'
                         ? "Блокувати"
                         : "Розблокувати"}>
-                        <IconButton 
-                        disabled={isUsersLocking}
-                        onClick={() => location.pathname !== '/admin/adverts/blocked'
-                            ? lockUser(user.id)
-                            : unLockUser(user.id)} color="warning" size="small">
+                        <IconButton
+                            disabled={isUsersLocking}
+                            onClick={() => location.pathname !== '/admin/adverts/blocked'
+                                ? lockUser(user.id)
+                                : unLockUser(user.id)} color="warning" size="small">
                             {location.pathname !== '/admin/adverts/blocked' ? <LockOutlined /> : <LockOpen />}
                         </IconButton>
                     </Tooltip>
@@ -182,7 +188,7 @@ const UsersPage: React.FC = () => {
         modal.confirm({
             title: `Розблокування ${selectedUser.current || selectedUsers.length === 1 ? ` користувача` : " користувачів"} `,
             icon: <LockOpen />,
-            content: `Розблокувати ${selectedUser.current || selectedUsers.length === 1 ? `користувача ${getUserName(selectedUser.current || 0) || getUserName(selectedUsers[0]) }` : "обраних користувачів"}?`,
+            content: `Розблокувати ${selectedUser.current || selectedUsers.length === 1 ? `користувача ${getUserName(selectedUser.current || 0) || getUserName(selectedUsers[0])}` : "обраних користувачів"}?`,
             okText: 'Розблокувати',
             cancelText: 'Відмінити',
             onOk: unlockUsers,

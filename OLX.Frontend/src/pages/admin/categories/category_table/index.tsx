@@ -17,6 +17,8 @@ import { toast } from "react-toastify";
 import { useSearchParams } from "react-router-dom";
 import { getQueryString } from "../../../../utilities/common_funct";
 import { DrawerDataModel } from "./models";
+import { useAppDispatch } from "../../../../redux";
+import { scrollTop } from "../../../../redux/slices/appSlice";
 
 const getPageRequest = (searchParams: URLSearchParams) => ({
     size: Number(searchParams.get("size")) || paginatorConfig.pagination.defaultPageSize,
@@ -28,6 +30,7 @@ const getPageRequest = (searchParams: URLSearchParams) => ({
 })
 
 const AdminCategoryTable: React.FC = () => {
+    const dispatch = useAppDispatch();
     const [searchParams, setSearchParams] = useSearchParams('');
     const [pageRequest, setPageRequest] = useState<ICategoryPageRequest>(getPageRequest(searchParams))
     const [search, setSearch] = useState<ICategoryPageRequest>(pageRequest as ICategoryPageRequest)
@@ -46,6 +49,10 @@ const AdminCategoryTable: React.FC = () => {
     useEffect(() => {
         setSearchParams(getQueryString({ ...search, page: paginatorConfig.pagination.defaultCurrent }))
     }, [search])
+
+    useEffect(() => {
+        dispatch(scrollTop())
+    }, [data])
 
     const getColumnSearchProps = (dataIndex: keyof ICategoryPageRequest): ColumnType<ICategory> => ({
         filterDropdown: ({ close }) => (

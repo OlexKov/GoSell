@@ -15,6 +15,8 @@ import AdminFilterCreate from "../../../../components/drawers/filter_create";
 import { useSearchParams } from "react-router-dom";
 import { getQueryString } from "../../../../utilities/common_funct";
 import { FilterDrawerDataModel } from "./models";
+import { scrollTop } from "../../../../redux/slices/appSlice";
+import { useAppDispatch } from "../../../../redux";
 
 const getPageRequest = (searchParams: URLSearchParams) => ({
     size: Number(searchParams.get("size")) || paginatorConfig.pagination.defaultPageSize,
@@ -25,7 +27,7 @@ const getPageRequest = (searchParams: URLSearchParams) => ({
 })
 
 const AdminFilterTable: React.FC = () => {
-
+    const dispatch  = useAppDispatch();
     const [searchParams, setSearchParams] = useSearchParams('');
     const [drawerData, setDrawerData] = useState<FilterDrawerDataModel>({
         isDrawerOpen: false,
@@ -40,6 +42,10 @@ const AdminFilterTable: React.FC = () => {
             setPageRequest(getPageRequest(searchParams))
         })()
     }, [location.search])
+
+    useEffect(()=>{
+        dispatch(scrollTop())
+    },[data])
 
 
     const getColumnSearchProps = (): ColumnType<IFilter> => ({
