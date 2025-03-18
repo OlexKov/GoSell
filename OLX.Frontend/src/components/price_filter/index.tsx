@@ -1,5 +1,6 @@
 import { Button, Form, InputNumber, Radio } from "antd"
 import './style.scss'
+import '../../pages/user/create_advert/style.scss'
 import { useSearchParams } from "react-router-dom"
 import { PriceFilterProps } from "./props"
 
@@ -24,18 +25,17 @@ const PriceFilter: React.FC<PriceFilterProps> = ({ className, onChange, onReset:
                 </Radio.Group>
             </Form.Item>
 
-            <div className="flex justify-start gap-[1vw]">
+            <div className="flex justify-start gap-[0.5vw]">
                 <Form.Item
                     noStyle
                     name="priceFrom"
                     initialValue={searchParams.get('priceFrom') || undefined}
                 >
-
                     <InputNumber
-                        size='small'
                         min={0}
                         placeholder="від"
                         onPressEnter={onChange}
+                        className="h-[3vh] font-montserrat create-advert-number-input"
                     />
                 </Form.Item>
                 <Form.Item
@@ -45,9 +45,9 @@ const PriceFilter: React.FC<PriceFilterProps> = ({ className, onChange, onReset:
                 >
                     <InputNumber
                         min={0}
-                        size='small'
                         placeholder="до"
                         onPressEnter={onChange}
+                        className="h-[3vh] font-montserrat create-advert-number-input"
                     />
 
                 </Form.Item>
