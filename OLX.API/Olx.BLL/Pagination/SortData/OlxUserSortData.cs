@@ -20,7 +20,7 @@ namespace Olx.BLL.Pagination.SortData
                      "firstName" => x => x.FirstName,
                      "lastName" => x => x.LastName,
                      "createdDate" => x => x.CreatedDate,
-                     "lastActivit" => x => x.LastActivity,
+                     "lastActivity" => x => x.LastActivity,
                      "settlementRef" => x => x.SettlementRef,
                      "advertCount" => x => x.Adverts.Count(),
                      _ => x => x.Id,
