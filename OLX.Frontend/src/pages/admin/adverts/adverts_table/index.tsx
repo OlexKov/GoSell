@@ -55,9 +55,15 @@ const AdminAdvertTable: React.FC = () => {
     const [approveAdvert] = useApproveAdvertMutation();
     const [deleteAdvert] = useDeleteAdvertMutation();
     const { data: adverts, isLoading, refetch } = useGetAdvertPageQuery(getPageRequest);
+
     useEffect(() => {
         refetch()
     }, [location])
+
+    useEffect(()=>{
+        dispatch(scrollTop())
+    },[adverts])
+    
     const getColumnSearchProps = (dataIndex: keyof IAdvertSearchPageData): ColumnType<IAdvert> => ({
         filterDropdown: ({ close }) => (
             <div className="p-3 flex gap-2" style={{ width: 300, padding: 8 }}>
@@ -275,7 +281,6 @@ const AdminAdvertTable: React.FC = () => {
 
 
     const onFiltersChange = (filterValues: AdminFilterResultModel) => {
-        console.log(filterValues)
         setSearchParams(getQueryString({
             ...pageRequest,
             categoryId: filterValues.categoryId === 0 ? undefined : filterValues.categoryId,
@@ -286,7 +291,6 @@ const AdminAdvertTable: React.FC = () => {
     }
 
     const onPaginationChange = (currentPage: number, pageSize: number) => {
-        dispatch(scrollTop())
         setSearchParams(getQueryString({ ...pageRequest, page: currentPage, size: pageSize }))
     }
 
