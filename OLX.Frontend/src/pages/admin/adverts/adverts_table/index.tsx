@@ -66,16 +66,18 @@ const AdminAdvertTable: React.FC = () => {
                     }}
                     size="small"
                 />
-                <Button
-                    onClick={() => {
-                        setSearchParams(getQueryString({ ...pageRequest, [dataIndex]: '' }))
-                        close()
-                    }}
-                    size="small"
-                    style={{ paddingLeft: 3, paddingRight: 3 }}
-                    danger
-                    icon={<ClearOutlined />}
-                />
+                <Tooltip title="Очистити" color="gray">
+                    <Button
+                        onClick={() => {
+                            setSearchParams(getQueryString({ ...pageRequest, [dataIndex]: '' }))
+                            close()
+                        }}
+                        size="small"
+                        style={{ paddingLeft: 3, paddingRight: 3 }}
+                        danger
+                        icon={<ClearOutlined />}
+                    />
+                </Tooltip>
             </div>
         ),
         filterIcon: () => (

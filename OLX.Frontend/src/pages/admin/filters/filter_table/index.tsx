@@ -27,8 +27,6 @@ const getPageRequest = (searchParams: URLSearchParams) => ({
 const AdminFilterTable: React.FC = () => {
 
     const [searchParams, setSearchParams] = useSearchParams('');
-    // const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
-    // const [selectedFilter, setSelectedFilter] = useState<IFilter | undefined>();
     const [drawerData, setDrawerData] = useState<FilterDrawerDataModel>({
         isDrawerOpen: false,
         selectedFilter: undefined
@@ -56,21 +54,22 @@ const AdminFilterTable: React.FC = () => {
                         setSearchParams(getQueryString({ ...pageRequest, page: 1, searchName: e.target.value }))
                     }}
                 />
-
-                <Button
-                    onClick={() => {
-                        if (searchParams.get("searchName")) {
-                            setNameSearch('')
-                            setSearchParams(getQueryString({ ...pageRequest, page: 1, searchName: '' }))
-                        }
-                        close();
-                    }}
-                    size="small"
-                    style={{ paddingLeft: 3, paddingRight: 3 }}
-                    danger
-                    icon={<ClearOutlined />}
-                />
-            </div>
+                <Tooltip title="Очистити" color="gray">
+                    <Button
+                        onClick={() => {
+                            if (searchParams.get("searchName")) {
+                                setNameSearch('')
+                                setSearchParams(getQueryString({ ...pageRequest, page: 1, searchName: '' }))
+                            }
+                            close();
+                        }}
+                        size="small"
+                        style={{ paddingLeft: 3, paddingRight: 3 }}
+                        danger
+                        icon={<ClearOutlined />}
+                    />
+                </Tooltip>
+           </div>
         ),
         filterIcon: () => (
             <SearchOutlined style={{ width: 20, color: nameSearch !== '' ? 'red' : undefined }} />

@@ -1,4 +1,4 @@
-import { Button, Input, Pagination, Table, TableColumnsType, TableProps } from "antd";
+import { Button, Input, Pagination, Table, TableColumnsType, TableProps, Tooltip } from "antd";
 import { IOlxUser, IOlxUserPageRequest } from "../../models/user";
 import { paginatorConfig } from "../../utilities/pagintion_settings";
 import { ColumnType, TableRowSelection } from "antd/es/table/interface";
@@ -24,9 +24,9 @@ const UserTable: React.FC<UserTableProps> = ({ selected, isLoading, onRowSelecti
         }
     ]
 
-    useEffect(()=>{
+    useEffect(() => {
         setSearch(pageRequest)
-    },[pageRequest])
+    }, [pageRequest])
 
     const onPaginationChange = (currentPage: number, pageSize: number) => {
         setSearchParams(getQueryString({ ...pageRequest, page: currentPage, size: pageSize }))
@@ -86,18 +86,21 @@ const UserTable: React.FC<UserTableProps> = ({ selected, isLoading, onRowSelecti
                     }}
                     size="small"
                 />
-                <Button
-                    onClick={() => {
-                        const newSearch = ({ ...search, [dataIndex]: '' })
-                        setSearch(newSearch)
-                        setSearchParams(getQueryString({ ...search, [dataIndex]: '' }))
-                        close()
-                    }}
-                    size="small"
-                    style={{ paddingLeft: 3, paddingRight: 3 }}
-                    danger
-                    icon={<ClearOutlined />}
-                />
+                <Tooltip title="Очистити" color="gray">
+                    <Button
+                        onClick={() => {
+                            const newSearch = ({ ...search, [dataIndex]: '' })
+                            setSearch(newSearch)
+                            setSearchParams(getQueryString({ ...search, [dataIndex]: '' }))
+                            close()
+                        }}
+                        size="small"
+                        style={{ paddingLeft: 3, paddingRight: 3 }}
+                        danger
+                        icon={<ClearOutlined />}
+                    />
+                </Tooltip>
+
             </div>
         ),
         filterIcon: () => (

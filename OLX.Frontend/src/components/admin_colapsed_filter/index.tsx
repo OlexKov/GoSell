@@ -8,6 +8,7 @@ import { FilterData } from "./models";
 import { ClearOutlined } from '@ant-design/icons'
 import { useSearchParams } from "react-router-dom";
 import { IFilter } from "../../models/filter";
+import { Tooltip } from "antd";
 
 
 const AdminAdvertCollapsedFilters: React.FC<AdminAdvertFiltersProps> = ({ onFiltersChange, columns = 4 }) => {
@@ -16,7 +17,7 @@ const AdminAdvertCollapsedFilters: React.FC<AdminAdvertFiltersProps> = ({ onFilt
     const { data: filters, isLoading } = useGetAllFilterQuery();
     const { data: categories, isLoading: isCategoriesLoading } = useGetAllCategoriesQuery()
     const categoryId = useRef<number | undefined>();
-    const priceFrom = useRef<number |  null>();
+    const priceFrom = useRef<number | null>();
     const priceTo = useRef<number | null>();
     const [categoryFiltersData, setCategoryFiltersData] = useState<FilterData>({
         filters: [],
@@ -48,7 +49,7 @@ const AdminAdvertCollapsedFilters: React.FC<AdminAdvertFiltersProps> = ({ onFilt
     }
 
     const getCategoryTree = useMemo(() => buildTree(categories || []), [categories])
-   
+
     useEffect(() => {
         const categoryParamsId = searchParams.has("categoryId") ? Number(searchParams.get("categoryId")) : 0
         if (categoryParamsId !== 0) {
@@ -70,16 +71,16 @@ const AdminAdvertCollapsedFilters: React.FC<AdminAdvertFiltersProps> = ({ onFilt
 
     const onPriceChange = (priceFilter: number | null, isFrom: boolean) => {
         isFrom ? priceFrom.current = priceFilter : priceTo.current = priceFilter;
-        onFiltersChange({ filters: categoryFiltersData.filtersValues, categoryId:categoryId.current || 0, priceFrom: priceFrom.current, priceTo: priceTo.current })
+        onFiltersChange({ filters: categoryFiltersData.filtersValues, categoryId: categoryId.current || 0, priceFrom: priceFrom.current, priceTo: priceTo.current })
     }
 
-    const clearFilters = ()=>{
+    const clearFilters = () => {
         priceFrom.current = 0
         priceTo.current = 0
         onCategoryChange(undefined)
     }
 
-    const categoryFilters = useMemo(()=>categoryFiltersData.filters.map(filter =>
+    const categoryFilters = useMemo(() => categoryFiltersData.filters.map(filter =>
         <Form.Item
             noStyle
             key={filter.id}
@@ -89,14 +90,14 @@ const AdminAdvertCollapsedFilters: React.FC<AdminAdvertFiltersProps> = ({ onFilt
             <Select
                 style={{ width: `${categoryFiltersData.filterWidth}%` }}
                 allowClear
-                mode= 'tags' 
+                mode='tags'
                 maxTagCount='responsive'
                 options={filter.values.map(value => ({ value: value.id.toString(), label: value.value }))}
                 placeholder={filter.name}
                 onChange={() => form.submit()}
             />
         </Form.Item>
-    ),[categoryFiltersData.filters])
+    ), [categoryFiltersData.filters])
 
     return (
         <Collapse
@@ -106,10 +107,13 @@ const AdminAdvertCollapsedFilters: React.FC<AdminAdvertFiltersProps> = ({ onFilt
                 {
                     key: '1',
                     label: 'Фільтри',
-                    extra: <ClearOutlined hidden={categoryFiltersData.isFilterClear} className="text-red-700" onClick={(event) => {
-                        clearFilters()
-                        event.stopPropagation();
-                    }} />,
+                    extra:
+                        <Tooltip title="Очистити" color="gray">
+                            <ClearOutlined hidden={categoryFiltersData.isFilterClear} className="text-red-700" onClick={(event) => {
+                                clearFilters()
+                                event.stopPropagation();
+                            }} />
+                        </Tooltip>,
                     children:
                         <Form
                             form={form}

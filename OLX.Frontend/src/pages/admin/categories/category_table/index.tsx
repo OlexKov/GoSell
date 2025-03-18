@@ -40,7 +40,7 @@ const AdminCategoryTable: React.FC = () => {
     })
 
     useEffect(() => {
-         setPageRequest(getPageRequest(searchParams))
+        setPageRequest(getPageRequest(searchParams))
     }, [location.search])
 
     useEffect(() => {
@@ -58,19 +58,19 @@ const AdminCategoryTable: React.FC = () => {
                         setSearch((prev) => ({ ...prev, [dataIndex]: e.target.value }))
                     }}
                 />
-
-                <Button
-                    onClick={() => {
-                        const newSearch = ({ ...search, [dataIndex]: '' })
-                        setSearch(newSearch)
-                        close();
-                    }}
-                    size="small"
-                    style={{ paddingLeft: 3, paddingRight: 3 }}
-                    danger
-                    icon={<ClearOutlined />}
-                />
-
+                <Tooltip title="Очистити" color="gray">
+                    <Button
+                        onClick={() => {
+                            const newSearch = ({ ...search, [dataIndex]: '' })
+                            setSearch(newSearch)
+                            close();
+                        }}
+                        size="small"
+                        style={{ paddingLeft: 3, paddingRight: 3 }}
+                        danger
+                        icon={<ClearOutlined />}
+                    />
+                </Tooltip>
             </div>
         ),
         filterIcon: () => (
