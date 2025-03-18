@@ -34,13 +34,11 @@ const AdminFilterTable: React.FC = () => {
         selectedFilter: undefined
     })
     const [delFilter] = useDeleteFilterMutation();
-    const [nameSearch, setNameSearch] = useState<string>('')
     const [pageRequest, setPageRequest] = useState<IFilterPageRequest>(getPageRequest(searchParams))
     const { data, isLoading, refetch } = useGetFilterPageQuery(pageRequest)
+    
     useEffect(() => {
-        (async () => {
-            setPageRequest(getPageRequest(searchParams))
-        })()
+        setPageRequest(getPageRequest(searchParams))
     }, [location.search])
 
     useEffect(()=>{
@@ -54,9 +52,8 @@ const AdminFilterTable: React.FC = () => {
                 <Input
                     size="small"
                     placeholder={`Пошук`}
-                    value={nameSearch}
+                    value={searchParams.get('searchName') || undefined}
                     onChange={(e) => {
-                        setNameSearch(e.target.value)
                         setSearchParams(getQueryString({ ...pageRequest, page: 1, searchName: e.target.value }))
                     }}
                 />
@@ -64,7 +61,6 @@ const AdminFilterTable: React.FC = () => {
                     <Button
                         onClick={() => {
                             if (searchParams.get("searchName")) {
-                                setNameSearch('')
                                 setSearchParams(getQueryString({ ...pageRequest, page: 1, searchName: '' }))
                             }
                             close();
@@ -78,7 +74,7 @@ const AdminFilterTable: React.FC = () => {
            </div>
         ),
         filterIcon: () => (
-            <SearchOutlined style={{ width: 20, color: nameSearch !== '' ? 'red' : undefined }} />
+            <SearchOutlined style={{ width: 20, color: searchParams.get("searchName") ? 'red' : undefined }} />
         ),
     });
 
