@@ -72,13 +72,18 @@ const AdminLock: React.FC<AdminModalProps> = ({ isOpen, onConfirm, onCancel, tit
             >
                 <span className="text-sm">Заблокувати до:</span>
                 <div className=" h-fit border border-1 p-2 rounded-md mt-2">
-                    
+
                     <div className="flex gap-2 justify-between ">
                         <Form.Item
                             name='lockEndDate'
                             label="Дата"
                             className="flex-1">
-                            <DatePicker minDate={dayjs(Date.now())} size="large" style={{ width: '100%' }} />
+                            <DatePicker
+                                minDate={dayjs(Date.now())}
+                                size="large"
+                                style={{ width: '100%' }}
+                                placeholder="дата"
+                            />
                         </Form.Item>
                         <Form.Item
                             name='lockEndTime'
@@ -100,7 +105,11 @@ const AdminLock: React.FC<AdminModalProps> = ({ isOpen, onConfirm, onCancel, tit
                                     },
                                 }),
                             ]}>
-                            <TimePicker format="HH:mm:ss" size="large" style={{ width: '100%' }} />
+                            <TimePicker
+                                format="HH:mm:ss"
+                                size="large"
+                                style={{ width: '100%' }}
+                                placeholder="час" />
                         </Form.Item>
                     </div>
                 </div>

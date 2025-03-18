@@ -55,17 +55,17 @@ const UsersPage: React.FC = () => {
     const [isAdminMessageOpen, setAminMessageOpen] = useState<boolean>(false);
     const [isAdminLockOpen, setAminLockOpen] = useState<boolean>(false);
     const adminModalTitle = useRef<string>('')
-    const [lockUsers] = useLockUnlockUsersMutation();
+    const [lockUsers,{isLoading:isUsersLocking}] = useLockUnlockUsersMutation();
     const [pageRequest, setPageRequest] = useState<IOlxUserPageRequest>(updatedPageRequest(searchParams));
     const { data, isLoading, refetch } = useGetUserPageQuery(pageRequest)
     const [removeUser] = useDeleteAccountMutation()
-     const {passwordCheck} = useAdminPasswordCheck()
+    const { passwordCheck } = useAdminPasswordCheck()
 
     useEffect(() => {
         setPageRequest(updatedPageRequest(searchParams));
     }, [location.search, location.pathname]);
 
-    const actions = useCallback((_value: any, user: IOlxUser) =>
+    const actions = (_value: any, user: IOlxUser) =>
         <div className='flex justify-around'>
             {(location.pathname !== '/admin/admins') &&
                 <>
@@ -75,11 +75,13 @@ const UsersPage: React.FC = () => {
                         </IconButton>
                     </Tooltip>
 
-                    <Tooltip title={location.pathname !== '/admin/adverts/blocked' 
-                        ? "Блокувати" 
+                    <Tooltip title={location.pathname !== '/admin/adverts/blocked'
+                        ? "Блокувати"
                         : "Розблокувати"}>
-                        <IconButton onClick={() => location.pathname !== '/admin/adverts/blocked' 
-                            ? lockUser(user.id) 
+                        <IconButton 
+                        disabled={isUsersLocking}
+                        onClick={() => location.pathname !== '/admin/adverts/blocked'
+                            ? lockUser(user.id)
                             : unLockUser(user.id)} color="warning" size="small">
                             {location.pathname !== '/admin/adverts/blocked' ? <LockOutlined /> : <LockOpen />}
                         </IconButton>
@@ -102,10 +104,10 @@ const UsersPage: React.FC = () => {
                     </Tooltip>
                 </Popconfirm>
             }
-        </div >, [location.pathname, currentUser?.id])
+        </div >
 
     const onUserRemove = async (id: number) => {
-        if(location.pathname === '/admin' || await passwordCheck()){
+        if (location.pathname === '/admin' || await passwordCheck()) {
             const result = await removeUser(id);
             if (!result.error) {
                 toast(`Користувач успішно видалений`, {
@@ -118,11 +120,10 @@ const UsersPage: React.FC = () => {
     const getUserName = (userId: number) => getUserDescr(data?.items.find(x => x.id === userId) || null)
 
     const sendMessage = async (userId: number) => {
+        selectedUser.current = userId;
         adminModalTitle.current = adminModalTitle.current = `Повідомлення для користувача "${getUserName(userId)}"`
         setAminMessageOpen(true)
-        selectedUser.current = userId;
     }
-
     const lockUser = (userId: number) => {
         selectedUser.current = userId;
         adminModalTitle.current = adminModalTitle.current = `Блокування користувача "${getUserName(userId)}"`
@@ -179,12 +180,13 @@ const UsersPage: React.FC = () => {
 
     const onGroupeUnLockUsers = async () => {
         modal.confirm({
-            title: `Розблокування ${selectedUser.current || selectedUsers.length === 1 ? " користувача" : " користувачів"}`,
+            title: `Розблокування ${selectedUser.current || selectedUsers.length === 1 ? ` користувача` : " користувачів"} `,
             icon: <LockOpen />,
-            content: `Розблокувати обран${selectedUser.current || selectedUsers.length === 1 ? "ого користувача" : "их користувачів"}?`,
+            content: `Розблокувати ${selectedUser.current || selectedUsers.length === 1 ? `користувача ${getUserName(selectedUser.current || 0) || getUserName(selectedUsers[0]) }` : "обраних користувачів"}?`,
             okText: 'Розблокувати',
             cancelText: 'Відмінити',
-            onOk: unlockUsers
+            onOk: unlockUsers,
+            onCancel: () => selectedUser.current = undefined
         });
     }
 
