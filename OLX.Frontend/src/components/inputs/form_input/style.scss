@@ -5,10 +5,14 @@
   color: globalColors.$controlsColor !important;
 }
 
-.primary-input .ant-input:-webkit-autofill {
-  box-shadow: 0 0 0px 1000px #fff inset !important;
-  -webkit-text-fill-color: globalColors.$controlsColor !important;
-  border: 1px solid globalColors.$controlsColor !important;
+.primary-input {
+  input:-webkit-autofill,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    transition: background-color 5000s ease-in-out 0s;
+    font-family: 'Montserrat', sans-serif !important;
+    color: globalColors.$controlsColor !important;
+  }
 }
 
 .primary-input .ant-input:-moz-autofill {
