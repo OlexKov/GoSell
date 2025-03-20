@@ -23,11 +23,12 @@ builder.Services.AddSignalR();
 
 
 var app = builder.Build();
-app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.UseHttpsRedirection();
-app.AddCultures();
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI();
+app.AddStaticFiles();
+app.AddCultures();
 //app.UseCookiePolicy(new CookiePolicyOptions
 //{
 //    MinimumSameSitePolicy = SameSiteMode.Strict,
@@ -35,7 +36,6 @@ app.UseSwaggerUI();
 //    Secure = CookieSecurePolicy.Always,
 //});
 
-app.AddStaticFiles();
 app.UseCors("AllowOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
