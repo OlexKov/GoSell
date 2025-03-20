@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetAdvertByIdQuery } from "../../../redux/api/advertApi";
 import CategoryNavigation from "../../../components/category_navigation";
 import { Divider } from "antd";
@@ -11,8 +11,12 @@ import { APP_ENV } from "../../../constants/env";
 
 const AdvertPage: React.FC = () => {
     const { id } = useParams();
-    const { data: advert, isLoading } = useGetAdvertByIdQuery(Number(id))
-    
+    const navigate = useNavigate()
+    const { data: advert, isLoading, isError } = useGetAdvertByIdQuery(Number(id))
+
+    useEffect(() => {
+        isError && navigate(-1)
+    }, [isError])
 
     useEffect(() => {
         if (advert) {
@@ -30,7 +34,7 @@ const AdvertPage: React.FC = () => {
             <div className="mx-[8vw] gap-[8vh] items-start flex  flex-col">
                 <CategoryNavigation categoryId={advert?.categoryId} />
                 {!isLoading &&
-                    <AdvertViewer advert={advert}  />
+                    <AdvertViewer advert={advert} />
                 }
             </div>
             <Divider className="p-0 m-0" />

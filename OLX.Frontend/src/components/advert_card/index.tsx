@@ -8,26 +8,32 @@ import AdvertButtonMenu from "../buttons/button_menu";
 import { useAppSelector } from "../../redux";
 import { APP_ENV } from "../../constants/env";
 import { useMemo } from "react";
+import AdminButtonMenu from "../buttons/admin_buttons_menu";
 
 
 const AdvertCard: React.FC<AdvertCardProps> = ({ advert, isFavorite = true, isCompleted = false, className }) => {
     const navigate = useNavigate();
     const user = useAppSelector(state => state.user.user)
+    const isAdmin = useAppSelector(state => state.user.auth.isAdmin)
     const onClick = () => {
         navigate(`/advert/${advert?.id}`)
     }
 
-    const activeButton = useMemo(() => user?.id == advert?.userId ?
-        <AdvertButtonMenu
-            id={advert?.id || 0}
-            className=" absolute  w-[11%] right-[0.5vw] top-[0.5vw]"
-            isEdit={true}
-            isComplete={!isCompleted}
-            isDelete={isCompleted}
-        />
-        : isFavorite ?
-            <ToggleFavoriteButton advertId={advert?.id || 0} className="absolute w-[3vw] right-[0.5vh] top-[0.5vh]" />
-            : <></>, [advert, user])
+    const activeButton = useMemo(() =>
+        !isAdmin
+            ? (user?.id == advert?.userId
+                ? <AdvertButtonMenu
+                    id={advert?.id || 0}
+                    className=" absolute  w-[11%] right-[0.5vw] top-[0.5vw]"
+                    isEdit={true}
+                    isComplete={!isCompleted}
+                    isDelete={isCompleted}
+                />
+                : isFavorite && <ToggleFavoriteButton advertId={advert?.id || 0} className="absolute w-[3vw] right-[0.5vh] top-[0.5vh]" />)
+            : advert && <AdminButtonMenu
+                advert={advert}
+                className="absolute  w-[11%] right-[0.5vw] top-[0.5vw]" />
+        , [advert, user])
 
     return (
         <div className={`rounded-bl-lg h-fit rounded-br-lg border border-[#9b7a5b]/20 p-0 relative transition-all duration-300 ease-in-out hover:border-[#9b7a5b]/80 hover:shadow-2xl ${className}`}>

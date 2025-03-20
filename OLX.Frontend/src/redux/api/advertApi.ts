@@ -6,7 +6,7 @@ import { PageResponse } from "../../models/user";
 export const advertApi = createApi({
   reducerPath: "advertApi",
   baseQuery: createBaseQuery("Advert"),
-  tagTypes: ["Adverts", "AdvertImages", "NotApproved", "Locked","Advert"],
+  tagTypes: ["Adverts", "AdvertImages", "NotApproved", "Locked", "Advert"],
 
   endpoints: (builder) => ({
     getAllAdverts: builder.query<IAdvert[], void>({

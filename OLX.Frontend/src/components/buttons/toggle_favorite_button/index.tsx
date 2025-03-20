@@ -4,11 +4,13 @@ import { useAddToFavoritesMutation, useGetFavoritesQuery, useRemoveFromFavorites
 import { useSelector } from "react-redux";
 import { getUser } from "../../../redux/slices/userSlice";
 import { APP_ENV } from "../../../constants/env";
+import { useAppSelector } from "../../../redux";
 
 const ToggleFavoriteButton: React.FC<ToggleFavoriteButtonProps> = ({ className, advertId, isAdvertPage = false }) => {
+    const isAdmin = useAppSelector(state => state.user.auth.isAdmin)
     const [addToFavorites] = useAddToFavoritesMutation();
     const [removeFromFavorites] = useRemoveFromFavoritesMutation();
-    const { data: favorites } = useGetFavoritesQuery();
+    const { data: favorites } = useGetFavoritesQuery(undefined, { skip: isAdmin });
     const [isFavorite, setIsFavorite] = useState(false);
     const user = useSelector(getUser);
 

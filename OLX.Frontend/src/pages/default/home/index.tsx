@@ -3,16 +3,14 @@ import HomePageImageBlock from '../../../components/home_page_image';
 import PrimaryButton from '../../../components/buttons/primary_button';
 import { useGetAdvertPageQuery } from '../../../redux/api/advertApi';
 import './style.scss'
-import { useEffect, useState } from 'react';
-import { IAdvert } from '../../../models/advert';
+import { useState } from 'react';
+import { IAdvertPageRequest } from '../../../models/advert';
 import CategoriesSection from '../../../components/categories_section';
 
 
 const HomePage: React.FC = () => {
-  const [page, setPage] = useState(1);
-  const [isEnd, setisEnd] = useState(false);
-  const { data, isLoading } = useGetAdvertPageQuery({
-    page,
+  const [pageRequest, setPageRequest] = useState<IAdvertPageRequest>({
+    page: 1,
     size: 8,
     sortKey: "date",
     isDescending: true,
@@ -20,20 +18,14 @@ const HomePage: React.FC = () => {
     priceTo: 0,
     approved: true,
     blocked: false,
-    completed:false
+    completed: false
   });
-
-  const [adverts, setAdverts] = useState<IAdvert[]>([]);
-  useEffect(() => {
-    if (data && data?.items.length > 0) {
-       const newAdverts =  [...adverts, ...data.items]
-       setAdverts(newAdverts);
-       setisEnd(data.total === newAdverts.length);
-    }
-  }, [data]);
+  const { data, isLoading } = useGetAdvertPageQuery(pageRequest);
 
   const loadMore = () => {
-    setPage((prev) => prev + 1);
+    if (pageRequest.size) {
+      setPageRequest({ ...pageRequest, size: pageRequest.size + 4 });
+    }
   };
 
   return (
@@ -41,8 +33,8 @@ const HomePage: React.FC = () => {
       <HomePageImageBlock />
       <div className='flex flex-col items-center mx-[8vw] py-[10vh] gap-[10vh]'>
         <CategoriesSection />
-        <AdvertsSection title='Рекомендовані оголошення' adverts={adverts} isLoading={isLoading} columns={4} />
-        {!isEnd &&
+        <AdvertsSection title='Рекомендовані оголошення' adverts={data?.items} isLoading={isLoading} columns={4} />
+        {!(data?.total === data?.items.length) &&
           <PrimaryButton
             onButtonClick={loadMore}
             title='Завантажити більше'

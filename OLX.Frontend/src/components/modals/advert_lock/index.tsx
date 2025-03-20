@@ -1,19 +1,18 @@
 import { Form, Modal } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
-import { IAdvert } from "../../../models/advert";
 import { useBlockAdvertMutation } from "../../../redux/api/advertAuthApi";
 import { toast } from "react-toastify";
+import { useAppDispatch, useAppSelector } from "../../../redux";
+import { closeModal } from "../../../redux/slices/lockAdvertModalSlice";
 
-interface IAdvertLockModalProps {
-    onCancel?: () => void
-    advert?: IAdvert
-}
 
-const AdvertLockModal: React.FC<IAdvertLockModalProps> = ({ advert, onCancel }) => {
+const AdvertLockModal: React.FC = () => {
     const [lockAdvert] = useBlockAdvertMutation();
     const [form] = Form.useForm();
     const [loading, setLoading] = useState<boolean>(false)
+    const dispatch = useAppDispatch();
+    const { isOpen, advert } = useAppSelector(state => state.lockAdverModalSlice);
 
     const handleOk = async () => {
         if (advert) {
@@ -24,8 +23,7 @@ const AdvertLockModal: React.FC<IAdvertLockModalProps> = ({ advert, onCancel }) 
                     if (!result.error) {
                         toast(`Оголошення ${advert.title} успішно заблоковано`, { type: 'info' })
                         handleCancel()
-                    }
-                    ;
+                    };
                 })
                 .catch((info) => {
                     console.log('Validate Failed:', info);
@@ -37,14 +35,13 @@ const AdvertLockModal: React.FC<IAdvertLockModalProps> = ({ advert, onCancel }) 
 
     const handleCancel = async () => {
         form.resetFields();
-        onCancel && onCancel()
+        dispatch(closeModal())
     }
-
 
     return (
         <Modal
             title={`Блокування оголошення "${advert?.title}"`}
-            open={advert !== undefined}
+            open={isOpen}
             onOk={handleOk}
             onCancel={handleCancel}
             okButtonProps={{

@@ -2,7 +2,7 @@
 import { DownOutlined, LogoutOutlined, MailOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import './style.scss'
 import { Badge, Dropdown, MenuProps } from 'antd'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getUserDescr } from '../../../../utilities/common_funct';
 import UserAvatar from '../../../user_avatar';
@@ -12,10 +12,13 @@ import { useAppSelector } from '../../../../redux';
 import { useEffect, useMemo } from 'react';
 import { useGetAdminMessagesQuery } from '../../../../redux/api/adminMessageApi';
 import { useSignalR } from '../../../hendlers/signalR/signalRContext';
+import { Images } from '../../../../constants/images';
+
 
 
 
 export const AdminHeader: React.FC = () => {
+    const navigate = useNavigate();
     const [logout] = useLogoutMutation();
     const signalRConnection = useSignalR();
     const user = useSelector(getUser)
@@ -49,19 +52,22 @@ export const AdminHeader: React.FC = () => {
     useEffect(() => { refetch() }, [user])
     return (
         <div className='h-[60px] bg-header sticky top-0 items-center flex-shrink-0 flex justify-end z-50'  >
-            <div className='flex gap-7 h-full'>
-                <div className='flex gap-5 flex-shrink-0 items-center'>
+            <div className='flex justify-between gap-7 h-full w-full'>
+                <img className='ml-[1vw] w-[6vw] cursor-pointer' color='white' src={Images.logo_white} onClick={()=>navigate("/")} />
+                <div className='flex gap-7 h-full items-center'>
                     <Badge count={unreadedMessagesCount} size='small' className={unreadedMessagesCount > 0 ? "animate-pulse" : ''}>
                         <MailOutlined className='text-xl text-white' />
                     </Badge>
+
+                    <Dropdown menu={{ items }} trigger={['click']} className=' min-w-[180] px-5 cursor-pointer h-full  flex-shrink-0 bg-orange-500 flex gap-2 justify-center items-center'>
+                        <div>
+                            <UserAvatar size={40} user={user} />
+                            <span className='flex-shrink-0  text-base text-nowrap'>{user ? getUserDescr(user) : ''}</span>
+                            <DownOutlined />
+                        </div>
+                    </Dropdown>
                 </div>
-                <Dropdown menu={{ items }} trigger={['click']} className=' min-w-[180] px-5 cursor-pointer  flex-shrink-0 bg-orange-500 flex gap-2 justify-center items-center'>
-                    <div>
-                        <UserAvatar size={40} user={user} />
-                        <span className='flex-shrink-0  text-base text-nowrap'>{user ? getUserDescr(user) : ''}</span>
-                        <DownOutlined />
-                    </div>
-                </Dropdown>
+
 
             </div>
         </div>

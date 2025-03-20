@@ -11,15 +11,15 @@ import { APP_ENV } from "../../../../constants/env";
 import { useGetAllCategoriesQuery } from "../../../../redux/api/categoryApi";
 import { formatPrice, getAdvertPageRequest, getDateTime, getQueryString } from "../../../../utilities/common_funct";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { Key, useEffect, useMemo, useState } from "react";
+import { Key, useEffect, useMemo } from "react";
 import { useGetAdvertPageQuery } from "../../../../redux/api/advertApi";
 import { IconButton } from "@mui/material";
 import { ColumnType, TableProps } from "antd/es/table";
 import { useApproveAdvertMutation, useDeleteAdvertMutation } from "../../../../redux/api/advertAuthApi";
 import { toast } from "react-toastify";
-import AdvertLockModal from "../../../../components/modals/advert_lock";
 import { useAppDispatch } from "../../../../redux";
 import { scrollTop } from "../../../../redux/slices/appSlice";
+import { openModal } from "../../../../redux/slices/lockAdvertModalSlice";
 
 
 const updatedPageRequest = (searchParams: URLSearchParams): IAdvertSearchPageData => ({
@@ -45,7 +45,6 @@ const updatedPageRequest = (searchParams: URLSearchParams): IAdvertSearchPageDat
 
 const AdminAdvertTable: React.FC = () => {
     const dispatch  = useAppDispatch();
-    const [advertToLock, setAdvertToLock] = useState<IAdvert>();
     const navigate = useNavigate()
     const location = useLocation()
     const { data: categories } = useGetAllCategoriesQuery()
@@ -232,7 +231,9 @@ const AdminAdvertTable: React.FC = () => {
                         <Popconfirm
                             title="Блокування оголошення"
                             description={`Ви впевненні що бажаєте заблокувати оголошення "${advert.title}"?`}
-                            onConfirm={() => { setAdvertToLock(advert) }}
+                            onConfirm={() => { 
+                                dispatch(openModal({advert:advert}))
+                            }}
                             okText="Заблокувати"
                             cancelText="Відмінити"
                         >
@@ -275,11 +276,6 @@ const AdminAdvertTable: React.FC = () => {
         }
     }
 
-    const advertLockCancel = () => {
-        setAdvertToLock(undefined);
-    }
-
-
     const onFiltersChange = (filterValues: AdminFilterResultModel) => {
         setSearchParams(getQueryString({
             ...pageRequest,
@@ -296,10 +292,6 @@ const AdminAdvertTable: React.FC = () => {
 
     return (
         <div className="m-6 flex-grow  text-center overflow-hidden">
-            <AdvertLockModal
-                advert={advertToLock}
-                onCancel={advertLockCancel}
-            />
             <PageHeader
                 title={`${location.pathname === '/admin/adverts' ? "Діючі" : "Непідтверджені"} оголошення`}
                 icon={<ProfileOutlined className="text-2xl" />}
@@ -348,7 +340,6 @@ const AdminAdvertTable: React.FC = () => {
                     scroll={{ x: 'max-content' }}
                     loading={isLoading}
                     bordered
-                    // rowSelection={selected ? rowSelection : undefined}
                     pagination={false}
                     showSorterTooltip={{ target: 'sorter-icon' }}
                     onChange={onTableChange}

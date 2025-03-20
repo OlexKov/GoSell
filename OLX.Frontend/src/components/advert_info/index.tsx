@@ -7,10 +7,12 @@ import { IAdvertInfoProps } from "./props"
 import { useAppSelector } from "../../redux"
 import AdvertButtonMenu from "../buttons/button_menu"
 import '../category_tree/style.scss'
+import AdminButtonMenu from "../buttons/admin_buttons_menu"
 
 
 const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
     const user = useAppSelector(state => state.user.user)
+    const isAdmin = useAppSelector(state => state.user.auth.isAdmin)
     const navigate = useNavigate();
     return (
         <div className=" flex flex-1 flex-col justify-between gap-[8vh] ">
@@ -20,26 +22,30 @@ const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
                         <span className="font-unbounded text-adaptive-advert-page-price-text font-medium">{formatPrice(advert?.price || 0)} грн.</span>
                         <p className="font-unbounded text-adaptive-card-price-text font-medium overflow-hidden text-ellipsis">{advert?.title}</p>
                     </div>
-                    {buttons
-                        ? !advert?.completed && user?.id != advert?.userId
-                            ? <ToggleFavoriteButton
-                                advertId={advert?.id || 0}
-                                isAdvertPage
-                                className="w-[7%] absolute right-0" />
-                            : <AdvertButtonMenu
-                                id={advert?.id || 0}
-                                isEdit={true}
-                                isComplete={true}
-                                className="w-[7%] absolute right-0" />
-                        : <></>
+                    {buttons &&
+                        (!isAdmin
+                            ? !advert?.completed && user?.id != advert?.userId
+                                ? <ToggleFavoriteButton
+                                    advertId={advert?.id || 0}
+                                    isAdvertPage
+                                    className="w-[7%] absolute right-0" />
+                                : <AdvertButtonMenu
+                                    id={advert?.id || 0}
+                                    isEdit={true}
+                                    isComplete={!advert?.completed}
+                                    isDelete={advert?.completed}
+                                    className="w-[7%] absolute right-0" />
+                            : advert && <AdminButtonMenu
+                                advert={advert}
+                                className="w-[7%] absolute right-0" />)
                     }
                 </div>
                 <div className="flex flex-col flex-1  w-[28vw] gap-[1vh]">
                     <span className="font-unbounded text-adaptive-card-price-text font-medium">Опис</span>
                     <div className="w-full max-h-[23vh]  overflow-y-auto custom-scrollbar">
-                       <p className="font-montserrat text-adaptive-card-price-text text-balance">{advert?.description}</p>
+                        <p className="font-montserrat text-adaptive-card-price-text text-balance">{advert?.description}</p>
                     </div>
-                    
+
                 </div>
             </div>
             <div className=" flex flex-col gap-[6vh]">
@@ -55,7 +61,7 @@ const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
                                 isLoading={false}
                                 className="h-[4.6vh] w-[22vw] "
                                 onButtonClick={() => navigate(`/user/advert/buy/${advert?.id}`)}
-                                disabled={user?.id == advert?.userId} />
+                                disabled={user?.id == advert?.userId || isAdmin} />
                             <PrimaryButton
                                 title={"Написати продавцю"}
                                 isLoading={false}
@@ -65,7 +71,7 @@ const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
                                 fontSize="clamp(14px, 2.1vh, 36px)"
                                 className="h-[4.6vh] w-[22vw] border-2"
                                 onButtonClick={() => navigate(`/user/chat?id=${advert?.id}`)}
-                                disabled={user?.id == advert?.userId} />
+                                disabled={user?.id == advert?.userId || isAdmin} />
                         </div>
 
                         : <div className="h-[6vh] content-center rounded-sm bg-slate-100 text-center text-slate-400 font-unbounded text-adaptive-card-price-text">

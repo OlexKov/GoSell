@@ -41,8 +41,8 @@ const RegisterPage = React.lazy(() => import('./pages/default/register'));
 function App() {
   return (
     <Routes>
-      <Route element={<ProtectedRoutes requiredRole={["User", "UnAuth"]} />}>
-        <Route path="/" element={
+      <Route  path="/"
+        element={
           <Suspense fallback={<GlobalFallback />}>
             <DefaultLayout />
           </Suspense>
@@ -68,7 +68,7 @@ function App() {
           </Route>
 
           <Route path='favorites' element={<FavoritesAdverts />} />
-        </Route>
+       
       </Route>
 
       <Route path="/auth" element={
