@@ -23,9 +23,9 @@ builder.Services.AddSignalR();
 
 
 var app = builder.Build();
-app.UseCors("AllowOrigins");
-app.AddStaticFiles();
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+app.UseHttpsRedirection();
+app.AddCultures();
 app.UseSwagger();
 app.UseSwaggerUI();
 //app.UseCookiePolicy(new CookiePolicyOptions
@@ -34,13 +34,14 @@ app.UseSwaggerUI();
 //    HttpOnly = HttpOnlyPolicy.Always,
 //    Secure = CookieSecurePolicy.Always,
 //});
-app.SetMaxRequestBodySize();
+
+app.AddStaticFiles();
+app.UseCors("AllowOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
+app.SetMaxRequestBodySize();
 app.MapHub<MessageHub>("/hub");
-//app.UseHttpsRedirection();
 app.MapControllers();
-app.AddCultures();
 app.DataBaseMigrate();
 await app.SeedDataAsync();
 await app.RunAsync();

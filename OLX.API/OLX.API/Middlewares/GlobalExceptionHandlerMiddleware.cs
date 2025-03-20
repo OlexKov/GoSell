@@ -7,13 +7,12 @@ namespace OLX.API.Middlewares
 {
     public class GlobalExceptionHandlerMiddleware(RequestDelegate next)
     {
-        private readonly RequestDelegate _next = next;
-
+        
         public async Task Invoke(HttpContext context)
         {
             try
             {
-                await _next(context);
+                await next(context);
             }
             catch (HttpException httpError)
             {

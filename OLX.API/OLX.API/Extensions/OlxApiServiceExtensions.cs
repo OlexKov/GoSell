@@ -11,6 +11,7 @@ using Olx.BLL.Helpers.Options;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 
 namespace OLX.API.Extensions
@@ -45,7 +46,7 @@ namespace OLX.API.Extensions
                 {
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOpts.Key)),
                     ValidateAudience = false,
-                    ValidateIssuer = false,
+                    ValidateIssuer = true,
                     ValidateLifetime = true,
                     ValidIssuer = jwtOpts.Issuer,
                     ValidateIssuerSigningKey = true,
@@ -54,7 +55,7 @@ namespace OLX.API.Extensions
                 };
                 cfg.Events = new JwtBearerEvents
                 {
-                    OnMessageReceived = context => {
+                    OnMessageReceived = (context) => {
                         var accessToken = context.Request.Query["access_token"];
 
                         var path = context.HttpContext.Request.Path;
