@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Olx.BLL.Exceptions;
 using Olx.BLL.Interfaces;
 using Olx.BLL.Models;
+using Olx.BLL.Resources;
 using System.Diagnostics;
 using System.IO.Compression;
 using System.Net;
@@ -11,7 +14,9 @@ using System.Net;
 
 namespace Olx.BLL.Services
 {
-    public class BackupDataService(IConfiguration config) : IBackupDataService
+    public class BackupDataService(
+        IConfiguration config,
+        ILogger<BackupDataService> logger) : IBackupDataService
     {
         private readonly string _host = config["DbSetings:Host"]!;
         private readonly string _dbName = config["DbSetings:DbName"]!;
@@ -46,8 +51,13 @@ namespace Olx.BLL.Services
             try
             {
 
-                process = Process.Start(processStartInfo)
-                ?? throw new HttpException("Не вдалося запустити процес pg_dump.", HttpStatusCode.InternalServerError);
+                process = Process.Start(processStartInfo);
+                if (process == null) 
+                {
+                    logger.LogError("{error}",Errors.ErrorStarPGDump);
+                    throw new HttpException(Errors.ErrorStarPGDump, HttpStatusCode.InternalServerError);
+                }
+                 
                
                 await process.WaitForExitAsync().WaitAsync(TimeSpan.FromSeconds(60));
 
@@ -71,13 +81,15 @@ namespace Olx.BLL.Services
                     });
                     string zipPath = Path.Combine(_backupDir, $"{backupName}.back");
                     ZipFile.CreateFromDirectory(_backupTempDir, zipPath,CompressionLevel.SmallestSize,false);
+                    logger.LogInformation("{info}", Messages.BackupCreated);
                     return backupName;
                 }
             }
             catch (Exception ex)
             {
-                throw new HttpException($"Помилка при створенні бекапу: {ex.Message}",HttpStatusCode.InternalServerError);
-
+                var errorMessage = string.Format(Errors.BackupCreatinError, ex.Message);
+                logger.LogError("{error}", errorMessage);
+                throw new HttpException(errorMessage, HttpStatusCode.InternalServerError);
             }
             finally 
             {
@@ -108,19 +120,21 @@ namespace Olx.BLL.Services
                     Process? process = null;
                     try
                     {
-
-                        process = Process.Start(processStartInfo)
-                        ?? throw new HttpException("Не вдалося запустити процес pg_restore.",HttpStatusCode.InternalServerError);
-                       
+                        process = Process.Start(processStartInfo);
+                        if (process == null)
+                        {
+                            logger.LogError("{error}", Errors.ErrorStartPGRestore);
+                            throw new HttpException(Errors.ErrorStartPGRestore, HttpStatusCode.InternalServerError);
+                        }
                         
                         await process.WaitForExitAsync().WaitAsync(TimeSpan.FromSeconds(60));
-                        
 
                         if (process.ExitCode != 0)
                         {
                             var error = await process.StandardError.ReadToEndAsync();
-                            Console.WriteLine($"Помилка при відновленні бази: {error}");
-                            throw new HttpException($"Помилка при відновленні бази: {error}",HttpStatusCode.InternalServerError);
+                            var errorMessage = string.Format(Errors.DataBaseRestoreError, error);
+                            logger.LogError("{error}", errorMessage);
+                            throw new HttpException(errorMessage, HttpStatusCode.InternalServerError);
                         }
                         else 
                         {
@@ -132,15 +146,16 @@ namespace Olx.BLL.Services
                             {
                                 File.Copy(filePath, Path.Combine(_imagesDir, Path.GetFileName(filePath)));
                             });
-                            Console.WriteLine("База даних успішно відновлена!");
+                            logger.LogInformation("{info}",Messages.DataBaseUpdateSucceeded);
                             return;
                         }
                       
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Помилка при відновленні бази: {ex.Message}");
-                        throw new HttpException($"Помилка при відновленні бази: {ex.Message}",HttpStatusCode.InternalServerError);
+                        var errorMessage = string.Format(Errors.DataBaseRestoreError, ex.Message);
+                        logger.LogError("{error}",errorMessage);
+                        throw new HttpException(errorMessage, HttpStatusCode.InternalServerError);
                     }
                     finally 
                     {
@@ -150,15 +165,18 @@ namespace Olx.BLL.Services
                 }
                 
             }
-            throw new HttpException($"Не вірне ім'я файлу", HttpStatusCode.BadRequest);
-
+            throw new HttpException(Errors.InvalidBackupFileName, HttpStatusCode.BadRequest);
         }
 
         public async Task<string> BackupDatabase()
         {
-            Console.WriteLine("Backup start");
-            var backupName = await CreateDbBackupAsync()
-                ?? throw new HttpException("Error backup create", HttpStatusCode.InternalServerError);
+            logger.LogInformation("{info}",Messages.BackupStart);
+            var backupName = await CreateDbBackupAsync();
+            if (backupName == null) 
+            {
+                logger.LogError("{info}",Errors.BackupCreatinError);
+                throw new HttpException(Errors.BackupCreatinError, HttpStatusCode.InternalServerError);
+            }
             return backupName;
         }
 
@@ -173,12 +191,12 @@ namespace Olx.BLL.Services
             if (File.Exists(filePath))
             {
                 var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read) 
-                    ?? throw new HttpException("Error open backup file", HttpStatusCode.InternalServerError);
+                    ?? throw new HttpException(Errors.ErrorOpenBackupFile, HttpStatusCode.InternalServerError);
                 return stream;
             }
             else
             {
-                throw new HttpException("Invalid backup file name", HttpStatusCode.BadRequest);
+                throw new HttpException(Errors.InvalidBackupFileName, HttpStatusCode.BadRequest);
             }
         }
 
@@ -186,7 +204,7 @@ namespace Olx.BLL.Services
         {
             if (file == null || file.Length == 0)
             {
-                throw new HttpException("Invalid upload file", HttpStatusCode.BadRequest);
+                throw new HttpException(Errors.ErrorOpenBackupFile, HttpStatusCode.BadRequest);
             }
            
             var filePath = Path.Combine(_backupDir, file.FileName);
@@ -215,7 +233,7 @@ namespace Olx.BLL.Services
             }
             else 
             {
-                throw new HttpException("Invalid backup file name", HttpStatusCode.BadRequest);
+                throw new HttpException(Errors.InvalidBackupFileName, HttpStatusCode.BadRequest);
             }
         }
     }

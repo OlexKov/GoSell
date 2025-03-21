@@ -20,7 +20,7 @@ builder.Services.AddOlxApiConfigurations(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
-
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 app.UseHttpsRedirection();

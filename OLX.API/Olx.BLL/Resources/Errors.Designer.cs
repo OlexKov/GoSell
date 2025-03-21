@@ -79,6 +79,15 @@ namespace Olx.BLL.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Backup creatin error: {0}.
+        /// </summary>
+        internal static string BackupCreatinError {
+            get {
+                return ResourceManager.GetString("BackupCreatinError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Current password is not valid.
         /// </summary>
         internal static string CurrentPasswordIsNotValid {
@@ -88,11 +97,29 @@ namespace Olx.BLL.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Акаунт за цією поштою вже існує.
+        ///   Ищет локализованную строку, похожую на Error database restore: {0}.
+        /// </summary>
+        internal static string DataBaseRestoreError {
+            get {
+                return ResourceManager.GetString("DataBaseRestoreError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на An account with this email already exists.
         /// </summary>
         internal static string EmailAlreadyExist {
             get {
                 return ResourceManager.GetString("EmailAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Adverts Ids is not be empty.
+        /// </summary>
+        internal static string EmptyAdvertIds {
+            get {
+                return ResourceManager.GetString("EmptyAdvertIds", resourceCulture);
             }
         }
         
@@ -102,6 +129,42 @@ namespace Olx.BLL.Resources {
         internal static string ErrorAthorizedUser {
             get {
                 return ResourceManager.GetString("ErrorAthorizedUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Error open backup file.
+        /// </summary>
+        internal static string ErrorOpenBackupFile {
+            get {
+                return ResourceManager.GetString("ErrorOpenBackupFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Darabase restore error: {0}.
+        /// </summary>
+        internal static string ErrorRestoreDataBase {
+            get {
+                return ResourceManager.GetString("ErrorRestoreDataBase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Error starting pg_dump process..
+        /// </summary>
+        internal static string ErrorStarPGDump {
+            get {
+                return ResourceManager.GetString("ErrorStarPGDump", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Error starting pg_restore process.
+        /// </summary>
+        internal static string ErrorStartPGRestore {
+            get {
+                return ResourceManager.GetString("ErrorStartPGRestore", resourceCulture);
             }
         }
         
@@ -124,7 +187,7 @@ namespace Olx.BLL.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на InvalidAdminMessageId.
+        ///   Ищет локализованную строку, похожую на Invalid admin message id.
         /// </summary>
         internal static string InvalidAdminMessageId {
             get {
@@ -147,6 +210,15 @@ namespace Olx.BLL.Resources {
         internal static string InvalidAreaRef {
             get {
                 return ResourceManager.GetString("InvalidAreaRef", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Invalid backup file name.
+        /// </summary>
+        internal static string InvalidBackupFileName {
+            get {
+                return ResourceManager.GetString("InvalidBackupFileName", resourceCulture);
             }
         }
         
@@ -178,29 +250,11 @@ namespace Olx.BLL.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Invalid chatt id.
-        /// </summary>
-        internal static string InvalidChattId {
-            get {
-                return ResourceManager.GetString("InvalidChattId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Ищет локализованную строку, похожую на Confirmation data error.
         /// </summary>
         internal static string InvalidConfirmationData {
             get {
                 return ResourceManager.GetString("InvalidConfirmationData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на fdghdfghhfd.
-        /// </summary>
-        internal static string Invalidfghbsdfghdfg {
-            get {
-                return ResourceManager.GetString("Invalidfghbsdfghdfg", resourceCulture);
             }
         }
         
@@ -241,7 +295,7 @@ namespace Olx.BLL.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Невірний логін або пароль.
+        ///   Ищет локализованную строку, похожую на Invalid login or password.
         /// </summary>
         internal static string InvalidLoginData {
             get {
@@ -259,7 +313,7 @@ namespace Olx.BLL.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Не вірно введений пароль.
+        ///   Ищет локализованную строку, похожую на Incorrect password entered.
         /// </summary>
         internal static string InvalidPassword {
             get {
@@ -349,7 +403,7 @@ namespace Olx.BLL.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Відмова у видаленні акаунту..
+        ///   Ищет локализованную строку, похожую на Account deletion denied..
         /// </summary>
         internal static string LastAdminDeleteBlock {
             get {
@@ -381,6 +435,15 @@ namespace Olx.BLL.Resources {
         internal static string NewPostRequestError {
             get {
                 return ResourceManager.GetString("NewPostRequestError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на No valid adverts found.
+        /// </summary>
+        internal static string NoValidAdverts {
+            get {
+                return ResourceManager.GetString("NoValidAdverts", resourceCulture);
             }
         }
         

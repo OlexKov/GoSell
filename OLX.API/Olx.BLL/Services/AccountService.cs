@@ -86,7 +86,7 @@ namespace Olx.BLL.Services
         {
             var confirmationToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
             var email = EmailTemplates.GetEmailConfirmationTemplate(configuration["FrontendEmailConfirmationUrl"]!, confirmationToken, user.Id);
-            await emailService.SendAsync(user.Email, "Підтвердження електронної пошти", email, true);
+            await emailService.SendAsync(user.Email, Messages.EmailConfirmation, email, true);
         }
 
         private async Task CheckEmailConfirmAsync(OlxUser user)
@@ -95,7 +95,7 @@ namespace Olx.BLL.Services
             {
                 throw new HttpException(HttpStatusCode.Forbidden, new UserBlockInfo
                 {
-                    Message = "Ваша пошта не підтверджена. Перевірте email для підтвердження.",
+                    Message = Messages.EmailNotConfirmed,
                     UnlockTime = null,
                     Email = user.Email
                 });
@@ -109,7 +109,7 @@ namespace Olx.BLL.Services
             {
                 throw new HttpException(HttpStatusCode.Locked, new UserBlockInfo
                 {
-                    Message = "Ваш обліковий запис заблокований.",
+                    Message = Messages.AccountLocked,
                     UnlockTime = user.LockoutEnd.HasValue && user.LockoutEnd.Value.Year < 9000 ? user.LockoutEnd.Value.LocalDateTime : null
                 });
             }
@@ -144,7 +144,7 @@ namespace Olx.BLL.Services
             {
                 throw new HttpException(HttpStatusCode.Forbidden, new UserBlockInfo
                 {
-                    Message = "reCAPTHCA перевірку не пройдено"
+                    Message = Messages.reCaptchaValidationError
                 });
             }
         }
@@ -166,7 +166,7 @@ namespace Olx.BLL.Services
                     {
                         throw new HttpException(HttpStatusCode.Locked, new UserBlockInfo
                         {
-                            Message = "Ваш обліковий запис заблоковано через надто багато невірних спроб входу",
+                            Message = Messages.FailedLoginAttempts,
                             UnlockTime = user.LockoutEnd.HasValue ? user.LockoutEnd.Value.LocalDateTime : null
                         });
                     }
@@ -302,10 +302,10 @@ namespace Olx.BLL.Services
                             if (result.Succeeded)
                             {
                                 string lockoutEndMessage = userBlockModel.LockoutEndDate is null
-                                    ? "На невизначений термін"
-                                    : $"Заблокований до {userBlockModel.LockoutEndDate.Value.ToLongDateString()} {userBlockModel.LockoutEndDate.Value.ToLongTimeString()}";
+                                    ? Messages.Indefinitely
+                                    : $"{Messages.LockedUntil} {userBlockModel.LockoutEndDate.Value.ToLongDateString()} {userBlockModel.LockoutEndDate.Value.ToLongTimeString()}";
                                 var accountBlockedTemplate = EmailTemplates.GetAccountBlockedTemplate(userBlockModel.LockReason ?? "", lockoutEndMessage);
-                                await emailService.SendAsync(user.Email, "Ваш акаунт заблоковано", accountBlockedTemplate, true);
+                                await emailService.SendAsync(user.Email, Messages.AccountLocked, accountBlockedTemplate, true);
                                 continue;
                             }
                         }
@@ -315,7 +315,7 @@ namespace Olx.BLL.Services
                             if (result.Succeeded)
                             {
                                 var accountUnblockedTemplate = EmailTemplates.GetAccountUnblockedTemplate();
-                                await emailService.SendAsync(user.Email, "Ваш акаунт розблоковано", accountUnblockedTemplate, true);
+                                await emailService.SendAsync(user.Email, Messages.AccountUnlocked, accountUnblockedTemplate, true);
                                 continue;
                             }
                         }
@@ -380,8 +380,8 @@ namespace Olx.BLL.Services
                 if (currentUser.Id != id && await userManager.IsInRoleAsync(currentUser, Roles.Admin)) 
                 {
                     await userManager.UpdateUserActivityAsync(httpContext);
-                    var accountBlockedTemplate = EmailTemplates.GetAccountRemovedTemplate("Ваш акаунт було видалено адміністратором сайту");
-                    await emailService.SendAsync(user.Email, "Ваш акаунт видалено", accountBlockedTemplate, true);
+                    var accountBlockedTemplate = EmailTemplates.GetAccountRemovedTemplate(Messages.AccountDeleted);
+                    await emailService.SendAsync(user.Email, Messages.AccountRemoved, accountBlockedTemplate, true);
                     await hubContext.Clients.Users(user.Id.ToString())
                          .SendAsync(HubMethods.AdminRemoveAccount);
                 }
@@ -443,8 +443,8 @@ namespace Olx.BLL.Services
                     new AdminMessageCreationModel
                     {
                         MessageLogo = advert.Images.FirstOrDefault(x => x.Priority == 0)?.Name,
-                        Content = $"Користувач \"{user.GetUserDescription()}\" додав ваше оголошення \"{advert.Title}\" в обрані",
-                        Subject = "Ваше оголошення було додане в обрані",
+                        Content = string.Format(Messages.UserAddedToFavorites, user.GetUserDescription(), advert.Title),
+                        Subject = Messages.AdvertInFavorites,
                         UserId = advert.UserId
                     });
         }
@@ -455,7 +455,7 @@ namespace Olx.BLL.Services
         {
             if (advertIds == null || !advertIds.Any())
             {
-                throw new HttpException("Advert IDs cannot be empty.", HttpStatusCode.BadRequest);
+                throw new HttpException(Errors.EmptyAdvertIds, HttpStatusCode.BadRequest);
             }
 
             var user = await GetCurrentUser();
@@ -470,7 +470,7 @@ namespace Olx.BLL.Services
             var advertsToAdd = await advertRepository.GetListBySpec(new AdvertSpecs.GetByIds(newAdvertIds));
             if (!advertsToAdd.Any())
             {
-                throw new HttpException("No valid adverts found.", HttpStatusCode.BadRequest);
+                throw new HttpException(Errors.NoValidAdverts, HttpStatusCode.BadRequest);
             }
 
             foreach (var advert in advertsToAdd)

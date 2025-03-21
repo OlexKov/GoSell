@@ -69,7 +69,7 @@ namespace Olx.BLL.Services
         {
             await userManager.UpdateUserActivityAsync(httpContext);
             var chat = await chatRepository.GetItemBySpec(new ChatSpecs.GetById(chatId))
-                ?? throw new HttpException(Errors.InvalidChattId, HttpStatusCode.BadRequest);
+                ?? throw new HttpException(Errors.InvalidChatId, HttpStatusCode.BadRequest);
             chatRepository.Delete(chat);
             await chatRepository.SaveAsync();
         }
@@ -77,7 +77,7 @@ namespace Olx.BLL.Services
         {
             await userManager.UpdateUserActivityAsync(httpContext);
             var chats = await chatRepository.GetListBySpec(new ChatSpecs.GetByIds(chatIds))
-                ?? throw new HttpException(Errors.InvalidChattId, HttpStatusCode.BadRequest);
+                ?? throw new HttpException(Errors.InvalidChatId, HttpStatusCode.BadRequest);
             chatRepository.DeleteRange(chats);
             await chatRepository.SaveAsync();
         }
@@ -99,7 +99,7 @@ namespace Olx.BLL.Services
         {
             var user = await userManager.UpdateUserActivityAsync(httpContext);
             var chats = await chatRepository.GetListBySpec(new ChatSpecs.GetByIds(chatIds))
-                ?? throw new HttpException(Errors.InvalidChattId, HttpStatusCode.BadRequest);
+                ?? throw new HttpException(Errors.InvalidChatId, HttpStatusCode.BadRequest);
 
             foreach (var chat in chats)
             {
@@ -116,7 +116,7 @@ namespace Olx.BLL.Services
         {
             var user = await userManager.UpdateUserActivityAsync(httpContext);
             var chat = await chatRepository.GetItemBySpec(new ChatSpecs.GetById(chatId))
-                ?? throw new HttpException(Errors.InvalidChattId, HttpStatusCode.BadRequest);
+                ?? throw new HttpException(Errors.InvalidChatId, HttpStatusCode.BadRequest);
             var newMessage = new ChatMessage()
             {
                 Content = message,
@@ -138,7 +138,7 @@ namespace Olx.BLL.Services
             if (messagesIds.Any()) 
             {
                 var chat = await chatRepository.GetItemBySpec(new ChatSpecs.GetById(chatId,ChatOpt.NoTracking))
-                    ?? throw new HttpException(Errors.InvalidChattId, HttpStatusCode.BadRequest);
+                    ?? throw new HttpException(Errors.InvalidChatId, HttpStatusCode.BadRequest);
                 var user = await userManager.UpdateUserActivityAsync(httpContext);
                 var messeges = await chatMessageRepository.GetListBySpec(new ChatMessageSpecs.GetMesssegesById(messagesIds, true));
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Olx.BLL.Entities;
 using Olx.BLL.Interfaces;
 using Olx.BLL.Specifications;
@@ -9,12 +10,13 @@ namespace Olx.BLL.Services.BackgroundServices
 {
     public class ImageCeanupService(
         IConfiguration configuration,
-        IServiceScopeFactory serviceScopeFactory) : BackgroundService
+        IServiceScopeFactory serviceScopeFactory,
+        ILogger<ImageCeanupService> logger) : BackgroundService
     {
         private readonly TimeSpan _interval = TimeSpan.FromHours(int.Parse(configuration["ImageCleanupIntervalHours"]!));
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            Console.WriteLine("Image cleanup service started");
+            logger.LogInformation("Image cleanup service started");
             while (!stoppingToken.IsCancellationRequested)
             {
                 await Task.Delay(_interval, stoppingToken);
@@ -34,7 +36,7 @@ namespace Olx.BLL.Services.BackgroundServices
                 imageRepo.DeleteRange(deletedImages);
                 await imageRepo.SaveAsync();
                 imageService.DeleteImages(deletedImages.Select(x => x.Name));
-                Console.WriteLine($"Removed {deletedImages.Count()} images");
+                logger.LogInformation("Removed {Count} images", deletedImages.Count());
             }
         }
     }

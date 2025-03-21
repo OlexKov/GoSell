@@ -117,142 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="JwtSettingsReadError" xml:space="preserve">
-    <value>Error read JWT setting</value>
+  <data name="BirthdateError" xml:space="preserve">
+    <value>{PropertyName} мусить бути меншою за поточну дату</value>
   </data>
-  <data name="ImageSizesReadError" xml:space="preserve">
-    <value>Error read image sizes</value>
+  <data name="CollectionEmptyError" xml:space="preserve">
+    <value>Колекція не може бути пустою</value>
   </data>
-  <data name="ImageSizesInitError" xml:space="preserve">
-    <value>Image sizes not initializing</value>
+  <data name="GreaterEqualZeroError" xml:space="preserve">
+    <value>{PropertyName} мусить бути більше або рівне нулю</value>
   </data>
-  <data name="InvalidLoginData" xml:space="preserve">
-    <value>Invalid login or password</value>
+  <data name="GreaterZeroError" xml:space="preserve">
+    <value>{PropertyName} мусить бути більше нуля</value>
   </data>
-  <data name="InvalidToken" xml:space="preserve">
-    <value>Invalid token</value>
+  <data name="ImageEmptyError" xml:space="preserve">
+    <value>{PropertyName} не може бути пустим коли відсутнє зображення.</value>
   </data>
-  <data name="InvalidConfirmationData" xml:space="preserve">
-    <value>Confirmation data error</value>
-  </data>
-  <data name="InvalidResetPasswordData" xml:space="preserve">
-    <value>Invalid reser password data</value>
-  </data>
-  <data name="UserCreateError" xml:space="preserve">
-    <value>User creation error</value>
-  </data>
-  <data name="InvalidUserEmail" xml:space="preserve">
-    <value>Invalid user email</value>
-  </data>
-  <data name="UserRemoveError" xml:space="preserve">
-    <value>User remove error</value>
-  </data>
-  <data name="ActionBlocked" xml:space="preserve">
-    <value>Action blocked</value>
-  </data>
-  <data name="InvalidUserId" xml:space="preserve">
-    <value>Invalid user id</value>
-  </data>
-  <data name="InvalidAdminMessageId" xml:space="preserve">
-    <value>Invalid admin message id</value>
-  </data>
-  <data name="InvalidFilterCreationModelData" xml:space="preserve">
-    <value>Invalid filter creation model data</value>
-  </data>
-  <data name="InvalidFilterValueId" xml:space="preserve">
-    <value>Invalid filter value id</value>
-  </data>
-  <data name="InvalidFilterId" xml:space="preserve">
-    <value>Invalid filter id</value>
-  </data>
-  <data name="InvalidCategoryId" xml:space="preserve">
-    <value>Invalid category id</value>
-  </data>
-  <data name="InvalidAdvertId" xml:space="preserve">
-    <value>Invalid advert id</value>
-  </data>
-  <data name="ErrorAthorizedUser" xml:space="preserve">
-    <value>Error authorized user</value>
-  </data>
-  <data name="CurrentPasswordIsNotValid" xml:space="preserve">
-    <value>Current password is not valid</value>
-  </data>
-  <data name="InvalidChatId" xml:space="preserve">
-    <value>Invalid chat id</value>
-  </data>
-  <data name="AdvertIsBlocked" xml:space="preserve">
-    <value>Advert is blocked</value>
-  </data>
-  <data name="InvalidSettlementId" xml:space="preserve">
-    <value>Invalid settlement id</value>
-  </data>
-  <data name="NewPostRequestError" xml:space="preserve">
-    <value>New post request error</value>
-  </data>
-  <data name="NewPostDataUpdateError" xml:space="preserve">
-    <value>New post data update error</value>
-  </data>
-  <data name="InvalidSettlementRef" xml:space="preserve">
-    <value>Invalid settlement ref</value>
-  </data>
-  <data name="InvalidRegionRef" xml:space="preserve">
-    <value>Invalid region ref</value>
-  </data>
-  <data name="InvalidAreaRef" xml:space="preserve">
-    <value>Invalid area ref</value>
-  </data>
-  <data name="EmailAlreadyExist" xml:space="preserve">
-    <value>An account with this email already exists</value>
-  </data>
-  <data name="ReCapthcaValidationError" xml:space="preserve">
-    <value>reCapthca validation error</value>
-  </data>
-  <data name="InvalidRole" xml:space="preserve">
-    <value>Invalid role name</value>
-  </data>
-  <data name="InvalidLockedOperation" xml:space="preserve">
-    <value>User already has current locked status</value>
-  </data>
-  <data name="InvalidParentCategoryId" xml:space="preserve">
-    <value>Invalid parent category id</value>
-  </data>
-  <data name="MultipleRefresh" xml:space="preserve">
-    <value>Multiple refresh</value>
-  </data>
-  <data name="InvalidChatMessegesIds" xml:space="preserve">
-    <value>Invalid chat messeges ids</value>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Невірна адресса електронної пошти</value>
   </data>
   <data name="InvalidPassword" xml:space="preserve">
-    <value>Incorrect password entered</value>
+    <value>Невірний пароль</value>
   </data>
-  <data name="LastAdminDeleteBlock" xml:space="preserve">
-    <value>Account deletion denied.</value>
+  <data name="InvalidPhoneNumber" xml:space="preserve">
+    <value>Невірний номер телефону</value>
   </data>
-  <data name="EmptyAdvertIds" xml:space="preserve">
-    <value>Adverts Ids is not be empty</value>
+  <data name="InvalidUrl" xml:space="preserve">
+    <value>Невірний  {PropertyName} URL.</value>
   </data>
-  <data name="NoValidAdverts" xml:space="preserve">
-    <value>No valid adverts found</value>
+  <data name="NotEmpty" xml:space="preserve">
+    <value>{PropertyName} не може бути пустим.</value>
   </data>
-  <data name="ErrorStarPGDump" xml:space="preserve">
-    <value>Error starting pg_dump process.</value>
+  <data name="NotMatchPasswordsError" xml:space="preserve">
+    <value>Паролі не співпадають</value>
   </data>
-  <data name="BackupCreatinError" xml:space="preserve">
-    <value>Backup creatin error: {0}</value>
+  <data name="StartUppercaseError" xml:space="preserve">
+    <value>{PropertyName} повинно починатися з великої букви</value>
   </data>
-  <data name="ErrorStartPGRestore" xml:space="preserve">
-    <value>Error starting pg_restore process</value>
+  <data name="MinSymbolsCountError" xml:space="preserve">
+    <value>{PropertyName} довжина має бути більшою</value>
   </data>
-  <data name="DataBaseRestoreError" xml:space="preserve">
-    <value>Error database restore: {0}</value>
+  <data name="PasswordComfirmationError" xml:space="preserve">
+    <value>Невірний пароль підтвердження</value>
   </data>
-  <data name="ErrorRestoreDataBase" xml:space="preserve">
-    <value>Darabase restore error: {0}</value>
+  <data name="MaxSymbolsCountError" xml:space="preserve">
+    <value>{PropertyName} довжина має бути меншою</value>
   </data>
-  <data name="InvalidBackupFileName" xml:space="preserve">
-    <value>Invalid backup file name</value>
-  </data>
-  <data name="ErrorOpenBackupFile" xml:space="preserve">
-    <value>Error open backup file</value>
+  <data name="InvalidImageFileType" xml:space="preserve">
+    <value>Невірний пип зображення(png,jpeg,jpg,gif,webp)</value>
   </data>
 </root>

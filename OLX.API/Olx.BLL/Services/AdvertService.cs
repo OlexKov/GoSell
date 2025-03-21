@@ -92,13 +92,13 @@ namespace Olx.BLL.Services
                 var message = new AdminMessageCreationModel
                 {
                     MessageLogo = advert.Images.FirstOrDefault(x => x.Priority == 0)?.Name,
-                    Content = "За порушення правил та не відповідності що до політикі сайту.",
-                    Subject = $"Адміністратор видалив ваше оголошення \"{advert.Title}\".",
+                    Content = Messages.AdvertDeletedDefault,
+                    Subject =string.Format(Messages.AdminDeleteAdvert, advert.Title),
                     UserId = advert.UserId
                 };
                 await adminMessageService.AdminCreate(message);
                 var accountBlockedTemplate = EmailTemplates.GetAdvertRemovedTemplate($"{message.Subject} {message.Content}");
-                await emailService.SendAsync(advert.User.Email, "Вашe оголошення видалено", accountBlockedTemplate, true);
+                await emailService.SendAsync(advert.User.Email, Messages.AdvertDeleted, accountBlockedTemplate, true);
                 await hubContext.Clients.Users(advert.UserId.ToString())
                   .SendAsync(HubMethods.AdminDeleteAdvert);
                 return;
@@ -240,14 +240,14 @@ namespace Olx.BLL.Services
                 var message = new AdminMessageCreationModel
                 {
                     MessageLogo = advert.Images.FirstOrDefault(x => x.Priority == 0)?.Name,
-                    Content = lockRequest.LockReason ?? "За не відповідність що до політикі сайту",
-                    Subject = $"Адміністратор заблокував ваше оголошення \"{advert.Title}\"",
+                    Content = lockRequest.LockReason ?? Messages.AdvertDeletedDefault,
+                    Subject = string.Format(Messages.AdminLockAdvert, advert.Title),
                     UserId = advert.UserId
                 };
                 await adminMessageService.AdminCreate(message);
                
                 var accountBlockedTemplate = EmailTemplates.GetAdvertLockedTemplate($"{message.Subject} {message.Content}");
-                await emailService.SendAsync(advert.User.Email, "Вашe оголошення заблоковано", accountBlockedTemplate, true);
+                await emailService.SendAsync(advert.User.Email, Messages.AdvertLocked, accountBlockedTemplate, true);
                 await hubContext.Clients.Users(advert.UserId.ToString())
                  .SendAsync(HubMethods.AdminLockAdvert);
             }

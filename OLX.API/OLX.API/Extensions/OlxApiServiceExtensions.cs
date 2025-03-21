@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.AspNetCore.Localization;
 
 
 namespace OLX.API.Extensions
@@ -144,14 +145,23 @@ namespace OLX.API.Extensions
 
         public static void AddCultures(this WebApplication app)
         {
-            var supportedCultures = new[] { "en-US", "uk-UA", "ru-RU" };
+            var supportedCultures = new[] { "en-US", "uk-UA" };
             var localizationOptions = new RequestLocalizationOptions()
                 .SetDefaultCulture("en-US")
                 .AddSupportedCultures(supportedCultures)
                 .AddSupportedUICultures(supportedCultures);
-
+            localizationOptions.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(async context =>
+            {
+                var userLang = context.Request.Headers.AcceptLanguage.ToString();
+                if (userLang.StartsWith("ru", StringComparison.OrdinalIgnoreCase) ||
+                    userLang.StartsWith("uk", StringComparison.OrdinalIgnoreCase))
+                {
+                    return new ProviderCultureResult("uk-UA");
+                }
+                return new ProviderCultureResult("en-US");
+               
+            }));
             app.UseRequestLocalization(localizationOptions);
-
         }
 
         public static void SetMaxRequestBodySize(this WebApplication app)

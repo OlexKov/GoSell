@@ -117,142 +117,85 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="JwtSettingsReadError" xml:space="preserve">
-    <value>Error read JWT setting</value>
+  <data name="AccountDeleted" xml:space="preserve">
+    <value>Your account has been deleted by the site administrator</value>
   </data>
-  <data name="ImageSizesReadError" xml:space="preserve">
-    <value>Error read image sizes</value>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Your account is locked</value>
   </data>
-  <data name="ImageSizesInitError" xml:space="preserve">
-    <value>Image sizes not initializing</value>
+  <data name="AccountRemoved" xml:space="preserve">
+    <value>Account removed</value>
   </data>
-  <data name="InvalidLoginData" xml:space="preserve">
-    <value>Invalid login or password</value>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Your account has been unlocked</value>
   </data>
-  <data name="InvalidToken" xml:space="preserve">
-    <value>Invalid token</value>
+  <data name="AdminDeleteAdvert" xml:space="preserve">
+    <value>The admin has deleted your advert."{0}".</value>
   </data>
-  <data name="InvalidConfirmationData" xml:space="preserve">
-    <value>Confirmation data error</value>
+  <data name="AdminLockAdvert" xml:space="preserve">
+    <value>The admin has locked your advert "{0}".</value>
   </data>
-  <data name="InvalidResetPasswordData" xml:space="preserve">
-    <value>Invalid reser password data</value>
+  <data name="AdvertDeleted" xml:space="preserve">
+    <value>Your advert has been deleted.</value>
   </data>
-  <data name="UserCreateError" xml:space="preserve">
-    <value>User creation error</value>
+  <data name="AdvertDeletedDefault" xml:space="preserve">
+    <value>Due to violation of the rules and non-compliance with the site's policy.</value>
   </data>
-  <data name="InvalidUserEmail" xml:space="preserve">
-    <value>Invalid user email</value>
+  <data name="AdvertInFavorites" xml:space="preserve">
+    <value>Your advert has been added to favorites.</value>
   </data>
-  <data name="UserRemoveError" xml:space="preserve">
-    <value>User remove error</value>
+  <data name="AdvertLocked" xml:space="preserve">
+    <value>Advert is locked</value>
   </data>
-  <data name="ActionBlocked" xml:space="preserve">
-    <value>Action blocked</value>
+  <data name="AreasCount" xml:space="preserve">
+    <value>Areas - {0}</value>
   </data>
-  <data name="InvalidUserId" xml:space="preserve">
-    <value>Invalid user id</value>
+  <data name="AreasUpdate" xml:space="preserve">
+    <value>Start areas update ...</value>
   </data>
-  <data name="InvalidAdminMessageId" xml:space="preserve">
-    <value>Invalid admin message id</value>
+  <data name="BackupCreated" xml:space="preserve">
+    <value>Backup successfully created.</value>
   </data>
-  <data name="InvalidFilterCreationModelData" xml:space="preserve">
-    <value>Invalid filter creation model data</value>
+  <data name="BackupStart" xml:space="preserve">
+    <value>Backup process has started.</value>
   </data>
-  <data name="InvalidFilterValueId" xml:space="preserve">
-    <value>Invalid filter value id</value>
+  <data name="DataBaseUpdateSucceeded" xml:space="preserve">
+    <value>Database update succeeded!</value>
   </data>
-  <data name="InvalidFilterId" xml:space="preserve">
-    <value>Invalid filter id</value>
+  <data name="EmailConfirmation" xml:space="preserve">
+    <value>Email confirmation</value>
   </data>
-  <data name="InvalidCategoryId" xml:space="preserve">
-    <value>Invalid category id</value>
+  <data name="EmailNotConfirmed" xml:space="preserve">
+    <value>Your email is not confirmed. Please check your inbox for confirmation.</value>
   </data>
-  <data name="InvalidAdvertId" xml:space="preserve">
-    <value>Invalid advert id</value>
+  <data name="FailedLoginAttempts" xml:space="preserve">
+    <value>Your account has been locked due to too many unsuccessful login attempts</value>
   </data>
-  <data name="ErrorAthorizedUser" xml:space="preserve">
-    <value>Error authorized user</value>
+  <data name="Indefinitely" xml:space="preserve">
+    <value>For an indefinite period</value>
   </data>
-  <data name="CurrentPasswordIsNotValid" xml:space="preserve">
-    <value>Current password is not valid</value>
+  <data name="LockedUntil" xml:space="preserve">
+    <value>Locked until</value>
   </data>
-  <data name="InvalidChatId" xml:space="preserve">
-    <value>Invalid chat id</value>
+  <data name="NPUpdateCompleted" xml:space="preserve">
+    <value>New Post data successfully updated !!!</value>
   </data>
-  <data name="AdvertIsBlocked" xml:space="preserve">
-    <value>Advert is blocked</value>
+  <data name="reCaptchaValidationError" xml:space="preserve">
+    <value>reCaptcha validation error</value>
   </data>
-  <data name="InvalidSettlementId" xml:space="preserve">
-    <value>Invalid settlement id</value>
+  <data name="RegionsCount" xml:space="preserve">
+    <value>Regions - {0}</value>
   </data>
-  <data name="NewPostRequestError" xml:space="preserve">
-    <value>New post request error</value>
+  <data name="RegionsUpdate" xml:space="preserve">
+    <value>Start regions update ....</value>
   </data>
-  <data name="NewPostDataUpdateError" xml:space="preserve">
-    <value>New post data update error</value>
+  <data name="SettlemensUpdate" xml:space="preserve">
+    <value>Start settlements update ...</value>
   </data>
-  <data name="InvalidSettlementRef" xml:space="preserve">
-    <value>Invalid settlement ref</value>
+  <data name="SettlementsCount" xml:space="preserve">
+    <value>Settlements - {0}</value>
   </data>
-  <data name="InvalidRegionRef" xml:space="preserve">
-    <value>Invalid region ref</value>
-  </data>
-  <data name="InvalidAreaRef" xml:space="preserve">
-    <value>Invalid area ref</value>
-  </data>
-  <data name="EmailAlreadyExist" xml:space="preserve">
-    <value>An account with this email already exists</value>
-  </data>
-  <data name="ReCapthcaValidationError" xml:space="preserve">
-    <value>reCapthca validation error</value>
-  </data>
-  <data name="InvalidRole" xml:space="preserve">
-    <value>Invalid role name</value>
-  </data>
-  <data name="InvalidLockedOperation" xml:space="preserve">
-    <value>User already has current locked status</value>
-  </data>
-  <data name="InvalidParentCategoryId" xml:space="preserve">
-    <value>Invalid parent category id</value>
-  </data>
-  <data name="MultipleRefresh" xml:space="preserve">
-    <value>Multiple refresh</value>
-  </data>
-  <data name="InvalidChatMessegesIds" xml:space="preserve">
-    <value>Invalid chat messeges ids</value>
-  </data>
-  <data name="InvalidPassword" xml:space="preserve">
-    <value>Incorrect password entered</value>
-  </data>
-  <data name="LastAdminDeleteBlock" xml:space="preserve">
-    <value>Account deletion denied.</value>
-  </data>
-  <data name="EmptyAdvertIds" xml:space="preserve">
-    <value>Adverts Ids is not be empty</value>
-  </data>
-  <data name="NoValidAdverts" xml:space="preserve">
-    <value>No valid adverts found</value>
-  </data>
-  <data name="ErrorStarPGDump" xml:space="preserve">
-    <value>Error starting pg_dump process.</value>
-  </data>
-  <data name="BackupCreatinError" xml:space="preserve">
-    <value>Backup creatin error: {0}</value>
-  </data>
-  <data name="ErrorStartPGRestore" xml:space="preserve">
-    <value>Error starting pg_restore process</value>
-  </data>
-  <data name="DataBaseRestoreError" xml:space="preserve">
-    <value>Error database restore: {0}</value>
-  </data>
-  <data name="ErrorRestoreDataBase" xml:space="preserve">
-    <value>Darabase restore error: {0}</value>
-  </data>
-  <data name="InvalidBackupFileName" xml:space="preserve">
-    <value>Invalid backup file name</value>
-  </data>
-  <data name="ErrorOpenBackupFile" xml:space="preserve">
-    <value>Error open backup file</value>
+  <data name="UserAddedToFavorites" xml:space="preserve">
+    <value>User "{0}" added your advert "{1}" to favorites.</value>
   </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Olx.BLL.DTOs.NewPost;
 using Olx.BLL.Entities.NewPost;
@@ -20,7 +21,8 @@ namespace Olx.BLL.Services
         IRepository<Area> areaRepository,
         IRepository<Region> regionRepository,
         IRepository<Settlement> settlementRepository,
-        IMapper mapper) : INewPostService
+        IMapper mapper,
+        ILogger<NewPostService> logger) : INewPostService
     {
         private bool _disposedValue;
         private readonly HttpClient _httpClient = new();
@@ -144,7 +146,7 @@ namespace Olx.BLL.Services
         {
             try 
             {
-                Console.WriteLine("Start areas update ...");
+                logger.LogInformation("{info}", Messages.AreasUpdate);
                 var areasData = await GetAreasDataAsync();
                 var areas = await areaRepository.GetListBySpec(new NewPostDataSpecs.GetAreas(true));
                 if (areas.Any())
@@ -169,7 +171,7 @@ namespace Olx.BLL.Services
                 }
                 await areaRepository.SaveAsync();
 
-                Console.WriteLine("Start regions update ...");
+                logger.LogInformation("{info}", Messages.RegionsUpdate);
                 var regionsData = await GetRegionsDataAsync(areasData.Select(x => x.Ref));
                 var regions = await regionRepository.GetListBySpec(new NewPostDataSpecs.GetRegions(true));
                 if (regions.Any())
@@ -193,7 +195,7 @@ namespace Olx.BLL.Services
                 }
                 await regionRepository.SaveAsync();
 
-                Console.WriteLine("Start settlements update ...");
+                logger.LogInformation("{info}", Messages.SettlemensUpdate);
 
                 var settlementsData = await GetSettlementsDataAsync(regionsData);
                 var settlements = await settlementRepository.GetListBySpec(new NewPostDataSpecs.GetSettlements(true));
@@ -217,14 +219,14 @@ namespace Olx.BLL.Services
                     await settlementRepository.AddRangeAsync(settlementsData);
                 }
                 await settlementRepository.SaveAsync();
-                Console.WriteLine("Update successfuly completed ...");
-                Console.WriteLine($"Areas - {areasData.Count()}");
-                Console.WriteLine($"Regions - {regionsData.Count()}");
-                Console.WriteLine($"Settlements - {settlementsData.Count()}");
+                logger.LogInformation("{info}", Messages.NPUpdateCompleted);
+                logger.LogInformation("{info}",string.Format(Messages.AreasCount, areasData.Count()));
+                logger.LogInformation("{info}", string.Format(Messages.RegionsCount, regionsData.Count()));
+                logger.LogInformation("{info}", string.Format(Messages.SettlementsCount, settlementsData.Count()));
             }
             catch(Exception e) 
             {
-                Console.WriteLine(e.Message);
+                logger.LogError("{error} {info}", Errors.NewPostDataUpdateError,e.Message);
                 throw new HttpException(Errors.NewPostDataUpdateError, HttpStatusCode.InternalServerError);
             }
         }

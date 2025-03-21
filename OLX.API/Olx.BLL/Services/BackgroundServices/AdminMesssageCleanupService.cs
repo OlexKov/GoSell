@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Olx.BLL.Entities.AdminMessages;
 using Olx.BLL.Interfaces;
 using Olx.BLL.Specifications;
@@ -11,13 +12,14 @@ namespace Olx.BLL.Services.BackgroundServices
 {
     public class AdminMesssageCleanupService(
         IConfiguration configuration,
-        IServiceScopeFactory serviceScopeFactory) : BackgroundService
+        IServiceScopeFactory serviceScopeFactory,
+        ILogger<AdminMesssageCleanupService> logger) : BackgroundService
     {
         private readonly TimeSpan _interval = TimeSpan.FromHours(int.Parse(configuration["AdminMessageCleanupIntervalHours"]!));
         private readonly int messageExpDay = int.Parse(configuration["AdminMessageExpDays"]!);
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            Console.WriteLine("Admin message cleanup service started");
+            logger.LogInformation("Admin message cleanup service started");
             while (!stoppingToken.IsCancellationRequested)
             {
                 await Task.Delay(_interval, stoppingToken);
@@ -43,7 +45,7 @@ namespace Olx.BLL.Services.BackgroundServices
                     messageRepo.DeleteRange(deletedMesseges);
                     await messageRepo.SaveAsync();
                 }
-                Console.WriteLine($"Removed {deletedAdminMesseges.Count()} admin messages");
+                logger.LogInformation("Removed {Count} admin messages", deletedAdminMesseges.Count());
             }
         }
     }
