@@ -36,7 +36,15 @@ docker run -d --restart=always --name olx-asp_container -p 5817:8080 sashok9203/
 ```nginx options /etc/nginx/sites-available/default
 server {
     server_name   olxapi.itstep.click *.olxapi.itstep.click;
-    client_max_body_size 200M;
+    location /api/Backup/upload {
+            client_max_body_size 200M;
+    }
+    location /api/Backup/add {
+            client_max_body_size 200M;
+    }
+    location / {
+            client_max_body_size 20M;
+    };
     location / {
        proxy_pass         http://localhost:5817;
        proxy_http_version 1.1;
