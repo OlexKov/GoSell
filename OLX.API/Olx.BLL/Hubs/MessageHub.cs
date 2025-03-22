@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using Olx.BLL.Entities;
 using Olx.BLL.Helpers;
 namespace Olx.BLL.Hubs
 {
     [Authorize]
-    public class MessageHub(UserManager<OlxUser> userManager) : Hub
+    public class MessageHub(
+        UserManager<OlxUser> userManager,
+        ILogger<MessageHub> logger) : Hub
     {
         private async Task<bool> _isAdmin()
         {
@@ -21,12 +24,12 @@ namespace Olx.BLL.Hubs
             if (await _isAdmin())
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, "Admins");
-                Console.WriteLine("----------------- Admin SignalR connected ----------------------");
+                logger.LogInformation("----------------- Admin SignalR connected ----------------------");
             }
             else
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, "Users");
-                Console.WriteLine("----------------- User  SignalR connected ----------------------");
+                logger.LogInformation("----------------- User  SignalR connected ----------------------");
             }
 
         }
@@ -36,12 +39,12 @@ namespace Olx.BLL.Hubs
             if (await _isAdmin())
             {
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Admins");
-                Console.WriteLine("----------------- Admin SignalR disconnected ----------------------");
+                logger.LogInformation("----------------- Admin SignalR disconnected ----------------------");
             }
             else
             {
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Users");
-                Console.WriteLine("----------------- User SignalR disconnected ----------------------");
+                logger.LogInformation("----------------- User SignalR disconnected ----------------------");
             }
 
         }

@@ -153,13 +153,14 @@ namespace OLX.API.Extensions
             localizationOptions.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(async context =>
             {
                 var userLang = context.Request.Headers.AcceptLanguage.ToString();
-                if (userLang.StartsWith("ru", StringComparison.OrdinalIgnoreCase) ||
-                    userLang.StartsWith("uk", StringComparison.OrdinalIgnoreCase))
+                if (userLang != null &&
+                    (userLang.StartsWith("ru", StringComparison.OrdinalIgnoreCase) ||
+                    userLang.StartsWith("uk", StringComparison.OrdinalIgnoreCase)))
                 {
                     return new ProviderCultureResult("uk-UA");
                 }
                 return new ProviderCultureResult("en-US");
-               
+
             }));
             app.UseRequestLocalization(localizationOptions);
         }

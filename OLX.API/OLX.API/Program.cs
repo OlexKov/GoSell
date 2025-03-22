@@ -1,15 +1,8 @@
-using Microsoft.AspNetCore.Http.Features;
 using Olx.BLL.Exstensions;
 using Olx.BLL.Hubs;
 using Olx.DAL.Exstension;
 using OLX.API.Extensions;
 using OLX.API.Middlewares;
-using System.Globalization;
-
-
-var defaultCulture = CultureInfo.InvariantCulture;
-CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
-CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
 
 var builder = WebApplication.CreateBuilder(args);
 
