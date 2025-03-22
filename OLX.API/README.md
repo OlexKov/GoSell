@@ -44,7 +44,7 @@ server {
     }
     location / {
             client_max_body_size 20M;
-    };
+    }
     location / {
        proxy_pass         http://localhost:5817;
        proxy_http_version 1.1;
