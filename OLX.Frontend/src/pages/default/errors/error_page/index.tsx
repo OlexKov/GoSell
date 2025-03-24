@@ -33,11 +33,9 @@ const ErrorPage: React.FC<IErrorProps> = ({ status, title, subTitle }) => {
             title={errorData.title}
             subTitle={errorData.subTitle}
             extra={
-              errorData.location !== location && (
-                <Button className=" w-auto" type="primary" onClick={() => navigate(location)}>
+              <Button className=" w-auto" type="primary" onClick={() => navigate(location)}>
                   Повернутися на головну
-                </Button>
-              )
+              </Button>
             }
           />
       }

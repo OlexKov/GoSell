@@ -73,10 +73,14 @@ const userSlice = createSlice({
         },
 
         logOut: (state) => {
-            localStorage.removeItem(APP_ENV.ACCESS_KEY);
-            sessionStorage.removeItem(APP_ENV.ACCESS_KEY)
-            localStorage.removeItem(APP_ENV.REFRESH_KEY);
-            sessionStorage.removeItem(APP_ENV.REFRESH_KEY)
+            if(state.auth.remember){
+                localStorage.removeItem(APP_ENV.ACCESS_KEY);
+                localStorage.removeItem(APP_ENV.REFRESH_KEY);
+            }
+            else{
+                sessionStorage.removeItem(APP_ENV.ACCESS_KEY)
+                sessionStorage.removeItem(APP_ENV.REFRESH_KEY)
+            }
             state.user = null
             state.token = null
             state.refreshToken = null

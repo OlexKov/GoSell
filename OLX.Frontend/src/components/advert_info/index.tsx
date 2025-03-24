@@ -30,7 +30,7 @@ const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
 
                         <p className="font-unbounded text-adaptive-card-price-text font-medium overflow-hidden text-ellipsis">{advert?.title}</p>
                     </div>
-                    {buttons &&
+                    {
                         (!isAdmin
                             ? !advert?.completed && user?.id != advert?.userId
                                 ? <ToggleFavoriteButton
@@ -59,7 +59,7 @@ const AdvertInfo: React.FC<IAdvertInfoProps> = ({ advert, buttons = true }) => {
             <div className=" flex flex-col gap-[6vh]">
                 {
                     !advert?.completed && !advert?.blocked
-                        ? buttons &&
+                        ? buttons && !isAdmin &&
                         <div className="flex flex-col gap-[2.4vh]">
                             <PrimaryButton
                                 title={"Купити зараз"}
