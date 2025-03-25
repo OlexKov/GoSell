@@ -33,6 +33,7 @@ namespace Olx.BLL.Entities
 
         [StringLength(36)]
         [Unicode(false)]
+       
         public string SettlementRef { get; set; }
         public Settlement Settlement { get; set; }
         public int CategoryId { get; set; }

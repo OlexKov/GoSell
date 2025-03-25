@@ -2,7 +2,13 @@ import { useNavigate } from "react-router-dom";
 import AdminMessageCard from "../../../components/admin_message_card";
 import { BackButton } from "../../../components/buttons/back_button"
 import PrimaryButton from "../../../components/buttons/primary_button";
-import { useGetUserMessagesPageQuery, useSetUserMessageReadedMutation, useSetUserMessageReadedRangeMutation, useSoftDeleteUserMessageMutation, useSoftDeleteUserMessagesMutation } from "../../../redux/api/adminMessageApi";
+import {
+    useGetUserMessagesPageQuery,
+    useSetUserMessageReadedMutation,
+    useSetUserMessageReadedRangeMutation,
+    useSoftDeleteUserMessageMutation,
+    useSoftDeleteUserMessagesMutation
+} from "../../../redux/api/adminMessageApi";
 import { toast } from "react-toastify";
 import { useMemo, useState } from "react";
 import { IAdminMesssage, IAdminMesssagePageRequest } from "../../../models/adminMesssage";

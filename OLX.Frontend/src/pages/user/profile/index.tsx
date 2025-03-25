@@ -30,11 +30,11 @@ const UserProfile: React.FC = () => {
             label: <h5 className="ml-[8vw] font-montserrat text-adaptive-card-price-text" >Мої оголошення</h5>,
             children: <ActiveAdverts adverts={adverts || []} />,
         },
-        {
-            key: '2',
-            label: <h5 className="ml-[.5vw] font-montserrat text-adaptive-card-price-text" >Відгуки</h5>,
-            children: <div className="mx-[8vw] h-[300px] bg-slate-200">Відгуки</div>
-        },
+        // {
+        //     key: '2',
+        //     label: <h5 className="ml-[.5vw] font-montserrat text-adaptive-card-price-text" >Відгуки</h5>,
+        //     children: <div className="mx-[8vw] h-[300px] bg-slate-200">Відгуки</div>
+        // },
         {
             key: '3',
             label: <h5 className="ml-[.51vw] font-montserrat text-adaptive-card-price-text" >Неактивні оголошення</h5>,

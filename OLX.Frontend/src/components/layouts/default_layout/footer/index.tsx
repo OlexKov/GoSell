@@ -1,6 +1,15 @@
 import { Divider } from "antd"
 import { FacebookOutlined, InstagramOutlined } from '@ant-design/icons';
+import { useAppDispatch } from "../../../../redux";
+import { openMessageSendModal } from "../../../../redux/slices/modalSlice";
 export const Footer: React.FC = () => {
+    const dispach = useAppDispatch();
+    const sendAdminMessage = ()=>{
+        dispach(openMessageSendModal({
+            title:"Лист для адміністрації",
+            toAdmin:true
+        }))
+    }
     return (
         <div>
             <Divider className="p-0 m-0" />
@@ -17,6 +26,7 @@ export const Footer: React.FC = () => {
                     <span className="mr-[6vw]">Як продавати?</span>
                     <span className="mr-[6vw]">Як купувати</span>
                     <span className="mr-[6vw]">Доставка</span>
+                    <span className="mr-[6vw] cursor-pointer" onClick={sendAdminMessage}>Лист адміністрації</span> 
                 </div>
                 <div className="flex gap-5 self-end">
                     <InstagramOutlined className="text-adaptive-footer-icons" />

@@ -12,6 +12,7 @@ import RedirectHendler from './components/hendlers/redirect_hendler/index.tsx'
 import ErrorHendler from './components/hendlers/error_hendler/index.tsx'
 import { SignalRProvider } from './components/hendlers/signalR/signalRContext/index.tsx'
 import AdvertLockModal from './components/modals/advert_lock/index.tsx'
+import AdminMessageModal from './components/modals/admin_message/index.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
@@ -31,6 +32,7 @@ createRoot(document.getElementById('root')!).render(
           transition={Zoom} />
         <ErrorHendler />
         <AdvertLockModal/>
+        <AdminMessageModal/>
         <RedirectHendler />
         <SignalRProvider>
           <SignalRListener />

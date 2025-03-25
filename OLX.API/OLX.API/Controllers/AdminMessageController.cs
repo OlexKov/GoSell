@@ -17,7 +17,7 @@ namespace OLX.API.Controllers
 
         [Authorize(Roles = Roles.Admin)]
         [HttpGet("get/admin")]
-        public async Task<IActionResult> GetAdminMessages() => Ok(await adminMessageService.GetAdminMessages());
+        public async Task<IActionResult> GetAdminMessages() => Ok(await adminMessageService.GetAdminMessages(null));
 
         [Authorize(Roles = Roles.User)]
         [HttpGet("get/user")]
@@ -26,6 +26,10 @@ namespace OLX.API.Controllers
         [Authorize(Roles = Roles.User)]
         [HttpGet("get/user/unreaded")]
         public async Task<IActionResult> GetUserUnreadedMessages() => Ok(await adminMessageService.GetUserMessages(true));
+
+        [Authorize(Roles = Roles.Admin)]
+        [HttpGet("get/admin/unreaded")]
+        public async Task<IActionResult> GetAdminUnreadedMessages() => Ok(await adminMessageService.GetAdminMessages(true));
 
         [Authorize(Roles = Roles.Admin)]
         [HttpGet("get/deleted")]
@@ -53,19 +57,19 @@ namespace OLX.API.Controllers
         }
 
         [Authorize(Roles = Roles.Admin)]
-        [HttpPut("create/admin")]
-        public async Task<IActionResult> AdminCreate([FromBody] AdminMessageCreationModel messageCreationModel) 
+        [HttpPut("send/user")]
+        public async Task<IActionResult> SendMessageToUser([FromBody] AdminMessageCreationModel messageCreationModel) 
         {
-            await adminMessageService.AdminCreate(messageCreationModel);
+            await adminMessageService.SendToUser(messageCreationModel);
             return Ok();
         }
 
 
         [Authorize(Roles = Roles.User)]
-        [HttpPut("create/user")]
-        public async Task<IActionResult> UserCreate([FromBody] AdminMessageCreationModel messageCreationModel) 
+        [HttpPut("send/admin")]
+        public async Task<IActionResult> SendMassageToAdmin([FromBody] AdminMessageCreationModel messageCreationModel) 
         {
-            await adminMessageService.UserCreate(messageCreationModel);
+            await adminMessageService.SendToAdmin(messageCreationModel);
             return Ok();
         }
             

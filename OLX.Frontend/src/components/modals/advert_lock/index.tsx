@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useBlockAdvertMutation } from "../../../redux/api/advertAuthApi";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../../redux";
-import { closeModal } from "../../../redux/slices/lockAdvertModalSlice";
+import { closeLockModal } from "../../../redux/slices/modalSlice";
 
 
 const AdvertLockModal: React.FC = () => {
@@ -12,7 +12,7 @@ const AdvertLockModal: React.FC = () => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState<boolean>(false)
     const dispatch = useAppDispatch();
-    const { isOpen, advert } = useAppSelector(state => state.lockAdverModalSlice);
+    const { isLockModalOpen, advert } = useAppSelector(state => state.modalSlice);
 
     const handleOk = async () => {
         if (advert) {
@@ -35,13 +35,13 @@ const AdvertLockModal: React.FC = () => {
 
     const handleCancel = async () => {
         form.resetFields();
-        dispatch(closeModal())
+        dispatch(closeLockModal())
     }
 
     return (
         <Modal
             title={`Блокування оголошення "${advert?.title}"`}
-            open={isOpen}
+            open={isLockModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
             okButtonProps={{

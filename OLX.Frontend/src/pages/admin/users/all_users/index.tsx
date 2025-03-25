@@ -5,7 +5,7 @@ import { IOlxUser, IOlxUserPageRequest } from "../../../../models/user";
 import PageHeaderButton from "../../../../components/buttons/page_header_button";
 import { useEffect, useRef, useState } from "react";
 import { paginatorConfig } from "../../../../utilities/pagintion_settings";
-import AdminMessage from "../../../../components/modals/admin_message";
+//import AdminMessageModal from "../../../../components/modals/admin_message";
 import { useCreateAdminMessageMutation } from "../../../../redux/api/adminMessageApi";
 import { toast } from "react-toastify";
 import IconButton from "@mui/material/IconButton/IconButton";
@@ -28,6 +28,7 @@ import { useGetUserPageQuery } from "../../../../redux/api/userAuthApi";
 import { useAppDispatch, useAppSelector } from "../../../../redux";
 import useAdminPasswordCheck from "../../../../hooks/checkAdminPassword";
 import { scrollTop } from "../../../../redux/slices/appSlice";
+import { openMessageSendModal } from "../../../../redux/slices/modalSlice";
 
 const updatedPageRequest = (searchParams: URLSearchParams) => ({
     isAdmin: location.pathname === '/admin/admins',
@@ -53,8 +54,6 @@ const UsersPage: React.FC = () => {
     const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
     const selectedUser = useRef<number | undefined>();
     const [modal, contextHolder] = Modal.useModal();
-    const [sendAdminMesssage] = useCreateAdminMessageMutation();
-    const [isAdminMessageOpen, setAminMessageOpen] = useState<boolean>(false);
     const [isAdminLockOpen, setAminLockOpen] = useState<boolean>(false);
     const adminModalTitle = useRef<string>('')
     const [lockUsers, { isLoading: isUsersLocking }] = useLockUnlockUsersMutation();
@@ -126,9 +125,10 @@ const UsersPage: React.FC = () => {
     const getUserName = (userId: number) => getUserDescr(data?.items.find(x => x.id === userId) || null)
 
     const sendMessage = async (userId: number) => {
-        selectedUser.current = userId;
-        adminModalTitle.current = adminModalTitle.current = `Повідомлення для користувача "${getUserName(userId)}"`
-        setAminMessageOpen(true)
+        dispatch(openMessageSendModal({
+            title: `Повідомлення для користувача "${getUserName(userId)}"`,
+            userId: userId
+        }))
     }
     const lockUser = (userId: number) => {
         selectedUser.current = userId;
@@ -196,33 +196,26 @@ const UsersPage: React.FC = () => {
         });
     }
 
-    const sendGroupeMessage = async (data: any) => {
-        const result = await sendAdminMesssage({
-            userIds: selectedUser.current ? [selectedUser.current] : selectedUsers,
-            content: data.message,
-            subject: data.subject
-        })
-        if (!result.error) {
-            toast(`Повідомлення успішно відправлен${selectedUsers.length > 1 ? 'і' : 'о'}`, {
-                type: 'info',
-                style: { width: 'fit-content' }
-            })
-            setAminMessageOpen(false)
-            selectedUser.current = undefined;
-        }
-    }
 
     const onGroupeMessageSend = () => {
+        let title = '';
+
         if (selectedUsers.length === 0) {
-            adminModalTitle.current = "Повідомлення для всіх користувачів"
+            title = "Повідомлення для всіх користувачів"
         }
         else if (selectedUsers.length === 1) {
-            adminModalTitle.current = `Повідомлення для користувача "${getUserName(selectedUsers[0])}"`
+            title = `Повідомлення для користувача "${getUserName(selectedUsers[0])}"`
         }
         else {
-            adminModalTitle.current = "Повідомлення для обраних користувачів"
+            title = "Повідомлення для обраних користувачів"
         }
-        setAminMessageOpen(true)
+
+        dispatch(openMessageSendModal({
+            title: title,
+            userId: undefined,
+            usersIds: selectedUsers
+        }))
+
     }
 
     const pageHeaderButtons = [
@@ -287,18 +280,11 @@ const UsersPage: React.FC = () => {
         <div className="m-6 flex-grow  text-center overflow-hidden">
             {contextHolder}
             {location.pathname !== '/admin/admins' &&
-                <>
-                    <AdminMessage
-                        isOpen={isAdminMessageOpen}
-                        onConfirm={sendGroupeMessage}
-                        onCancel={() => setAminMessageOpen(false)}
-                        title={adminModalTitle.current} />
-                    <AdminLock
-                        isOpen={isAdminLockOpen}
-                        onConfirm={onLockUsers}
-                        onCancel={() => setAminLockOpen(false)}
-                        title={adminModalTitle.current} />
-                </>
+                <AdminLock
+                    isOpen={isAdminLockOpen}
+                    onConfirm={onLockUsers}
+                    onCancel={() => setAminLockOpen(false)}
+                    title={adminModalTitle.current} />
             }
 
             <PageHeader

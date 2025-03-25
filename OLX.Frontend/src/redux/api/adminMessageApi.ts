@@ -9,10 +9,10 @@ export const adminMessageAuthApi = createApi({
     tagTypes: ['Messeges', 'AdminMessages', 'UnreadedMessages'],
     endpoints: (builder) => ({
 
-        createAdminMessage: builder.mutation<void, IAdminMesssageCreationModel>({
+        createMessageForUser: builder.mutation<void, IAdminMesssageCreationModel>({
             query: (messageCreationModel) => {
                 return {
-                    url: 'create/admin',
+                    url: 'send/user',
                     method: 'PUT',
                     body: messageCreationModel
                     // timeout: 10000,
@@ -21,10 +21,10 @@ export const adminMessageAuthApi = createApi({
             invalidatesTags: ['AdminMessages']
         }),
 
-        createUserMessage: builder.mutation<void, IAdminMesssageCreationModel>({
+        createMessageForAdmin: builder.mutation<void, IAdminMesssageCreationModel>({
             query: (messageCreationModel) => {
                 return {
-                    url: 'create/user',
+                    url: 'send/admin',
                     method: 'PUT',
                     body: messageCreationModel
                     // timeout: 10000,
@@ -59,6 +59,17 @@ export const adminMessageAuthApi = createApi({
             query: () => {
                 return {
                     url: 'get/user/unreaded',
+                    method: 'GET',
+                    // timeout: 10000,
+                }
+            },
+            providesTags: ["UnreadedMessages"]
+        }),
+
+        getAdminUnreadedMessages: builder.query<IAdminMesssage[], void>({
+            query: () => {
+                return {
+                    url: 'get/admin/unreaded',
                     method: 'GET',
                     // timeout: 10000,
                 }
@@ -126,8 +137,9 @@ export const adminMessageAuthApi = createApi({
     }),
 })
 export const {
-    useCreateAdminMessageMutation,
-    useCreateUserMessageMutation,
+    useGetAdminUnreadedMessagesQuery,
+    useCreateMessageForUserMutation,
+    useCreateMessageForAdminMutation,
     useGetAdminMessagesQuery,
     useGetUserMessagesQuery,
     useGetUserUnreadedMessagesQuery,

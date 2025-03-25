@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from './slices/userSlice'
 import appReducer from './slices/appSlice'
-import lockAdverModalReducer from './slices/lockAdvertModalSlice'
+import modalReducer from './slices/modalSlice'
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { accountApi } from "./api/accountApi";
 import errorMiddleware from "./middlewares/errorMiddleware";
@@ -24,7 +24,7 @@ export const store = configureStore({
     reducer: {
         user: userReducer,
         app: appReducer,
-        lockAdverModalSlice:lockAdverModalReducer,
+        modalSlice:modalReducer,
         [userAuthApi.reducerPath]: userAuthApi.reducer,
         [filterApi.reducerPath]: filterApi.reducer,
         [categoryApi.reducerPath]: categoryApi.reducer,

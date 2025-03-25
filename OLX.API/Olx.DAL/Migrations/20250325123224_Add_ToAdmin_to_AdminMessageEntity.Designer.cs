@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Olx.DAL.Data;
@@ -11,9 +12,11 @@ using Olx.DAL.Data;
 namespace Olx.DAL.Migrations
 {
     [DbContext(typeof(OlxDbContext))]
-    partial class OlxDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250325123224_Add_ToAdmin_to_AdminMessageEntity")]
+    partial class Add_ToAdmin_to_AdminMessageEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

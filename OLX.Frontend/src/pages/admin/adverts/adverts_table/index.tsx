@@ -19,7 +19,7 @@ import { useApproveAdvertMutation, useDeleteAdvertMutation } from "../../../../r
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../../../../redux";
 import { scrollTop } from "../../../../redux/slices/appSlice";
-import { openModal } from "../../../../redux/slices/lockAdvertModalSlice";
+import { openLockModal } from "../../../../redux/slices/modalSlice";
 
 
 const updatedPageRequest = (searchParams: URLSearchParams): IAdvertSearchPageData => ({
@@ -232,7 +232,7 @@ const AdminAdvertTable: React.FC = () => {
                             title="Блокування оголошення"
                             description={`Ви впевненні що бажаєте заблокувати оголошення "${advert.title}"?`}
                             onConfirm={() => { 
-                                dispatch(openModal({advert:advert}))
+                                dispatch(openLockModal({advert:advert}))
                             }}
                             okText="Заблокувати"
                             cancelText="Відмінити"

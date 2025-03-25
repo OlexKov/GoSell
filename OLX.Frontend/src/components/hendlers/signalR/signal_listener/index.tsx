@@ -63,7 +63,7 @@ const SignalRListener: React.FC = () => {
                 }
                 else {
                     signalRConnection?.connection?.on('ReceiveMessageFromUser', () => {
-                        dispatch(adminMessageAuthApi.util.invalidateTags(['AdminMessages']))
+                        dispatch(adminMessageAuthApi.util.invalidateTags(['AdminMessages','UnreadedMessages']))
                     });
                 }
             })()

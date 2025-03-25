@@ -9,8 +9,8 @@ import UserAvatar from '../../../user_avatar';
 import { getRefreshToken, getUser } from '../../../../redux/slices/userSlice';
 import { useLogoutMutation } from '../../../../redux/api/accountApi';
 import { useAppSelector } from '../../../../redux';
-import { useEffect, useMemo } from 'react';
-import { useGetAdminMessagesQuery } from '../../../../redux/api/adminMessageApi';
+import { useEffect } from 'react';
+import { useGetAdminUnreadedMessagesQuery } from '../../../../redux/api/adminMessageApi';
 import { useSignalR } from '../../../hendlers/signalR/signalRContext';
 import { Images } from '../../../../constants/images';
 
@@ -23,7 +23,7 @@ export const AdminHeader: React.FC = () => {
     const signalRConnection = useSignalR();
     const user = useSelector(getUser)
     const refreshToken = useAppSelector(getRefreshToken)
-    const { data: adminMessages, refetch } = useGetAdminMessagesQuery();
+    const { data: messagesForAdmin, refetch } = useGetAdminUnreadedMessagesQuery();
     const items: MenuProps['items'] = [
         {
             icon: <UserOutlined />,
@@ -48,14 +48,13 @@ export const AdminHeader: React.FC = () => {
             }
         },
     ];
-    const unreadedMessagesCount = useMemo(() => adminMessages?.length && adminMessages.filter(x => !x.readed).length || 0, [adminMessages])
     useEffect(() => { refetch() }, [user])
     return (
         <div className='h-[60px] bg-header sticky top-0 items-center flex-shrink-0 flex justify-end z-50'  >
             <div className='flex justify-between gap-7 h-full w-full'>
                 <img className='ml-[1vw] w-[6vw] cursor-pointer' color='white' src={Images.logo_white} onClick={()=>navigate("/")} />
                 <div className='flex gap-7 h-full items-center'>
-                    <Badge count={unreadedMessagesCount} size='small' className={unreadedMessagesCount > 0 ? "animate-pulse" : ''}>
+                    <Badge count={messagesForAdmin?.length} size='small' className={messagesForAdmin?.length && messagesForAdmin.length > 0 ? "animate-pulse" : ''}>
                         <MailOutlined className='text-xl text-white' />
                     </Badge>
 

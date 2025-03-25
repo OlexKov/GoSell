@@ -96,7 +96,7 @@ namespace Olx.BLL.Services
                     Subject =string.Format(Messages.AdminDeleteAdvert, advert.Title),
                     UserId = advert.UserId
                 };
-                await adminMessageService.AdminCreate(message);
+                await adminMessageService.SendToUser(message);
                 var accountBlockedTemplate = EmailTemplates.GetAdvertRemovedTemplate($"{message.Subject} {message.Content}");
                 await emailService.SendAsync(advert.User.Email, Messages.AdvertDeleted, accountBlockedTemplate, true);
                 await hubContext.Clients.Users(advert.UserId.ToString())
@@ -244,7 +244,7 @@ namespace Olx.BLL.Services
                     Subject = string.Format(Messages.AdminLockAdvert, advert.Title),
                     UserId = advert.UserId
                 };
-                await adminMessageService.AdminCreate(message);
+                await adminMessageService.SendToUser(message);
                
                 var accountBlockedTemplate = EmailTemplates.GetAdvertLockedTemplate($"{message.Subject} {message.Content}");
                 await emailService.SendAsync(advert.User.Email, Messages.AdvertLocked, accountBlockedTemplate, true);

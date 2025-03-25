@@ -49,14 +49,16 @@ namespace Olx.BLL.Services
             return adminIds;
         }
 
-        public async Task UserCreate(AdminMessageCreationModel messageCreationModel)
+        public async Task SendToAdmin(AdminMessageCreationModel messageCreationModel)
         {
             validator.ValidateAndThrow(messageCreationModel);
-            var currentUser = await userManager.UpdateUserActivityAsync(httpContext,false);
+            var currentUser =  await userManager.UpdateUserActivityAsync(httpContext);
             var adminMessage = mapper.Map<AdminMessage>(messageCreationModel);
+            adminMessage.MessageLogo = currentUser.Photo;
             adminMessage.User = currentUser;
-            currentUser.AdminMessages.Add(adminMessage);
-            await userManager.UpdateAsync(currentUser);
+            adminMessage.ForAdmin = true;
+            await adminMessageRepo.AddAsync(adminMessage);
+            await adminMessageRepo.SaveAsync();
             await hubContext.Clients.Group("Admins")
                .SendAsync(HubMethods.ReceiveUserMessage);
         }
@@ -70,10 +72,10 @@ namespace Olx.BLL.Services
             await adminMessageRepo.SaveAsync();
         }
 
-        public async Task<IEnumerable<AdminMessageDto>> GetAdminMessages()
+        public async Task<IEnumerable<AdminMessageDto>> GetAdminMessages(bool? unreaded)
         {
             await userManager.UpdateUserActivityAsync(httpContext);
-            return await mapper.ProjectTo<AdminMessageDto>(adminMessageRepo.GetQuery().Where(x => x.User == null && !x.Deleted)).ToArrayAsync();
+            return await mapper.ProjectTo<AdminMessageDto>(adminMessageRepo.GetQuery().Where(x => x.ForAdmin && !x.Deleted && (!unreaded.HasValue || unreaded.Value == !x.Readed))).ToArrayAsync();
         }
 
         public async Task<AdminMessageDto> GetById(int id)
@@ -94,7 +96,7 @@ namespace Olx.BLL.Services
         {
             var currentUser = await userManager.UpdateUserActivityAsync(httpContext);
             var messages = await mapper.ProjectTo<AdminMessageDto>(adminMessageRepo.GetQuery()
-                .Where(x => x.User != null && !x.Deleted && x.User.Id == currentUser.Id && (!unreaded.HasValue || unreaded.Value == !x.Readed)))
+                .Where(x => !x.ForAdmin && !x.Deleted && x.User.Id == currentUser.Id && (!unreaded.HasValue || unreaded.Value == !x.Readed)))
                 .ToArrayAsync();
             return messages;
         }
@@ -108,18 +110,18 @@ namespace Olx.BLL.Services
             await adminMessageRepo.SaveAsync();
         }
 
-        public async Task AdminCreate(AdminMessageCreationModel messageCreationModel)
+        public async Task SendToUser(AdminMessageCreationModel messageCreationModel)
         {
             await userManager.UpdateUserActivityAsync(httpContext, false);
             validator.ValidateAndThrow(messageCreationModel);
             var adminMessage = mapper.Map<AdminMessage>(messageCreationModel);
-            if (adminMessage.UserId != null)
+            if (messageCreationModel.UserId != null)
             {
                 var user = userManager.Users.Include(x => x.AdminMessages).FirstOrDefault(x => x.Id == messageCreationModel.UserId)
                     ?? throw new HttpException(Errors.InvalidUserId, HttpStatusCode.BadRequest);
                 user.AdminMessages.Add(adminMessage);
                 await userManager.UpdateAsync(user);
-                string userId = adminMessage.UserId.Value.ToString();
+                string userId = adminMessage.UserId.ToString();
                 await hubContext.Clients.Users(userId)
                    .SendAsync(HubMethods.ReceiveAdminMessage);
                 return;

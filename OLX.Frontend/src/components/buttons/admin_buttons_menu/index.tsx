@@ -6,7 +6,7 @@ import { confirm } from "../../../utilities/confirm_modal";
 import { Tooltip } from "antd";
 import { AdminButtonMenuProps } from './props';
 import { useAppDispatch } from '../../../redux';
-import { openModal } from '../../../redux/slices/lockAdvertModalSlice';
+import { openLockModal } from '../../../redux/slices/modalSlice';
 
 const AdminButtonMenu: React.FC<AdminButtonMenuProps> = ({ className, advert }) => {
     const [open, setOpen] = useState<boolean>()
@@ -34,7 +34,7 @@ const AdminButtonMenu: React.FC<AdminButtonMenuProps> = ({ className, advert }) 
             title: <span className="font-unbounded font-medium text-adaptive-1_7_text text-[red]">Блокування оголошення</span>,
             content: <div className="font-montserrat text-adaptive-1_7_text my-[2vh] mr-[1.5vw]">Ви впевненні що хочете заблокувати це оголошення?</div>,
             onOk: async () => {
-                dispatch(openModal({ advert }))
+                dispatch(openLockModal({ advert }))
             },
             okText: 'Заблокувати'
         })

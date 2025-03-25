@@ -1,23 +1,47 @@
 import { Form, Input, Modal } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
-import { AdminModalProps } from "../props";
+import { useAppDispatch, useAppSelector } from "../../../redux";
+import { closeMessageSendModal } from "../../../redux/slices/modalSlice";
+import { useCreateMessageForAdminMutation, useCreateMessageForUserMutation } from "../../../redux/api/adminMessageApi";
+import { toast } from "react-toastify";
 
 
-const AdminMessage: React.FC<AdminModalProps> = ({ isOpen, onConfirm, onCancel, title }) => {
-
+const AdminMessageModal: React.FC = () => {
+    const dispatch = useAppDispatch();
+    const [sendMesssageToUser] = useCreateMessageForUserMutation();
+    const [sendMesssageToAdmin] = useCreateMessageForAdminMutation();
+    const { isMessageSendModalOpen, title, userId, usersIds,toAdmin } = useAppSelector(state => state.modalSlice);
     const [form] = Form.useForm();
-    const [loading,setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const handleOk = async () => {
         form
             .validateFields()
             .then(async (_values) => {
                 setLoading(true)
-                await onConfirm({
-                    message: form.getFieldValue('message'),
-                    subject: form.getFieldValue('subject')
-                })
+                let result :any; 
+                if(!toAdmin){
+                    result = await sendMesssageToUser({
+                        userIds: userId ? [userId] : usersIds,
+                        content: form.getFieldValue('message'),
+                        subject: form.getFieldValue('subject')
+                    })
+                }
+                else{
+                    result = await sendMesssageToAdmin({
+                        content: form.getFieldValue('message'),
+                        subject: form.getFieldValue('subject')
+                    })
+                }
+                
+                if (!result.error) {
+                    toast(`Повідомлення успішно відправлен${usersIds?.length && usersIds?.length > 1 ? 'і' : 'о'}`, {
+                        type: 'info',
+                        style: { width: 'fit-content' }
+                    })
+                    handleCancel();
+                }
                 form.resetFields();
                 setLoading(false)
             })
@@ -28,23 +52,21 @@ const AdminMessage: React.FC<AdminModalProps> = ({ isOpen, onConfirm, onCancel, 
 
     const handleCancel = async () => {
         form.resetFields();
-        await onCancel();
+        dispatch(closeMessageSendModal())
     }
-
-
 
     return (
         <Modal
             title={title}
-            open={isOpen}
+            open={isMessageSendModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
             okButtonProps={{
-                loading:loading
+                loading: loading
             }}
             okText="Надіслати"
             cancelText='Відмінити'
-            
+
         >
             <Form
                 form={form}
@@ -108,4 +130,4 @@ const AdminMessage: React.FC<AdminModalProps> = ({ isOpen, onConfirm, onCancel, 
         </Modal>
     );
 }
-export default AdminMessage;
+export default AdminMessageModal;

@@ -439,7 +439,7 @@ namespace Olx.BLL.Services
                 var advert = await advertRepository.GetItemBySpec(new AdvertSpecs.GetById(advertId, AdvertOpt.Images))
                     ?? throw new HttpException(Errors.InvalidAdvertId, HttpStatusCode.BadRequest);
                 user.FavoriteAdverts.Add(advert);
-                await adminMessageService.AdminCreate(
+                await adminMessageService.SendToUser(
                     new AdminMessageCreationModel
                     {
                         MessageLogo = advert.Images.FirstOrDefault(x => x.Priority == 0)?.Name,
