@@ -5,8 +5,6 @@ import { IOlxUser, IOlxUserPageRequest } from "../../../../models/user";
 import PageHeaderButton from "../../../../components/buttons/page_header_button";
 import { useEffect, useRef, useState } from "react";
 import { paginatorConfig } from "../../../../utilities/pagintion_settings";
-//import AdminMessageModal from "../../../../components/modals/admin_message";
-import { useCreateAdminMessageMutation } from "../../../../redux/api/adminMessageApi";
 import { toast } from "react-toastify";
 import IconButton from "@mui/material/IconButton/IconButton";
 import Tooltip from "@mui/material/Tooltip/Tooltip";

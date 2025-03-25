@@ -9,7 +9,7 @@ namespace Olx.BLL.Interfaces
     {
         Task<IEnumerable<AdminMessageDto>> GetAdminMessages(bool? unreaded);
         Task<IEnumerable<AdminMessageDto>> GetUserMessages(bool? unreadedOnly);
-        Task<PageResponse<AdminMessageDto>> GetPageAsync(AdminMessagePageRequest pageRequest);
+        Task<PageResponse<AdminMessageDto>> GetPageAsync(AdminMessagePageRequest pageRequest, bool fofAdmin = false);
         Task<IEnumerable<AdminMessageDto>> GetDeleted();
         Task<AdminMessageDto> GetById(int id);
         Task SendToAdmin(AdminMessageCreationModel messageCreationModel);

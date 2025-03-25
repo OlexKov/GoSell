@@ -5,11 +5,13 @@ import {
     FilterOutlined,
     HddOutlined,
     LockOutlined,
+    MailOutlined,
     ProfileOutlined,
     RobotOutlined,
     SnippetsOutlined,
     SolutionOutlined,
     TeamOutlined,
+    TwitchOutlined,
     UserAddOutlined,
     UserOutlined
 } from '@ant-design/icons';
@@ -115,6 +117,19 @@ const items: MenuItem[] = [
                 key: "/admin/backup",
                 icon: <ContainerOutlined  style={{ fontSize: 16 }} />,
                 label: <span className='text-sm font-medium'>Копії та відновлення</span>,
+            }
+        ]
+    }
+    ,
+    {
+        key: "messages_main",
+        icon: <MailOutlined style={{ fontSize: 20 }} />,
+        label: <span className='text-base font-medium'>Повідмлення</span>,
+        children: [
+            {
+                key: "/admin/messages",
+                icon: <TwitchOutlined  style={{ fontSize: 16 }} />,
+                label: <span className='text-sm font-medium'>Всі</span>,
             }
         ]
     }

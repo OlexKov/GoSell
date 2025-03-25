@@ -88,7 +88,18 @@ export const adminMessageAuthApi = createApi({
             providesTags: ["Messeges"]
         }),
 
-        softDeleteUserMessage: builder.mutation<void, number>({
+        getAdminMessagesPage: builder.query<PageResponse<IAdminMesssage>, IAdminMesssagePageRequest>({
+            query: (pageRequest) => {
+                return {
+                    url: 'get/admin/page',
+                    method: 'POST',
+                    body: pageRequest
+                }
+            },
+            providesTags: ["AdminMessages"]
+        }),
+
+        softDeleteMessage: builder.mutation<void, number>({
             query: (id) => {
                 return {
                     url: `delete/soft/${id}`,
@@ -97,10 +108,10 @@ export const adminMessageAuthApi = createApi({
                     // timeout: 10000,
                 }
             },
-            invalidatesTags: ['Messeges', 'UnreadedMessages']
+            invalidatesTags: ['Messeges', 'UnreadedMessages',"AdminMessages"]
         }),
 
-        softDeleteUserMessages: builder.mutation<void, number[]>({
+        softDeleteMessages: builder.mutation<void, number[]>({
             query: (ids) => {
                 return {
                     url: `delete/soft`,
@@ -109,7 +120,7 @@ export const adminMessageAuthApi = createApi({
                     // timeout: 10000,
                 }
             },
-            invalidatesTags: ['Messeges', 'UnreadedMessages']
+            invalidatesTags: ['Messeges', 'UnreadedMessages',"AdminMessages"]
         }),
 
         setUserMessageReaded: builder.mutation<void, number>({
@@ -119,7 +130,7 @@ export const adminMessageAuthApi = createApi({
                     method: 'POST',
                 }
             },
-            invalidatesTags: ['Messeges', 'UnreadedMessages']
+            invalidatesTags: ['Messeges', 'UnreadedMessages',"AdminMessages"]
            
         }),
 
@@ -131,20 +142,21 @@ export const adminMessageAuthApi = createApi({
                     body: ids
                 }
             },
-            invalidatesTags: ['Messeges', 'UnreadedMessages']
+            invalidatesTags: ['Messeges', 'UnreadedMessages',"AdminMessages"]
         }),
 
     }),
 })
 export const {
+    useGetAdminMessagesPageQuery,
     useGetAdminUnreadedMessagesQuery,
     useCreateMessageForUserMutation,
     useCreateMessageForAdminMutation,
     useGetAdminMessagesQuery,
     useGetUserMessagesQuery,
     useGetUserUnreadedMessagesQuery,
-    useSoftDeleteUserMessageMutation,
-    useSoftDeleteUserMessagesMutation,
+    useSoftDeleteMessageMutation,
+    useSoftDeleteMessagesMutation,
     useSetUserMessageReadedMutation,
     useSetUserMessageReadedRangeMutation,
     useGetUserMessagesPageQuery } = adminMessageAuthApi

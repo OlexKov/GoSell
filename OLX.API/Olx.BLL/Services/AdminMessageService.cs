@@ -165,25 +165,37 @@ namespace Olx.BLL.Services
         {
             var user =  await userManager.UpdateUserActivityAsync(httpContext);
             int? userId = await userManager.IsInRoleAsync(user, Roles.Admin) ? null : user.Id;
-            var  adminMessage = await adminMessageRepo.GetItemBySpec(new AdminMessageSpecs.GetUnreadedById(userId, id,  true))
-                ?? throw new HttpException(Errors.InvalidAdminMessageId, HttpStatusCode.BadRequest);
-            adminMessage.Readed = true;
-            await adminMessageRepo.SaveAsync();
-            //await hubContext.Clients.Users(user.Id.ToString())
-            //    .SendAsync(HubMethods.SetReaded, adminMessage.Id);
+            var adminMessage = await userManager.IsInRoleAsync(user, Roles.Admin)
+                ? await adminMessageRepo.GetItemBySpec(new AdminMessageSpecs.GetAdminUnreadedById(id, true))
+                : await adminMessageRepo.GetItemBySpec(new AdminMessageSpecs.GetUnreadedById(userId, id, true));
+            if (adminMessage != null) 
+            {
+                adminMessage.Readed = true;
+                await adminMessageRepo.SaveAsync();
+                return;
+            }
+            throw new HttpException(Errors.InvalidAdminMessageId, HttpStatusCode.BadRequest);
         }
 
         public async Task SetReaded(IEnumerable<int> ids)
         {
             var user = await userManager.UpdateUserActivityAsync(httpContext);
             int? userId = await userManager.IsInRoleAsync(user, Roles.Admin) ? null : user.Id;
-            var messages = await adminMessageRepo.GetListBySpec(new AdminMessageSpecs.GetUnreadedByIds(userId, ids,  true))
-                ?? throw new HttpException(Errors.InvalidAdminMessageId, HttpStatusCode.BadRequest);
-            foreach (var message in messages)
+
+            var messages = await userManager.IsInRoleAsync(user, Roles.Admin)
+                ? await adminMessageRepo.GetListBySpec(new AdminMessageSpecs.GetAdminUnreadedByIds(ids, true))
+                : await adminMessageRepo.GetListBySpec(new AdminMessageSpecs.GetUnreadedByIds(userId, ids, true));
+            
+            if (messages.Any())
             {
-                message.Readed = true;
+                foreach (var message in messages)
+                {
+                    message.Readed = true;
+                }
+                await adminMessageRepo.SaveAsync();
+                return;
             }
-            await adminMessageRepo.SaveAsync();
+            throw new HttpException(Errors.InvalidAdminMessageId, HttpStatusCode.BadRequest);
         }
 
         public async Task SoftDeleteRange(IEnumerable<int> ids)
@@ -201,10 +213,12 @@ namespace Olx.BLL.Services
             await adminMessageRepo.SaveAsync();
         }
 
-        public async Task<PageResponse<AdminMessageDto>> GetPageAsync(AdminMessagePageRequest pageRequest)
+        public async Task<PageResponse<AdminMessageDto>> GetPageAsync(AdminMessagePageRequest pageRequest,bool forAdmin = false)
         {
             var currentUser = await userManager.UpdateUserActivityAsync(httpContext);
-            var query = mapper.ProjectTo<AdminMessageDto>(adminMessageRepo.GetQuery().Where(x => x.User != null && x.User.Id == currentUser.Id).AsNoTracking());
+            var query = mapper.ProjectTo<AdminMessageDto>(adminMessageRepo.GetQuery()
+                .Where(x => x.ForAdmin == forAdmin && x.User.Id == currentUser.Id != forAdmin)
+                .AsNoTracking());
             var paginationBuilder = new PaginationBuilder<AdminMessageDto>(query);
             var adminMessageFilter = mapper.Map<AdminMessageFilter>(pageRequest);
             var page = await paginationBuilder.GetPageAsync(pageRequest.Page, pageRequest.Size, adminMessageFilter, new AdminMessageSortData());

@@ -20,21 +20,36 @@ export const getUserDescr = (user: IUser | IOlxUser | IShortOlxUser | null | und
 }
 
 export function stringToColor(string: string | null) {
-
   if (string) {
     let hash = 0;
-    let i;
-    for (i = 0; i < string.length; i += 1) {
+    for (let i = 0; i < string.length; i++) {
       hash = string.charCodeAt(i) + ((hash << 5) - hash);
     }
+
     let color = '#';
-    for (i = 0; i < 3; i += 1) {
+    for (let i = 0; i < 3; i++) {
       const value = (hash >> (i * 8)) & 0xff;
       color += `00${value.toString(16)}`.slice(-2);
-      return color;
     }
+
+    return color;
   }
   return '#000000';
+}
+
+export function getNameInitials(string: string | null) {
+  if (string) {
+    const array = string.split(' ');
+    let initials = ''
+    if (array?.length == 1) {
+      initials =  array[0][0];
+    }
+    else {
+      initials = array[0][0] + array[1][0];
+    }
+    return initials.toUpperCase();
+  }
+  return 'NA';
 }
 
 export const getDateTime = (dateStr: string): string => {

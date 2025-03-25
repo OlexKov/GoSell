@@ -11,6 +11,7 @@ namespace Olx.BLL.DTOs.AdminMessage
         public string? MessageLogo { get; set; }
         public DateTime Created { get; set; }
         public MessageDto Message { get; set; }
+        public bool ForAdmin { get; set; }
     }
        
 }

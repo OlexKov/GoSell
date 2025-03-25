@@ -40,6 +40,11 @@ namespace OLX.API.Controllers
         public async Task<IActionResult> GetPage([FromBody] AdminMessagePageRequest pageRequest) => 
             Ok(await adminMessageService.GetPageAsync(pageRequest));
 
+        [Authorize(Roles = Roles.Admin)]
+        [HttpPost("get/admin/page")]
+        public async Task<IActionResult> GetAdminMessagesPage([FromBody] AdminMessagePageRequest pageRequest) =>
+            Ok(await adminMessageService.GetPageAsync(pageRequest,true));
+
         [Authorize]
         [HttpPost("readed/set/{messageId:int}")]
         public async Task<IActionResult> SetReaded([FromRoute] int messageId)

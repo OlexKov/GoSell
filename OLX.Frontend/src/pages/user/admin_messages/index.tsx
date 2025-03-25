@@ -6,8 +6,8 @@ import {
     useGetUserMessagesPageQuery,
     useSetUserMessageReadedMutation,
     useSetUserMessageReadedRangeMutation,
-    useSoftDeleteUserMessageMutation,
-    useSoftDeleteUserMessagesMutation
+    useSoftDeleteMessageMutation,
+    useSoftDeleteMessagesMutation
 } from "../../../redux/api/adminMessageApi";
 import { toast } from "react-toastify";
 import { useMemo, useState } from "react";
@@ -28,8 +28,8 @@ const AdminMessagesPage: React.FC = () => {
         deleted: false
     })
     const { data: userMessages } = useGetUserMessagesPageQuery(pageRequest);
-    const [deleteMessege] = useSoftDeleteUserMessageMutation();
-    const [deleteAllMesseges] = useSoftDeleteUserMessagesMutation();
+    const [deleteMessege] = useSoftDeleteMessageMutation();
+    const [deleteAllMesseges] = useSoftDeleteMessagesMutation();
     const [setReaded] = useSetUserMessageReadedMutation()
     const [setReadedRange] = useSetUserMessageReadedRangeMutation()
 

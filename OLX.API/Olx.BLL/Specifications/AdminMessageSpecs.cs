@@ -45,10 +45,26 @@ namespace Olx.BLL.Specifications
                      .Include(x => x.Message);
         }
 
+        public class GetAdminUnreadedById : Specification<AdminMessage>
+        {
+            public GetAdminUnreadedById( int messageId, bool tracking = false) =>
+                Query.Where(x => x.Id == messageId && x.ForAdmin && !x.Readed && !x.Deleted)
+                     .AsTracking(tracking)
+                     .Include(x => x.Message);
+        }
+
         public class GetUnreadedByIds : Specification<AdminMessage>
         {
             public GetUnreadedByIds(int? userId, IEnumerable<int> messageIds, bool tracking = false) =>
-                Query.Where(x => messageIds.Contains(x.Id) && (x.UserId == userId) && !x.Readed && !x.Deleted)
+                Query.Where(x => messageIds.Contains(x.Id) && !x.ForAdmin && (x.UserId == userId) && !x.Readed && !x.Deleted)
+                     .AsTracking(tracking)
+                     .Include(x => x.Message);
+        }
+
+        public class GetAdminUnreadedByIds : Specification<AdminMessage>
+        {
+            public GetAdminUnreadedByIds(IEnumerable<int> messageIds, bool tracking = false) =>
+                Query.Where(x => messageIds.Contains(x.Id) && x.ForAdmin && !x.Readed && !x.Deleted)
                      .AsTracking(tracking)
                      .Include(x => x.Message);
         }

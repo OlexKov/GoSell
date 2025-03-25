@@ -5,7 +5,7 @@ import DefaultLayout from './components/layouts/default_layout/index';
 import ProtectedRoutes from './components/protected_routes';
 import GlobalFallback from './components/global_fallback';
 
-
+const UserMessagesPage = React.lazy(() => import('./pages/admin/messages'));
 const BackupDataPage = React.lazy(() => import( './pages/admin/backup'));
 const SuccessPayment = React.lazy(() => import('./pages/user/success_payment'));
 const ChatPage = React.lazy(() => import('./pages/user/chat/chat_page'));
@@ -104,6 +104,10 @@ function App() {
             <Route path='approve' element={<AdminAdvertTable />} />
             <Route path='preview/:id' element={<AdminAdvertPreview />} />
             <Route path="blocked" element={<UsersPage />} />
+          </Route>
+
+          <Route path="messages">
+            <Route index element={<UserMessagesPage />} />
           </Route>
 
           <Route path="categories">

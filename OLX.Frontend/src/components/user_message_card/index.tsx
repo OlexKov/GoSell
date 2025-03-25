@@ -1,9 +1,10 @@
+import { useRef } from "react"
 import { APP_ENV } from "../../constants/env"
-import { Images } from "../../constants/images"
-import { getFormatDateTime } from "../../utilities/common_funct"
-import { AdminMessageCardProps } from "./props"
+import { getFormatDateTime, getNameInitials, stringToColor } from "../../utilities/common_funct"
+import { AdminMessageCardProps } from "../admin_message_card/props"
 
-const AdminMessageCard: React.FC<AdminMessageCardProps> = ({ adminMessage, divider, className, dividerClassName, onDelete, onClick }) => {
+const UserMessageCard: React.FC<AdminMessageCardProps> = ({ adminMessage, divider, className, dividerClassName, onDelete, onClick }) => {
+    const userInitials  = useRef<string>(getNameInitials(adminMessage.userName))
     const deleteClick = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
         e.stopPropagation()
         onDelete && onDelete(adminMessage.id)
@@ -11,11 +12,11 @@ const AdminMessageCard: React.FC<AdminMessageCardProps> = ({ adminMessage, divid
     return (
         <div className={`${onClick ? 'cursor-pointer transition-all duration-500 ease-in-out hover:scale-[1.005]' : ''}`} onClick={() => onClick && onClick(adminMessage.id)}>
             <div className={`min-h-[70px]  ${className}`}>
-                <div className={`flex gap-[1vw] h-full  items-center rounded-md ${adminMessage.readed ? 'bg-white' : 'bg-slate-100'}`}>
+                <div className={`flex gap-[1vw] h-full text-start items-center rounded-md ${adminMessage.readed ? 'bg-white' : 'bg-slate-100'}`}>
                     {adminMessage.messageLogo
-                        ? <img className="h-full aspect-square rounded-md" src={APP_ENV.IMAGES_200_URL + adminMessage.messageLogo} />
-                        : <div className=" h-full aspect-square p-[0.5vh] bg-white rounded-md border border-[#9B7A5B]">
-                            <img className="h-full aspect-square rounded-md" src={Images.logo} />
+                        ? <img className="h-full aspect-square rounded-full" src={APP_ENV.IMAGES_200_URL + adminMessage.messageLogo} />
+                        : <div style={{ backgroundColor: stringToColor(adminMessage.userName) }} className={`p-2 overflow-hidden h-full flex items-center justify-center aspect-square rounded-full `}>
+                            <span style={{ fontSize: `clamp(14px,${6-userInitials.current.length}vh,90px)`, color: 'white'}}>{userInitials.current}</span>
                         </div>}
 
                     <div className="flex flex-col justify-between font-montserrat  overflow-hidden text-[black]">
@@ -37,4 +38,4 @@ const AdminMessageCard: React.FC<AdminMessageCardProps> = ({ adminMessage, divid
     )
 }
 
-export default AdminMessageCard
+export default UserMessageCard
