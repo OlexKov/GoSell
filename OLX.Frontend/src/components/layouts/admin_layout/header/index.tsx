@@ -52,10 +52,10 @@ export const AdminHeader: React.FC = () => {
     return (
         <div className='h-[60px] bg-header sticky top-0 items-center flex-shrink-0 flex justify-end z-50'  >
             <div className='flex justify-between gap-7 h-full w-full'>
-                <img className='ml-[1vw] w-[6vw] cursor-pointer' color='white' src={Images.logo_white} onClick={()=>navigate("/")} />
+                <img className='ml-[1vw] w-[6vw] cursor-pointer' color='white' src={Images.logo_white} onClick={() => navigate("/")} />
                 <div className='flex gap-7 h-full items-center'>
                     <Badge count={messagesForAdmin?.length} size='small' className={messagesForAdmin?.length && messagesForAdmin.length > 0 ? "animate-pulse" : ''}>
-                        <MailOutlined className='text-xl text-white' />
+                        <MailOutlined onClick={() => navigate('/admin/messages')} className='text-xl text-white' />
                     </Badge>
 
                     <Dropdown menu={{ items }} trigger={['click']} className=' min-w-[180] px-5 cursor-pointer h-full  flex-shrink-0 bg-orange-500 flex gap-2 justify-center items-center'>

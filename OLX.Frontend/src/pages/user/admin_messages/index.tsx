@@ -11,13 +11,12 @@ import {
 } from "../../../redux/api/adminMessageApi";
 import { toast } from "react-toastify";
 import { useMemo, useState } from "react";
-import { IAdminMesssage, IAdminMesssagePageRequest } from "../../../models/adminMesssage";
+import { IAdminMesssagePageRequest } from "../../../models/adminMesssage";
 import { confirm } from "../../../utilities/confirm_modal";
-import { Modal, Pagination } from "antd";
-import { getDateTime } from "../../../utilities/common_funct";
+import { Pagination } from "antd";
 import './style.scss'
-import { APP_ENV } from "../../../constants/env";
-import { Images } from "../../../constants/images";
+import { useAppDispatch } from "../../../redux";
+import { openMessageViewModal } from "../../../redux/slices/modalSlice";
 
 const AdminMessagesPage: React.FC = () => {
     const [pageRequest, setPageRequest] = useState<IAdminMesssagePageRequest>({
@@ -32,9 +31,9 @@ const AdminMessagesPage: React.FC = () => {
     const [deleteAllMesseges] = useSoftDeleteMessagesMutation();
     const [setReaded] = useSetUserMessageReadedMutation()
     const [setReadedRange] = useSetUserMessageReadedRangeMutation()
+    const dispatch = useAppDispatch();
 
     const navigate = useNavigate()
-    const [messageViewerData, setMessageViewerData] = useState<{ open: boolean, message: IAdminMesssage | undefined }>({ open: false, message: undefined })
     const onDelete = async (id: number) => {
         const result = await deleteMessege(id)
         if (!result.error) {
@@ -43,12 +42,16 @@ const AdminMessagesPage: React.FC = () => {
             })
         }
     }
+
     const onClick = async (id: number) => {
         const message = userMessages?.items.find(x => x.id === id)
         if (!message?.readed) {
             await setReaded(id)
         }
-        setMessageViewerData({ open: true, message: message })
+        dispatch(openMessageViewModal({
+            title: "Системне повідомлення",
+            adminMessage: message
+        }))
     }
 
     const messeges = useMemo(() => {
@@ -129,38 +132,6 @@ const AdminMessagesPage: React.FC = () => {
                     </div>}
 
             </div>
-            <Modal
-                width={'40vw'}
-                centered={true}
-                title={
-                    <div className="flex items-center justify-between font-montserrat ">
-                        <p className="text-adaptive-1_6-text">{`Системне повідомлення`}</p>
-                        <span className="text-adaptive-1_3-text pr-[1.5vw] text-gray-500">{getDateTime(messageViewerData.message?.created || '')}</span>
-                    </div>}
-
-                footer={
-                    <PrimaryButton
-                        title={"Закрити"}
-                        isLoading={false}
-                        onButtonClick={() => setMessageViewerData({ ...messageViewerData, open: false })}
-                        bgColor="white"
-                        brColor="#9B7A5B"
-                        fontSize="clamp(12px,1.6vh,28px)" />
-                }
-                open={messageViewerData.open}
-                onCancel={() => setMessageViewerData({ open: false, message: undefined })}
-            >
-                <div className="flex flex-col p-[1vh] min-h-[40vh]  font-montserrat ">
-                    <p className="text-adaptive-1_7_text text-balance font-medium">{messageViewerData.message?.message.subject}</p>
-                    <hr className="my-[2vh] w-full " />
-                    <div className="flex gap-[1vw] ">
-                        <div className=" h-[9vh] aspect-square p-[0.5vh] bg-white rounded-md border border-[#9B7A5B]">
-                            <img className="h-full aspect-square" src={messageViewerData.message?.messageLogo ? APP_ENV.IMAGES_200_URL + messageViewerData.message?.messageLogo : Images.logo} />
-                        </div>
-                        <p className="text-adaptive-1_6-text overflow-hidden text-balance self-start">{messageViewerData.message?.message.content}</p>
-                    </div>
-                </div>
-            </Modal>
         </>)
 }
 

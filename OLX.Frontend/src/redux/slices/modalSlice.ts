@@ -1,19 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IAdvert } from '../../models/advert';
+import { IAdminMesssage } from '../../models/adminMesssage';
 
 interface ModalState {
     isLockModalOpen: boolean;
     advert?: IAdvert;
     isMessageSendModalOpen: boolean;
+    isMessageViewModalOpen: boolean;
     title?: string;
     userId?: number;
     usersIds?: number[];
-    toAdmin: boolean
+    toAdmin: boolean,
+    adminMessage?: IAdminMesssage
 }
 
 const initialState: ModalState = {
     isLockModalOpen: false,
     isMessageSendModalOpen: false,
+    isMessageViewModalOpen: false,
     toAdmin: false
 };
 
@@ -21,6 +25,16 @@ const modalSlice = createSlice({
     name: 'modal',
     initialState,
     reducers: {
+        openMessageViewModal: (state, action: PayloadAction<{ title: string, adminMessage?: IAdminMesssage }>) => {
+            state.isMessageViewModalOpen = true;
+            state.title = action.payload.title
+            state.adminMessage = action.payload.adminMessage
+        },
+        closeMessageViewModal: (state) => {
+            state.isMessageViewModalOpen = false;
+            state.title = undefined
+            state.adminMessage = undefined
+        },
         openMessageSendModal: (state, action: PayloadAction<{ title: string, userId?: number, usersIds?: number[], toAdmin?: boolean }>) => {
             state.isMessageSendModalOpen = true;
             state.title = action.payload.title
@@ -45,5 +59,11 @@ const modalSlice = createSlice({
     },
 });
 
-export const { openLockModal, closeLockModal, closeMessageSendModal, openMessageSendModal } = modalSlice.actions;
+export const {
+    openLockModal,
+    closeLockModal,
+    closeMessageSendModal,
+    openMessageSendModal,
+    openMessageViewModal,
+    closeMessageViewModal } = modalSlice.actions;
 export default modalSlice.reducer;

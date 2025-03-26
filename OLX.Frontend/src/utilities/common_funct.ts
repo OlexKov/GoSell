@@ -37,7 +37,7 @@ export function stringToColor(string: string | null) {
   return '#000000';
 }
 
-export function getNameInitials(string: string | null) {
+export function getNameInitials(string: string | null | undefined) {
   if (string) {
     const array = string.split(' ');
     let initials = ''

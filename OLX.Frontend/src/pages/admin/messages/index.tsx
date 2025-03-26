@@ -8,8 +8,11 @@ import { Pagination } from "antd";
 import UserMessageCard from "../../../components/user_message_card";
 import { toast } from "react-toastify";
 import { confirm } from "../../../utilities/confirm_modal";
+import { useAppDispatch } from "../../../redux";
+import { openMessageViewModal } from "../../../redux/slices/modalSlice";
 
 const UserMessagesPage: React.FC = () => {
+    const dispatch = useAppDispatch();
     const [deleteMessege] = useSoftDeleteMessageMutation();
     const [deleteAllMesseges] = useSoftDeleteMessagesMutation();
     const [setReaded] = useSetUserMessageReadedMutation()
@@ -36,7 +39,10 @@ const UserMessagesPage: React.FC = () => {
         if (!message?.readed) {
             await setReaded(id)
         }
-        //  setMessageViewerData({ open: true, message: message })
+        dispatch(openMessageViewModal({
+            title: `Повідомлення від користувача "${message?.userName}"`,
+            adminMessage: message
+        }))
     }
 
     const setAllReaded = async () => {

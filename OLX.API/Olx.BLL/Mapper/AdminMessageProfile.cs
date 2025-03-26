@@ -13,11 +13,16 @@ namespace Olx.BLL.Mapper
         {
             CreateMap<AdminMessagePageRequest, AdminMessageFilter>();
             CreateMap<AdminMessageCreationModel, AdminMessage>()
-                 .ForMember(x => x.Message, opt => opt.MapFrom(x => new Message() { Content = x.Content,Subject = x.Subject }));
+                 .ForMember(x => x.Message, opt => opt.MapFrom(x => new Message() { Content = x.Content, Subject = x.Subject }));
             CreateMap<Message, MessageDto>();
             CreateMap<AdminMessage, AdminMessageDto>()
-                .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User == null ? "Адміністратор" : x.User.FirstName ?? x.User.LastName ?? x.User.Email));
-               
+                .ForMember(x => x.UserName, opt => opt.MapFrom(x =>
+                !x.ForAdmin
+                ? "Адміністратор"
+                : x.User.FirstName != null || x.User.LastName != null
+                ? $"{x.User.FirstName} {x.User.LastName}"
+                : x.User.Email));
+
         }
     }
 }
