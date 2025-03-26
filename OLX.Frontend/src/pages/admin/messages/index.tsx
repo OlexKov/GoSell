@@ -101,6 +101,7 @@ const UserMessagesPage: React.FC = () => {
                     className="w-[35px] h-[35px] bg-green-700"
                     buttonIcon={<DoneAll className="text-lg" />}
                     tooltipMessage="Позначити всі як прочитані"
+                    disabled={userMessages?.items && userMessages.items.filter(x => !x.readed).length < 2}
                     tooltipColor="gray" />,
                 <PageHeaderButton
                     key='removeAll'
@@ -108,6 +109,7 @@ const UserMessagesPage: React.FC = () => {
                     className="w-[35px] h-[35px] bg-red-700"
                     buttonIcon={<DeleteSweep className="text-lg" />}
                     tooltipMessage="Видалити всі"
+                    disabled={userMessages?.items && userMessages.items.length < 2}
                     tooltipColor="gray" />,
                 <PageHeaderButton
                     key='reload'

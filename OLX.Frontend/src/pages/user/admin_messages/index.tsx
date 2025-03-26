@@ -70,7 +70,7 @@ const AdminMessagesPage: React.FC = () => {
     }, [userMessages?.items])
 
     const setAllReaded = async () => {
-        if (messeges.length > 0) {
+        if (messeges.length > 0 && userMessages?.items.some(x=>!x.readed)) {
             const ids = userMessages?.items.map(x => x.id) || []
             await setReadedRange(ids)
         }
