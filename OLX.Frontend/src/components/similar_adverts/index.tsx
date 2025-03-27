@@ -25,7 +25,7 @@ const SimilarAdverts: React.FC<SimilarAdvertsProps> = ({ advert, className }) =>
         <>
             {!isAdvertsLoading && adverts && adverts?.items.length > 1 &&
                 <ScrolledAdvertsSection
-                    title="Схожі оголошення"
+                    title={`Схожі оголошення`}
                     adverts={items}
                     className={className}
                     cardClassName="min-w-[20.5vw] max-w-[20.5vw]" />
