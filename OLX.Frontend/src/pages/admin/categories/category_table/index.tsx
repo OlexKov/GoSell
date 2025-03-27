@@ -205,7 +205,7 @@ const AdminCategoryTable: React.FC = () => {
             ? await deleteCategoryTree(categoryId)
             : await deleteCategory(categoryId);
         if (!result.error) {
-            toast(`Категорія успішно вмдалена`, {
+            toast(`Категорія успішно видалена`, {
                 type: 'info'
             })
         }

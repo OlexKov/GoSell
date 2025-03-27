@@ -38,7 +38,7 @@ const AdminCategoryCreate: React.FC<CategoryCreateProps> = ({ open, onClose, cat
             currentImage: file ? category?.image : '',
             imageFile: file?.originFileObj,
             parentId: data.parentId || '',
-            filterIds: data.filterIds
+            filterIds: data.filterIds || []
         }
         const result = category
             ? await updateCategory(requestData)

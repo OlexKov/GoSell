@@ -109,7 +109,7 @@ const LoginPage: React.FC = () => {
         }}
         onFinish={onFinish}
         className='w-full'
-        autoComplete="on"
+        autoComplete="off"
       >
         <FormInput
           className='h-[5vh] min-h-[35px] text-adaptive-input-form-text text-[#9B7A5B]'

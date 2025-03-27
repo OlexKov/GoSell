@@ -76,7 +76,6 @@ export const getFormData = (data: any): FormData => {
     } else {
       formData.append(key, data[key]);
     }
-
   });
   return formData;
 }
