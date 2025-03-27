@@ -1,12 +1,10 @@
 import { Button, Form, InputNumber, Radio } from "antd"
 import './style.scss'
 import '../../pages/user/create_advert/style.scss'
-import { useSearchParams } from "react-router-dom"
 import { PriceFilterProps } from "./props"
 
 const PriceFilter: React.FC<PriceFilterProps> = ({ className, onChange, onReset: onClear }) => {
-    const [searchParams] = useSearchParams('');
-    
+     
     return (
         <div className={` ${className}`}>
             <h5 className="font-unbounded text-adaptive-1_6-text  mb-[1.5vh] "> Ціна</h5>
@@ -14,7 +12,6 @@ const PriceFilter: React.FC<PriceFilterProps> = ({ className, onChange, onReset:
             <Form.Item
                 noStyle
                 name="isContractPrice"
-                initialValue={searchParams.has('isContractPrice') ? searchParams.get('isContractPrice') === 'true' : undefined}
             >
                 <Radio.Group
                     onChange={onChange}
@@ -29,7 +26,6 @@ const PriceFilter: React.FC<PriceFilterProps> = ({ className, onChange, onReset:
                 <Form.Item
                     noStyle
                     name="priceFrom"
-                    initialValue={searchParams.get('priceFrom') || undefined}
                 >
                     <InputNumber
                         min={0}
@@ -41,7 +37,6 @@ const PriceFilter: React.FC<PriceFilterProps> = ({ className, onChange, onReset:
                 <Form.Item
                     noStyle
                     name="priceTo"
-                    initialValue={searchParams.get('priceTo') || undefined}
                 >
                     <InputNumber
                         min={0}

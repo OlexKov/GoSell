@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import { useGetAllFilterQuery } from "../../redux/api/filterApi"
 import { CategoryFiltersProps } from "./props"
 import Filter from "../filter"
@@ -6,6 +6,7 @@ import { Button, Form } from "antd"
 import PriceFilter from "../price_filter"
 import { useAppDispatch } from "../../redux"
 import { scrollTop } from "../../redux/slices/appSlice"
+import { useSearchParams } from "react-router-dom"
 
 const clearedPariceFilter = {
     priceFrom: undefined,
@@ -17,6 +18,15 @@ const CategoryFilters: React.FC<CategoryFiltersProps> = ({ categoryFiltersIds, o
     const [form] = Form.useForm()
     const { data: filters } = useGetAllFilterQuery()
     const dispatch = useAppDispatch()
+    const [searchParams] = useSearchParams('');
+
+    useEffect(()=>{
+        form.setFieldsValue({
+            isContractPrice:searchParams.has('isContractPrice') ? searchParams.get('isContractPrice') === 'true' : undefined,
+            priceFrom:searchParams.get('priceFrom') || undefined,
+            priceTo:searchParams.get('priceTo') || undefined
+        })
+    },[searchParams])
 
     const clearedFormFilters = useMemo(() =>  categoryFiltersIds?.reduce((acc, key) => {
         acc[key] = undefined;

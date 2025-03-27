@@ -12,6 +12,7 @@ import {
 import { useSearchParams } from "react-router-dom";
 
 
+
 const LocationSelect: React.FC<LocationSelectProps> = ({ onSelect }) => {
     const { data: areas } = useGetAreasQuery(undefined);
     const [treeData, setTreeData] = useState<any[]>([]);
@@ -19,15 +20,12 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ onSelect }) => {
     const [areaRef, setAreaRef] = useState<string | null>(null);
     const [regionRef, setRegionRef] = useState<string | null>(null);
     const [searchParams] = useSearchParams('');
-
     const initialArea = searchParams.get('areaRef') || undefined;
     const initialRegion = searchParams.get('regionRef') || undefined;
     const initialSettlement = searchParams.get('settlementRef') || undefined;
-
     const { data: regions } = useGetRegionsByAreaQuery(areaRef, { skip: !areaRef });
     const { data: settlements } = useGetSettlementsByRegionQuery(regionRef, { skip: !regionRef });
     const { data: selectedSettlement } = useGetSettlementsByIdQuery(initialSettlement!, { skip: !initialSettlement });
-
 
     useEffect(() => {
         if (initialSettlement && selectedSettlement) {
@@ -42,6 +40,9 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ onSelect }) => {
         } else if (initialArea) {
             setSelectedValue(initialArea);
             setAreaRef(initialArea);
+        }
+        else {
+            setSelectedValue(undefined);
         }
     }, [selectedSettlement, initialRegion, initialArea, settlements]);
 
@@ -111,7 +112,7 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ onSelect }) => {
         });
     };
 
-    const onClear = () =>{
+    const onClear = () => {
         setSelectedValue('all-ukraine');
         onSelect({
             areaRef: "",
@@ -122,7 +123,7 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ onSelect }) => {
 
     const handleSelect = (value: string) => {
         setSelectedValue(value);
-        
+
         if (value == 'all-ukraine') {
             onSelect({
                 areaRef: "",
