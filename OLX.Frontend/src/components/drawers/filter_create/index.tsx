@@ -8,9 +8,9 @@ import { useEffect } from "react";
 
 const AdminFilterCreate: React.FC<FilterCreateProps> = ({ open, onClose, filter }) => {
     const [form] = Form.useForm();
-    const [createFilter] = useCreateFilterMutation();
-    const [updateFilter] = useUpdateFilterMutation();
-    
+    const [createFilter, { isLoading: isFilterCreating }] = useCreateFilterMutation();
+    const [updateFilter, { isLoading: isFilterUpdating }] = useUpdateFilterMutation();
+
     const onFinish = async (data: any) => {
         const newValues = data.values.filter((x: any) => !x.id).map((x: any) => x.value)
         const changetValues = data.values.filter((x: any) => x.id).map((x: IFilterValue) => ({ id: x.id, value: x.value }))
@@ -68,7 +68,7 @@ const AdminFilterCreate: React.FC<FilterCreateProps> = ({ open, onClose, filter 
             extra={
                 <Space>
                     <Button size="small" onClick={onDrawerClose}>Відмінити</Button>
-                    <Button size="small" onClick={handleSubmit} type="primary">
+                    <Button size="small" loading={isFilterCreating || isFilterUpdating} onClick={handleSubmit} type="primary">
                         Зберегти
                     </Button>
                 </Space>
@@ -127,7 +127,7 @@ const AdminFilterCreate: React.FC<FilterCreateProps> = ({ open, onClose, filter 
                                 >
                                     Нове значення
                                 </Button>
-                               <Form.ErrorList errors={errors} />
+                                <Form.ErrorList errors={errors} />
                             </Form.Item>
                             {fields.map((field) => (
 

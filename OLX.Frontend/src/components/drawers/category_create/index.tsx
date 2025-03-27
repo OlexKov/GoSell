@@ -16,8 +16,8 @@ import { CategoryFilterDataModel, CategoryPreviewModel } from "./models";
 
 const AdminCategoryCreate: React.FC<CategoryCreateProps> = ({ open, onClose, category }) => {
     const [form] = Form.useForm();
-    const [createCategory] = useCreateCategoryMutation();
-    const [updateCategory] = useEditCategoryMutation();
+    const [createCategory, { isLoading: isCategoryCreating }] = useCreateCategoryMutation();
+    const [updateCategory, { isLoading: isCategoryEditing }] = useEditCategoryMutation();
     const { data: categories, isLoading } = useGetAllCategoriesQuery();
     const { data: allFilters } = useGetAllFilterQuery();
     const [categoryFilterData, setCategoryFilterData] = useState<CategoryFilterDataModel>({
@@ -130,7 +130,7 @@ const AdminCategoryCreate: React.FC<CategoryCreateProps> = ({ open, onClose, cat
             extra={
                 <Space>
                     <Button size="small" onClick={onDrawerClose}>Відмінити</Button>
-                    <Button size="small" onClick={handleSubmit} type="primary">
+                    <Button size="small" loading={isCategoryCreating || isCategoryEditing} onClick={handleSubmit} type="primary">
                         Зберегти
                     </Button>
                 </Space>
@@ -217,9 +217,10 @@ const AdminCategoryCreate: React.FC<CategoryCreateProps> = ({ open, onClose, cat
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={allFilters?.map(x => ({
-                             value: x.id, 
-                             label: x.name, 
-                             disabled: categoryFilterData.excludedFilters.includes(x.id) }))}
+                            value: x.id,
+                            label: x.name,
+                            disabled: categoryFilterData.excludedFilters.includes(x.id)
+                        }))}
                     />
                 </Form.Item>
             </Form>
