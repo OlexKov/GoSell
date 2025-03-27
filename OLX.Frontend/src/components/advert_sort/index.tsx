@@ -1,5 +1,5 @@
 import { Radio } from "antd"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { AdvertSortData } from "./models"
 import { useSearchParams } from "react-router-dom"
 import '../price_filter/style.scss'

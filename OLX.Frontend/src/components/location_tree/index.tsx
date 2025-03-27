@@ -44,7 +44,7 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ onSelect }) => {
         else {
             setSelectedValue(undefined);
         }
-    }, [selectedSettlement, initialRegion, initialArea, settlements]);
+    }, [selectedSettlement, initialRegion, initialArea, settlements,initialSettlement]);
 
 
     useEffect(() => {
