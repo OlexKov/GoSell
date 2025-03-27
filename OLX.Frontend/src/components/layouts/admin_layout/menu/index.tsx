@@ -106,8 +106,19 @@ const items: MenuItem[] = [
                 label: <span className='text-sm font-medium'>Додати</span>,
             }
         ]
-    }
-    ,
+    },
+    {
+        key: "messages_main",
+        icon: <MailOutlined style={{ fontSize: 20 }} />,
+        label: <span className='text-base font-medium'>Повідмлення</span>,
+        children: [
+            {
+                key: "/admin/messages",
+                icon: <TwitchOutlined  style={{ fontSize: 16 }} />,
+                label: <span className='text-sm font-medium'>Всі</span>,
+            }
+        ]
+    },
     {
         key: "backup_main",
         icon: <HddOutlined style={{ fontSize: 20 }} />,
@@ -120,19 +131,7 @@ const items: MenuItem[] = [
             }
         ]
     }
-    ,
-    {
-        key: "messages_main",
-        icon: <MailOutlined style={{ fontSize: 20 }} />,
-        label: <span className='text-base font-medium'>Повідмлення</span>,
-        children: [
-            {
-                key: "/admin/messages",
-                icon: <TwitchOutlined  style={{ fontSize: 16 }} />,
-                label: <span className='text-sm font-medium'>Всі</span>,
-            }
-        ]
-    }
+    
 ]
 
 export const AdminSideBarMenu: React.FC<MenuProps> = ({ collapsed }) => {

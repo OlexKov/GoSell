@@ -1,5 +1,5 @@
 
-import { DownOutlined, LogoutOutlined, MailOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { DownOutlined, LogoutOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
 import './style.scss'
 import { Badge, Dropdown, MenuProps } from 'antd'
 import { Link, useNavigate } from 'react-router-dom';
