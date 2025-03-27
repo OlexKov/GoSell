@@ -26,11 +26,6 @@ export const AdminHeader: React.FC = () => {
     const { data: messagesForAdmin, refetch } = useGetAdminUnreadedMessagesQuery();
     const items: MenuProps['items'] = [
         {
-            icon: <UserOutlined />,
-            label: <Link to={'/admin/rofile'}>Профіль</Link>,
-            key: '0',
-        },
-        {
             icon: <SettingOutlined />,
             label: <Link to={'/admin/settings'}>Налаштування</Link>,
             key: '1',
