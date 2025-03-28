@@ -1,6 +1,6 @@
 import '../button_menu/style.scss'
 import { useState } from "react";
-import { useDeleteAdvertMutation } from "../../../redux/api/advertAuthApi";
+import { useApproveAdvertMutation, useDeleteAdvertMutation } from "../../../redux/api/advertAuthApi";
 import { toast } from "react-toastify";
 import { confirm } from "../../../utilities/confirm_modal";
 import { Tooltip } from "antd";
@@ -12,6 +12,7 @@ const AdminButtonMenu: React.FC<AdminButtonMenuProps> = ({ className, advert }) 
     const [open, setOpen] = useState<boolean>()
     const [deleteAdvert] = useDeleteAdvertMutation()
     const dispatch = useAppDispatch()
+    const [approveAdvert] = useApproveAdvertMutation();
 
     const onDelete = async () => {
         confirm({
@@ -40,6 +41,20 @@ const AdminButtonMenu: React.FC<AdminButtonMenuProps> = ({ className, advert }) 
         })
     }
 
+    const onApprove = async () => {
+        confirm({
+            title: <span className="font-unbounded font-medium text-adaptive-1_7_text text-[red]">Підтвердження оголошення</span>,
+            content: <div className="font-montserrat text-adaptive-1_7_text my-[2vh] mr-[1.5vw]">Ви впевненні що хочете підтвердити це оголошення?</div>,
+            onOk: async () => {
+                const result = await approveAdvert(advert.id);
+                if (!result.error) {
+                    toast(`Оголошення ${advert.title} успішно підтверджено`, { type: 'info' })
+                }
+            },
+            okText: 'Підтвердити'
+        })
+    }
+
     return (
         <div className={` button-menu ${className}`} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} >
 
@@ -51,11 +66,20 @@ const AdminButtonMenu: React.FC<AdminButtonMenuProps> = ({ className, advert }) 
             </div>
 
             <div className={`flex flex-col w-[95%] mx-auto gap-[2vh] button-menu-container z-0 ${open !== undefined ? !open ? 'close' : 'open' : ''}`}>
+                {!advert.approved &&
+                    <Tooltip title="Підтвердити" color="gray" placement="rightTop">
+                        <div className="bg-white/30 p-[10%] hover:bg-white/60 rounded-md" >
+                            <svg xmlns="http://www.w3.org/2000/svg" onClick={onApprove} className=" transition-all duration-300 ease-in-out hover:scale-[1.1] w-full h-auto cursor-pointer" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M9.00003 16.1701L4.83003 12.0001L3.41003 13.4101L9.00003 19.0001L21 7.00009L19.59 5.59009L9.00003 16.1701Z" fill="green" />
+                            </svg>
+                        </div>
+                    </Tooltip>
+                }
                 {!advert.blocked &&
                     <Tooltip title="Заблокувати" color="gray" placement="rightTop">
                         <div className="bg-white/30 p-[10%] hover:bg-white/60 rounded-md" >
                             <svg xmlns="http://www.w3.org/2000/svg" className=" transition-all duration-300 ease-in-out hover:scale-[1.1] w-full h-auto cursor-pointer" width="24" height="24" onClick={onLock} viewBox="0 0 24 24" fill="none">
-                                <path d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM15.1 8H8.9V6C8.9 4.29 10.29 2.9 12 2.9C13.71 2.9 15.1 4.29 15.1 6V8Z" fill="green" />
+                                <path d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17ZM15.1 8H8.9V6C8.9 4.29 10.29 2.9 12 2.9C13.71 2.9 15.1 4.29 15.1 6V8Z" fill="blue" />
                             </svg>
                         </div>
                     </Tooltip>

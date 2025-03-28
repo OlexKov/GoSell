@@ -72,11 +72,13 @@ const UsersPage: React.FC = () => {
         <div className='flex justify-around'>
             {(location.pathname !== '/admin/admins') &&
                 <>
-                    <Tooltip title="Написати повідомлення">
-                        <IconButton onClick={() => sendMessage(user.id)} color="info" size="small">
-                            <MessageOutlined />
-                        </IconButton>
-                    </Tooltip>
+                    {location.pathname !== '/admin/adverts/blocked' &&
+                        <Tooltip title="Написати повідомлення">
+                            <IconButton onClick={() => sendMessage(user.id)} color="info" size="small">
+                                <MessageOutlined />
+                            </IconButton>
+                        </Tooltip>
+                    }
 
                     <Tooltip title={location.pathname !== '/admin/adverts/blocked'
                         ? "Блокувати"
@@ -264,7 +266,7 @@ const UsersPage: React.FC = () => {
             buttonIcon={<MessageOutlined className="text-lg" />}
             tooltipMessage="Написати повідомлення"
             tooltipColor="gray"
-            disabled={location.pathname === '/admin/admins'} />,
+            disabled={location.pathname === '/admin/admins' || location.pathname === '/admin/adverts/blocked'} />,
         <PageHeaderButton
             key='reload'
             onButtonClick={refetch}

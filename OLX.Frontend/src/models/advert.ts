@@ -18,6 +18,7 @@ export interface IAdvert {
     settlementRef: string,
     blocked:boolean,
     completed:boolean,
+    approved:boolean,
     regionRef: string,
     areaRef: string,
     categoryName: string,

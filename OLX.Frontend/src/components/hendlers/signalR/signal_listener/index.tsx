@@ -40,7 +40,10 @@ const SignalRListener: React.FC = () => {
                     });
 
                     signalRConnection?.connection?.on('AdminRemoveAccount', () => {
-                        console.log('AdminRemoveAccount')
+                        dispatch(logOut())
+                    });
+
+                    signalRConnection?.connection?.on('AdminLockAccount', () => {
                         dispatch(logOut())
                     });
 

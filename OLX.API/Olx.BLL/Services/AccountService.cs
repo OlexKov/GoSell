@@ -306,6 +306,7 @@ namespace Olx.BLL.Services
                                     : $"{Messages.LockedUntil} {userBlockModel.LockoutEndDate.Value.ToLongDateString()} {userBlockModel.LockoutEndDate.Value.ToLongTimeString()}";
                                 var accountBlockedTemplate = EmailTemplates.GetAccountBlockedTemplate(userBlockModel.LockReason ?? "", lockoutEndMessage);
                                 await emailService.SendAsync(user.Email, Messages.AccountLocked, accountBlockedTemplate, true);
+                                await hubContext.Clients.Users(user.Id.ToString()).SendAsync(HubMethods.AdminLockAccount);
                                 continue;
                             }
                         }
