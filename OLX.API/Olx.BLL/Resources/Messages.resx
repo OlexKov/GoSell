@@ -198,4 +198,10 @@
   <data name="UserAddedToFavorites" xml:space="preserve">
     <value>User "{0}" added your advert "{1}" to favorites.</value>
   </data>
+  <data name="UserBoughtAdvert" xml:space="preserve">
+    <value>User "{0}" bought your advert "{1}"</value>
+  </data>
+  <data name="UserBouth" xml:space="preserve">
+    <value>User  bought your advert</value>
+  </data>
 </root>

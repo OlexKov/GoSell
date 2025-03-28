@@ -24,6 +24,8 @@ using NETCore.MailKit.Core;
 using Olx.BLL.Helpers.Email;
 using Microsoft.AspNetCore.SignalR;
 using Olx.BLL.Hubs;
+using SixLabors.ImageSharp;
+using Microsoft.Extensions.Configuration;
 
 
 namespace Olx.BLL.Services
@@ -273,6 +275,32 @@ namespace Olx.BLL.Services
                 ?? throw new HttpException(Errors.InvalidAdvertId, HttpStatusCode.BadRequest);
             advertToComplete.Completed = true;
             await advertRepository.SaveAsync();
+        }
+
+        public async Task BuyAsync(int advertId)
+        {
+           var user =  await userManager.UpdateUserActivityAsync(httpContext);
+            var advert = await advertRepository.GetItemBySpec(new AdvertSpecs.GetById(advertId, AdvertOpt.User | AdvertOpt.Images))
+                ?? throw new HttpException(Errors.InvalidAdvertId, HttpStatusCode.BadRequest);
+            advert.Completed = true;
+            await advertRepository.SaveAsync();
+
+            var buyerName = user.FirstName != null || user.LastName != null
+                ? $"{user.FirstName} {user.LastName}"
+                : user.Email;
+            var content = string.Format(Messages.UserBoughtAdvert, buyerName, advert.Title);
+            var image = advert.Images.FirstOrDefault(x => x.Priority == 0)?.Name;
+
+            var message = new AdminMessageCreationModel
+            {
+                MessageLogo = image,
+                Content = content,
+                Subject = string.Format(Messages.UserBouth),
+                UserId = advert.UserId
+            };
+            await adminMessageService.SendToUser(message);
+            var accountBlockedTemplate = EmailTemplates.GetAdvertBoughtTemplate(content);
+            await emailService.SendAsync(advert.User.Email, Messages.AdvertLocked, accountBlockedTemplate, true);
         }
     }
 }

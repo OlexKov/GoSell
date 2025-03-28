@@ -6,6 +6,12 @@ namespace Olx.BLL.Helpers.Email
     {
         private static string _path = Path.Combine(Directory.GetCurrentDirectory(), "Helpers/EmailTemplates");
 
+        public static string GetAdvertBoughtTemplate(string text)
+        {
+            var html = File.ReadAllText(Path.Combine(_path, "AdvertBought.html"));
+            html = html.Replace("[text]", text);
+            return html;
+        }
         public static string GetAccountRemovedTemplate(string reason)
         {
             var html = File.ReadAllText(Path.Combine(_path, "AccountRemoved.html"));

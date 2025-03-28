@@ -131,6 +131,22 @@ export const advertAuthApi = createApi({
             invalidatesTags: ["UserAdverts"]
         }),
 
+        buyUserAdvert: builder.mutation<void, number>({
+            query: (advertId) => ({
+                url: `buy/${advertId}`,
+                method: "POST",
+            }),
+            async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(advertApi.util.invalidateTags(["Adverts", "Advert"]))
+                } catch (error) {
+                    console.error('Delete completed advert failed:', error);
+                }
+            },
+            invalidatesTags: ["UserAdverts","UserAdvert"]
+        }),
+
         deleteCompletedUserAdverts: builder.mutation<number, void>({
             query: () => ({
                 url: `delete/completed/all`,
@@ -158,6 +174,7 @@ export const advertAuthApi = createApi({
 });
 
 export const {
+    useBuyUserAdvertMutation,
     useCreateAdvertMutation,
     useUpdateAdvertMutation,
     useDeleteAdvertMutation,

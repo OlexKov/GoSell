@@ -302,5 +302,23 @@ namespace Olx.BLL.Resources {
                 return ResourceManager.GetString("UserAddedToFavorites", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на User &quot;{0}&quot; bought your advert &quot;{1}&quot;.
+        /// </summary>
+        internal static string UserBoughtAdvert {
+            get {
+                return ResourceManager.GetString("UserBoughtAdvert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на User  bought your advert.
+        /// </summary>
+        internal static string UserBouth {
+            get {
+                return ResourceManager.GetString("UserBouth", resourceCulture);
+            }
+        }
     }
 }

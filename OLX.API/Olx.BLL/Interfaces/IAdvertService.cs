@@ -21,5 +21,7 @@ namespace Olx.BLL.Interfaces
         Task ApproveAsync(int id);
         Task SetLockedStatusAsync(AdvertLockRequest lockRequest);
         Task SetCompletedAsync(int advertId);
+        Task BuyAsync(int advertId);
+
     }
 }

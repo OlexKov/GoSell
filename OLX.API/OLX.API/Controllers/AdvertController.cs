@@ -72,7 +72,15 @@ namespace OLX.API.Controllers
         {
             await advertService.SetCompletedAsync(advertId);
             return  Ok();
-        } 
+        }
+
+        [Authorize(Roles = Roles.User)]
+        [HttpPost("buy/{advertId:int}")]
+        public async Task<IActionResult> BuyAdvert([FromRoute] int advertId)
+        {
+            await advertService.BuyAsync(advertId);
+            return Ok();
+        }
 
 
         [Authorize(Roles = Roles.User)]
