@@ -1,4 +1,4 @@
-# OLX_Dyplom
+# GoSell
 Publish with Docker-Compose
 ```
 apt  install docker-compose
