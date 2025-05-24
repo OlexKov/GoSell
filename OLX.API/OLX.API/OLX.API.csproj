@@ -58,6 +58,9 @@
     <None Update="Helpers\EmailTemplates\AccountUnblocked.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Helpers\EmailTemplates\AdvertBought.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Helpers\EmailTemplates\AdvertLocked.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
