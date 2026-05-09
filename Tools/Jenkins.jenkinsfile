@@ -46,7 +46,9 @@ pipeline {
             steps {
                 echo "Deploying GoSell on remote server ..."  
                 sh """
-                        cd Tools
+                        cd Tools/
+                        pwd
+                        ls -l
                         docker compose down --remove-orphans || true
 
                         IMAGE_TAG=${env.BUILD_NUMBER} docker compose up -d
