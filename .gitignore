@@ -1,0 +1,13 @@
+/Tools/Terraform/.terraform
+/Tools/Terraform/.terraform.lock.hcl
+/Tools/Terraform/terraform.tfstate
+/Tools/Terraform/terraform.tfstate.backup
+
+# Environment and secrets
+**/.env
+**/.env.*
+!.env.example
+!.env*.example
+Tools/.env
+**/secrets.*
+**/*.tfvars

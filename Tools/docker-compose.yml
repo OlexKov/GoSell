@@ -1,0 +1,76 @@
+version: "3.9"
+networks:
+  myAppNetwork:
+    driver: bridge
+
+services:
+  postgresServerDb:
+    container_name: container-postgres
+    image: postgres:17.9-bookworm
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      - myAppNetwork
+    volumes:
+#       - d:/web/pd322/postgresql:/var/lib/postgresql/data  # Use the volume name msvol here
+        - /data/postgresql/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+
+  app:
+    container_name: olx_container
+    image: macnaer/gosell_back
+    ports:
+      - "8080:8080"
+    networks:
+     - myAppNetwork
+    depends_on:
+      postgresServerDb:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=postgresServerDb;Database=${POSTGRES_DB};User Id=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Port=5432
+      - DbSetings__Host=postgresServerDb
+      - DbSetings__DbName=${POSTGRES_DB}
+      - DbSetings__Username=${POSTGRES_USER}
+      - DbSetings__Password=${POSTGRES_PASSWORD}
+      - JwtOptions__Key=${JWT_KEY}
+      - JwtOptions__Issuer=Olx
+      - RecaptchaSecretKey=${RECAPTCHA_SECRET}
+      - NewPostApiKey=${NEWPOST_API_KEY}
+      - MailSettings__Password=${MAIL_PASSWORD}
+      - GoogleClientIds:0=${GOOGLE_CLIENT_ID}
+      - FrontendEmailConfirmationUrl=${FRONTEND_URL:-http://localhost}/auth/register/emailconfirm
+      - FrontendLoginUrl=${FRONTEND_URL:-http://localhost}/auth
+      - FrontendResetPasswordUrl=${FRONTEND_URL:-http://localhost}/auth/password/reset
+    volumes:
+     - /volumes/olx-asp/backup:/app/backup 
+     - /volumes/olx-asp/images:/app/uploading
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+  
+  client:
+    container_name: olx_client_container
+    image: macnaer/gosell_front
+    restart: on-failure
+    ports:
+      - "80:80"
+      
+

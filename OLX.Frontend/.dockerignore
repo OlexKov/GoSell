@@ -1,0 +1,13 @@
+**/.git
+**/.vs
+**/.vscode
+**/node_modules
+**/.gitignore
+**/*.md
+**/docker-compose*.yml
+**/Dockerfile*
+**/.env*
+**/dist
+**/.eslintcache
+**/coverage
+**/*.log

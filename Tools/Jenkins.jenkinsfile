@@ -1,0 +1,62 @@
+#!groovy
+
+pipeline {
+    agent none
+
+    environment {
+        IMAGE_NAME_API = "macnaer/gosell_back"
+        IMAGE_NAME_FRONT = "macnaer/gosell_front"
+    }
+
+    stages {
+
+        stage("Build GoSell API image") {
+            agent { label 'Agent001' }
+            steps {
+                echo 'Building GoSell image ...'
+                sh """
+                    cd OLX.API
+                    docker build --no-cache \
+                        -t ${IMAGE_NAME_API}:${env.BUILD_NUMBER} \
+                        -t ${IMAGE_NAME_API}:latest \
+                        .
+                    cd ..    
+                """
+            }
+        }
+
+        stage("Build GoSell Front image") {
+            agent { label 'Agent001' }
+            steps {
+                echo 'Building GoSell image ...'
+                sh """
+                    cd OLX.Frontend
+                    docker build --no-cache \
+                        -t ${IMAGE_NAME_FRONT}:${env.BUILD_NUMBER} \
+                        -t ${IMAGE_NAME_FRONT}:latest \
+                        .
+                    cd ..    
+                """
+            }
+        }
+
+
+        stage("Deploy GoSell on remote server") {
+            agent { label 'Agent001' }
+            steps {
+                echo "Deploying GoSell on remote server ..."  
+                sh """
+                        cd Tools/
+                        pwd
+                        ls -l
+                        docker compose down --remove-orphans || true
+
+                        IMAGE_TAG=${env.BUILD_NUMBER} docker compose up -d
+                        docker image prune -f
+                        cd ..
+                """
+            }
+        }
+
+    }
+}
